@@ -37,21 +37,21 @@ del mismo equipo.
 \centering
 \caption{Tipos de equipamiento considerados en el catálogo}
 \label{tab:tipos-equipamiento}
-\begin{tabularx}{\textwidth}{L{3cm} C{2.0cm} Y}
-\toprule
-\textbf{Tipo} & \textbf{Cantidad} & \textbf{Descripción} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{3cm}|C{2.0cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Tipo} & \textbf{Cantidad} & \textbf{Descripción} \\
+\hline
 Máquina guiada & 23 & Equipo con trayectoria fija y placas de peso, por
-ejemplo prensa de piernas, extensión de cuádriceps o máquina de pecho. \\
+ejemplo prensa de piernas, extensión de cuádriceps o máquina de pecho. \\ \hline
 Banco y rack & 5 & Estructuras para entrenar con barra o mancuernas, como el
-banco plano o el rack de sentadillas. \\
+banco plano o el rack de sentadillas. \\ \hline
 Cardio & 4 & Equipos de trabajo cardiovascular, como la cinta de correr o la
-bicicleta estática. \\
+bicicleta estática. \\ \hline
 Polea & 3 & Estaciones de cable con trayectoria libre, como el cruce de poleas
 o el jalón al pecho. \\
-\midrule
+\hline
 \textbf{Total} & \textbf{35} & \\
-\bottomrule
+\hline
 \end{tabularx}
 \fuente{Elaboración propia a partir del catálogo cargado en Cloud Firestore.}
 \end{table}
@@ -115,26 +115,26 @@ cada paso con el problema que genera.
 \centering
 \caption{Problemas del proceso actual y respuesta del sistema}
 \label{tab:problemas-proceso}
-\begin{tabularx}{\textwidth}{Y Y C{1.9cm}}
-\toprule
-\textbf{Problema} & \textbf{Respuesta del sistema} & \textbf{Objetivo} \\
-\midrule
+\begin{tabularx}{\textwidth}{|Y|Y|C{1.9cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Problema} & \textbf{Respuesta del sistema} & \textbf{Objetivo} \\
+\hline
 No sabe cómo se ajusta ni cómo se usa cada máquina. & Guía de máquinas con
 instrucciones, errores comunes y prevención de lesiones; escáner con
-cámara. & OE1 \\
+cámara. & OE1 \\ \hline
 No sabe ejecutar correctamente los ejercicios. & Animaciones de ejecución por
-ejercicio, con músculo objetivo y nivel de dificultad. & OE2 \\
+ejercicio, con músculo objetivo y nivel de dificultad. & OE2 \\ \hline
 Su rutina no considera su objetivo ni su nivel. & Generador de rutinas basado
-en reglas de prescripción del ejercicio. & OE3 \\
+en reglas de prescripción del ejercicio. & OE3 \\ \hline
 No organiza su semana de entrenamiento. & Plan semanal por días y
-planificador de rutinas personalizadas. & OE4 \\
+planificador de rutinas personalizadas. & OE4 \\ \hline
 No controla su composición corporal. & Calculadora de IMC con historial de
-mediciones. & OE5 \\
+mediciones. & OE5 \\ \hline
 No registra su evolución. & Registro de peso, estatura e IMC en el tiempo. &
-OE6 \\
+OE6 \\ \hline
 No percibe sus avances. & Reporte gráfico de la tendencia del peso y
 resumen de la variación. & OE7 \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 

@@ -11,99 +11,99 @@ pasa o falla.
 \newcommand{\cpres}{\textcolor{black!45}{\footnotesize\shortstack[l]{$\square$ Pasa\\$\square$ Falla}}}
 
 {\small
-\begin{longtable}{L{1.15cm} L{1.0cm} L{5.2cm} L{4.4cm} C{1.5cm}}
+\begin{longtable}{|L{1.15cm}|L{1.0cm}|L{5.2cm}|L{4.4cm}|C{1.5cm}|}
 \caption{Casos de prueba funcionales}
 \label{tab:casos-prueba}\\
-\toprule
-\textbf{ID} & \textbf{RF} & \textbf{Pasos} & \textbf{Resultado esperado} &
+\hline
+\rowcolor{encabezado} \textbf{ID} & \textbf{RF} & \textbf{Pasos} & \textbf{Resultado esperado} &
 \textbf{Resultado} \\
-\midrule
+\hline
 \endfirsthead
-\toprule
-\textbf{ID} & \textbf{RF} & \textbf{Pasos} & \textbf{Resultado esperado} &
+\hline
+\rowcolor{encabezado} \textbf{ID} & \textbf{RF} & \textbf{Pasos} & \textbf{Resultado esperado} &
 \textbf{Resultado} \\
-\midrule
+\hline
 \endhead
-\bottomrule
+
 \endfoot
-\multicolumn{5}{l}{\textbf{Autenticación, onboarding y perfil}}\\
+\multicolumn{5}{|l|}{\textbf{Autenticación, onboarding y perfil}}\\ \hline
 CP-01 & RF1 & Registrarse con nombre, apellido, correo válido y contraseña
 de 6 o más caracteres. & Se crea la cuenta y el perfil; se abre el
-onboarding. & \cpres \\
+onboarding. & \cpres \\ \hline
 CP-02 & RF1 & Registrarse con contraseñas distintas o de menos de 6
 caracteres. & Se muestra el mensaje de validación; no se crea la cuenta. &
-\cpres \\
+\cpres \\ \hline
 CP-03 & RF1 & Iniciar sesión con Google por primera vez y luego cerrar
 sesión y volver a ingresar. & El perfil se crea solo la primera vez; no se
-sobrescribe. & \cpres \\
+sobrescribe. & \cpres \\ \hline
 CP-04 & RF2 & Ingresar con un usuario sin objetivo ni nivel. & Se muestra el
-onboarding; las pestañas de la app no están disponibles. & \cpres \\
+onboarding; las pestañas de la app no están disponibles. & \cpres \\ \hline
 CP-05 & RF2 & Elegir objetivo, nivel y ``Generar con IA''. & Se guardan
-objetivo y nivel; se abre la generación de rutina. & \cpres \\
+objetivo y nivel; se abre la generación de rutina. & \cpres \\ \hline
 CP-06 & RF1 & Solicitar la recuperación de contraseña. & Llega el correo de
-restablecimiento. & \cpres \\
+restablecimiento. & \cpres \\ \hline
 CP-07 & RF12 & Editar la estatura y el objetivo en el perfil; cerrar
 sesión. & Los cambios persisten; al cerrar sesión se vuelve a la
 bienvenida. & \cpres \\
-\midrule
-\multicolumn{5}{l}{\textbf{Guía de máquinas y ejercicios}}\\
+\hline
+\multicolumn{5}{|l|}{\textbf{Guía de máquinas y ejercicios}}\\ \hline
 CP-08 & RF3 & Abrir la pestaña Máquinas. & Se muestran las 35 máquinas en
-cuadrícula. & \cpres \\
+cuadrícula. & \cpres \\ \hline
 CP-09 & RF3 & Buscar ``biceps'' y luego ``bíceps''. & Ambas búsquedas
-devuelven los mismos resultados. & \cpres \\
+devuelven los mismos resultados. & \cpres \\ \hline
 CP-10 & RF3 & Aplicar un filtro de grupo muscular y uno de tipo. & Solo se
-muestran las máquinas que cumplen ambos filtros. & \cpres \\
+muestran las máquinas que cumplen ambos filtros. & \cpres \\ \hline
 CP-11 & RF4 & Abrir la ficha de la prensa de piernas. & Se ven descripción,
-músculos, guía, errores, seguridad y variantes. & \cpres \\
+músculos, guía, errores, seguridad y variantes. & \cpres \\ \hline
 CP-12 & RF5 & En la ficha, revisar la sección de ejercicios. & Cada
-ejercicio muestra su animación, músculo objetivo y dificultad. & \cpres \\
+ejercicio muestra su animación, músculo objetivo y dificultad. & \cpres \\ \hline
 CP-13 & RF5 & Abrir una ficha sin conexión a Internet tras haberla visto
 antes. & Se muestra el contenido en caché; no se bloquea la pantalla. &
 \cpres \\
-\midrule
-\multicolumn{5}{l}{\textbf{Escáner con realidad aumentada}}\\
+\hline
+\multicolumn{5}{|l|}{\textbf{Escáner con realidad aumentada}}\\ \hline
 CP-14 & RF6 & Abrir el escáner por primera vez. & Se solicita el permiso de
-cámara con el mensaje explicativo. & \cpres \\
+cámara con el mensaje explicativo. & \cpres \\ \hline
 CP-15 & RF6 & Enfocar una máquina y capturar. & Al no haber modelo, se
-muestra la lista para confirmar la máquina. & \cpres \\
+muestra la lista para confirmar la máquina. & \cpres \\ \hline
 CP-16 & RF6 & Elegir una máquina de la lista. & Su ficha resumida se
-superpone sobre la cámara en vivo. & \cpres \\
+superpone sobre la cámara en vivo. & \cpres \\ \hline
 CP-17 & RF6 & Desde una ficha, tocar ``Ver en Realidad Aumentada''. & El
 escáner abre con esa máquina ya superpuesta. & \cpres \\
-\midrule
-\multicolumn{5}{l}{\textbf{Rutinas y planificación}}\\
+\hline
+\multicolumn{5}{|l|}{\textbf{Rutinas y planificación}}\\ \hline
 CP-18 & RF7 & Generar una rutina con objetivo ``Ganar masa'' y nivel
 ``Principiante''. & Rutina de 3 días (empuje, tirón, pierna) con 4 series de
-9 repeticiones y 90 s de descanso. & \cpres \\
+9 repeticiones y 90 s de descanso. & \cpres \\ \hline
 CP-19 & RF7 & Generar una rutina con ``Perder peso'' e ``Intermedio''. &
 Rutina de 4 días con un día de cardio y 3 series de 15 repeticiones. &
-\cpres \\
+\cpres \\ \hline
 CP-20 & RF8 & Crear una rutina personalizada de 2 días con ejercicios. & La
-rutina se guarda y queda como activa. & \cpres \\
+rutina se guarda y queda como activa. & \cpres \\ \hline
 CP-21 & RF8 & Intentar guardar un día sin ejercicios. & Se muestra el motivo
-y no se guarda. & \cpres \\
+y no se guarda. & \cpres \\ \hline
 CP-22 & RF8 & Desde una ficha, agregar un ejercicio al día 1; repetir. & La
-primera vez se agrega; la segunda se informa que ya existe. & \cpres \\
+primera vez se agrega; la segunda se informa que ya existe. & \cpres \\ \hline
 CP-23 & RF8 & Activar otra rutina y eliminar la anterior. & El inicio muestra
 la nueva rutina activa; la eliminada desaparece. & \cpres \\
-\midrule
-\multicolumn{5}{l}{\textbf{Nutrición}}\\
+\hline
+\multicolumn{5}{|l|}{\textbf{Nutrición}}\\ \hline
 CP-24 & RF9 & Calcular el IMC con 70~kg y 175~cm. & IMC 22.9, categoría
-normal. & \cpres \\
+normal. & \cpres \\ \hline
 CP-25 & RF9 & Calcular con una estatura de 30~cm. & Mensaje de validación;
-no se guarda. & \cpres \\
+no se guarda. & \cpres \\ \hline
 CP-26 & RF9 & Revisar Firestore tras un cálculo. & Existe el registro con la
 fecha del servidor. & \cpres \\
-\midrule
-\multicolumn{5}{l}{\textbf{Progreso y reportes}}\\
+\hline
+\multicolumn{5}{|l|}{\textbf{Progreso y reportes}}\\ \hline
 CP-27 & RF10 & Abrir Progreso con estatura en el perfil. & La estatura
-aparece precargada. & \cpres \\
+aparece precargada. & \cpres \\ \hline
 CP-28 & RF10 & Registrar 80~kg y luego 77.5~kg. & Se crean dos registros con
-su IMC. & \cpres \\
+su IMC. & \cpres \\ \hline
 CP-29 & RF11 & Observar el reporte tras el caso anterior. & El gráfico se
-actualiza al instante y la variación es $-2.5$~kg. & \cpres \\
+actualiza al instante y la variación es $-2.5$~kg. & \cpres \\ \hline
 CP-30 & RF11 & Registrar diez pesos distintos. & El gráfico muestra los ocho
-últimos. & \cpres \\
+últimos. & \cpres \\ \hline
 \end{longtable}
 }
 

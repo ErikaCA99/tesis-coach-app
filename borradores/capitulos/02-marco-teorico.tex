@@ -49,21 +49,21 @@ grandes grupos, resumidos en la Tabla~\ref{tab:tipos-apps}.
 \centering
 \caption{Tipos de aplicaciones móviles según su construcción}
 \label{tab:tipos-apps}
-\begin{tabularx}{\textwidth}{L{2.8cm} Y Y}
-\toprule
-\textbf{Tipo} & \textbf{Descripción} & \textbf{Ventajas y desventajas} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{2.8cm}|Y|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Tipo} & \textbf{Descripción} & \textbf{Ventajas y desventajas} \\
+\hline
 Nativa & Se desarrolla con el lenguaje y SDK de cada plataforma (Kotlin para
 Android, Swift para iOS). & Máximo rendimiento y acceso al hardware; requiere
-una base de código por plataforma. \\
+una base de código por plataforma. \\ \hline
 Híbrida & Aplicación web empaquetada dentro de un contenedor nativo
 (\emph{WebView}). & Rápida de construir; rendimiento y experiencia inferiores a
-una nativa. \\
+una nativa. \\ \hline
 Multiplata\-forma nativa & Un solo código fuente que se traduce a componentes
 nativos de cada plataforma (React Native, Flutter). & Una sola base de código
 con interfaz nativa y buen rendimiento; depende del ecosistema del
 \emph{framework}. \\
-\bottomrule
+\hline
 \end{tabularx}
 \fuente{Elaboración propia con base en \citet{reactnative} y \citet{sommerville2011}.}
 \end{table}
@@ -363,19 +363,19 @@ los rangos recomendados según el objetivo.
 \centering
 \caption{Variables de prescripción según el objetivo del entrenamiento}
 \label{tab:variables-objetivo}
-\begin{tabularx}{\textwidth}{L{3.3cm} C{1.6cm} C{2.8cm} C{2.4cm} Y}
-\toprule
-\textbf{Objetivo} & \textbf{Series} & \textbf{Repeticiones} &
+\begin{tabularx}{\textwidth}{|L{3.3cm}|C{1.6cm}|C{2.8cm}|C{2.4cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Objetivo} & \textbf{Series} & \textbf{Repeticiones} &
 \textbf{Descanso} & \textbf{Observación} \\
-\midrule
+\hline
 Hipertrofia (ganar masa) & 3--6 & 6--12 & 60--120 s & Cargas moderadas a
-altas \\
+altas \\ \hline
 Resistencia muscular & 2--3 & 15--25 & 30--60 s & Cargas bajas, descansos
-cortos \\
-Salud / mantenimiento & 2--4 & 8--15 & 60 s & Mínimo dos sesiones por semana \\
+cortos \\ \hline
+Salud / mantenimiento & 2--4 & 8--15 & 60 s & Mínimo dos sesiones por semana \\ \hline
 Pérdida de grasa & 2--4 & 12--20 & 30--60 s & Combinar con trabajo
 cardiovascular \\
-\bottomrule
+\hline
 \end{tabularx}
 \fuente{Elaboración propia con base en \citet{kraemer2004},
 \citet{schoenfeld2010} y \citet{acsm2021}.}
@@ -421,15 +421,15 @@ que en personas muy musculadas debe interpretarse con cautela.
 \centering
 \caption{Clasificación del IMC en adultos según la OMS}
 \label{tab:imc-oms}
-\begin{tabular}{L{5cm} C{4cm}}
-\toprule
-\textbf{Clasificación} & \textbf{IMC (kg/m$^2$)} \\
-\midrule
-Bajo peso & $< 18.5$ \\
-Peso normal & $18.5 - 24.9$ \\
-Sobrepeso & $25.0 - 29.9$ \\
+\begin{tabular}{|L{5cm}|C{4cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Clasificación} & \textbf{IMC (kg/m$^2$)} \\
+\hline
+Bajo peso & $< 18.5$ \\ \hline
+Peso normal & $18.5 - 24.9$ \\ \hline
+Sobrepeso & $25.0 - 29.9$ \\ \hline
 Obesidad & $\geq 30.0$ \\
-\bottomrule
+\hline
 \end{tabular}
 \fuente{\citet{oms2000}.}
 \end{table}
@@ -507,24 +507,24 @@ las pruebas del sistema.
 \centering
 \caption{Herramientas utilizadas en el desarrollo}
 \label{tab:herramientas}
-\begin{tabularx}{\textwidth}{L{3.6cm} Y}
-\toprule
-\textbf{Herramienta} & \textbf{Uso en el proyecto} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{3.6cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Herramienta} & \textbf{Uso en el proyecto} \\
+\hline
 Visual Studio Code & Editor de código principal, con extensiones de
-TypeScript, ESLint, Prettier y Tailwind. \\
+TypeScript, ESLint, Prettier y Tailwind. \\ \hline
 Android Studio & SDK de Android, emulador y compilación del
-\emph{development build}. \\
+\emph{development build}. \\ \hline
 Node.js y npm & Entorno de ejecución de las herramientas y gestor de
-dependencias. \\
+dependencias. \\ \hline
 Git y GitHub & Control de versiones con ramas \archivo{main},
 \archivo{develop} y \archivo{feature/*}, y solicitudes de integración
-(\emph{pull requests}). \\
+(\emph{pull requests}). \\ \hline
 Consola de Firebase & Configuración de Authentication, Firestore, Storage y
-publicación de reglas de seguridad. \\
-ESLint y Prettier & Análisis estático y formato uniforme del código. \\
+publicación de reglas de seguridad. \\ \hline
+ESLint y Prettier & Análisis estático y formato uniforme del código. \\ \hline
 Expo CLI y EAS & Servidor de desarrollo, compilación y generación de los
 paquetes de instalación. \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}

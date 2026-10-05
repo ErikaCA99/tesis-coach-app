@@ -22,23 +22,23 @@ Anexo~\ref{anx:casos}.
 \centering
 \caption{Historias de usuario de la iteración 1}
 \label{tab:hu-it1}
-\begin{tabularx}{\textwidth}{L{1.2cm} Y L{1.5cm}}
-\toprule
-\textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{1.2cm}|Y|L{1.5cm}|}
+\hline
+\rowcolor{encabezado} \textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
+\hline
 HU-01 & Como usuario nuevo, quiero registrarme con mi nombre, correo y
-contraseña para tener una cuenta propia. & RF1 \\
+contraseña para tener una cuenta propia. & RF1 \\ \hline
 HU-02 & Como usuario, quiero iniciar sesión con mi cuenta de Google para no
-recordar otra contraseña. & RF1 \\
+recordar otra contraseña. & RF1 \\ \hline
 HU-03 & Como usuario, quiero recuperar mi contraseña por correo si la
-olvido. & RF1 \\
+olvido. & RF1 \\ \hline
 HU-04 & Como usuario recién registrado, quiero indicar mi objetivo y mi nivel
-para recibir recomendaciones acordes. & RF2 \\
+para recibir recomendaciones acordes. & RF2 \\ \hline
 HU-05 & Como usuario, al terminar el registro quiero elegir entre generar una
-rutina automática o armar la mía. & RF2 \\
+rutina automática o armar la mía. & RF2 \\ \hline
 HU-06 & Como usuario, quiero editar mis datos de perfil y cerrar sesión. &
 RF12 \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -130,23 +130,23 @@ pantalla de inicio la abre automáticamente.
 \centering
 \caption{Criterios de aceptación de la iteración 1}
 \label{tab:ca-it1}
-\begin{tabularx}{\textwidth}{L{1.3cm} Y}
-\toprule
-\textbf{HU} & \textbf{Criterio de aceptación} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{1.3cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{HU} & \textbf{Criterio de aceptación} \\
+\hline
 HU-01 & Con datos válidos se crea la cuenta y el documento
 \archivo{usuarios/\{uid\}}; con un correo inválido, contraseñas distintas o
-de menos de seis caracteres se muestra el mensaje correspondiente. \\
+de menos de seis caracteres se muestra el mensaje correspondiente. \\ \hline
 HU-02 & El inicio con Google crea el perfil la primera vez y no lo
-sobrescribe en accesos posteriores. \\
-HU-03 & Se envía el correo de restablecimiento a la dirección ingresada. \\
+sobrescribe en accesos posteriores. \\ \hline
+HU-03 & Se envía el correo de restablecimiento a la dirección ingresada. \\ \hline
 HU-04 & Un usuario sin objetivo o sin nivel es dirigido al onboarding y no
-puede acceder a \archivo{(app)}. \\
+puede acceder a \archivo{(app)}. \\ \hline
 HU-05 & La opción elegida abre la pantalla de generación o de rutina
-personalizada al llegar al inicio. \\
+personalizada al llegar al inicio. \\ \hline
 HU-06 & Los cambios del perfil se guardan; al cerrar sesión se vuelve a la
 bienvenida. \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -165,21 +165,21 @@ bienvenida. \\
 \centering
 \caption{Historias de usuario de la iteración 2}
 \label{tab:hu-it2}
-\begin{tabularx}{\textwidth}{L{1.2cm} Y L{1.5cm}}
-\toprule
-\textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{1.2cm}|Y|L{1.5cm}|}
+\hline
+\rowcolor{encabezado} \textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
+\hline
 HU-07 & Como usuario, quiero buscar una máquina por su nombre o por el músculo
-que trabaja, aunque no escriba las tildes. & RF3 \\
+que trabaja, aunque no escriba las tildes. & RF3 \\ \hline
 HU-08 & Como usuario, quiero filtrar el catálogo por grupo muscular y por tipo
-de equipo. & RF3 \\
+de equipo. & RF3 \\ \hline
 HU-09 & Como principiante, quiero ver paso a paso cómo se usa una máquina, qué
-errores evitar y cómo prevenir lesiones. & RF4 \\
+errores evitar y cómo prevenir lesiones. & RF4 \\ \hline
 HU-10 & Como usuario, quiero ver una animación de cada ejercicio con su
-músculo objetivo y su dificultad. & RF5 \\
+músculo objetivo y su dificultad. & RF5 \\ \hline
 HU-11 & Como usuario, quiero ver cómo luce la máquina en distintos modelos
 comerciales para reconocerla en mi gimnasio. & RF4 \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -285,20 +285,20 @@ GIF.
 \centering
 \caption{Criterios de aceptación de la iteración 2}
 \label{tab:ca-it2}
-\begin{tabularx}{\textwidth}{L{1.3cm} Y}
-\toprule
-\textbf{HU} & \textbf{Criterio de aceptación} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{1.3cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{HU} & \textbf{Criterio de aceptación} \\
+\hline
 HU-07 & Buscar ``biceps'' o ``prensa'' devuelve las mismas máquinas que
-``bíceps'' o ``Prensa''. \\
+``bíceps'' o ``Prensa''. \\ \hline
 HU-08 & Los filtros de grupo muscular y tipo se combinan entre sí y con la
-búsqueda. \\
+búsqueda. \\ \hline
 HU-09 & Cada una de las 35 fichas muestra guía de uso, errores comunes y
-pautas de seguridad. \\
+pautas de seguridad. \\ \hline
 HU-10 & Cada máquina presenta al menos un ejercicio con su animación,
-músculo objetivo y dificultad. \\
+músculo objetivo y dificultad. \\ \hline
 HU-11 & La galería muestra hasta ocho variantes comerciales de la máquina. \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -315,17 +315,17 @@ HU-11 & La galería muestra hasta ocho variantes comerciales de la máquina. \\
 \centering
 \caption{Historias de usuario de la iteración 3}
 \label{tab:hu-it3}
-\begin{tabularx}{\textwidth}{L{1.2cm} Y L{1.5cm}}
-\toprule
-\textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{1.2cm}|Y|L{1.5cm}|}
+\hline
+\rowcolor{encabezado} \textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
+\hline
 HU-12 & Como usuario, quiero enfocar una máquina con la cámara y ver su
-información sobre la imagen real. & RF6 \\
+información sobre la imagen real. & RF6 \\ \hline
 HU-13 & Como usuario, si la máquina no se reconoce, quiero elegirla de una
-lista sin salir del escáner. & RF6 \\
+lista sin salir del escáner. & RF6 \\ \hline
 HU-14 & Como usuario, desde la ficha de una máquina quiero verla en modo de
 realidad aumentada. & RF6 \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -404,17 +404,17 @@ fotografías propias o con autorización (sección~\ref{sec:recomendaciones}).
 \centering
 \caption{Criterios de aceptación de la iteración 3}
 \label{tab:ca-it3}
-\begin{tabularx}{\textwidth}{L{1.3cm} Y}
-\toprule
-\textbf{HU} & \textbf{Criterio de aceptación} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{1.3cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{HU} & \textbf{Criterio de aceptación} \\
+\hline
 HU-12 & Con el permiso concedido se muestra la cámara en vivo con el marco
-de encuadre, y la ficha resumida se superpone sobre la imagen. \\
+de encuadre, y la ficha resumida se superpone sobre la imagen. \\ \hline
 HU-13 & Sin reconocimiento automático, la lista con búsqueda permite elegir
-cualquiera de las 35 máquinas y pasar al estado \emph{detectada}. \\
+cualquiera de las 35 máquinas y pasar al estado \emph{detectada}. \\ \hline
 HU-14 & Al abrir el escáner desde una ficha, la máquina se muestra
 directamente sobre la cámara. \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -431,21 +431,21 @@ directamente sobre la cámara. \\
 \centering
 \caption{Historias de usuario de la iteración 4}
 \label{tab:hu-it4}
-\begin{tabularx}{\textwidth}{L{1.2cm} Y L{1.5cm}}
-\toprule
-\textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{1.2cm}|Y|L{1.5cm}|}
+\hline
+\rowcolor{encabezado} \textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
+\hline
 HU-15 & Como usuario, quiero que la aplicación genere una rutina semanal
-adecuada a mi objetivo y mi nivel. & RF7 \\
+adecuada a mi objetivo y mi nivel. & RF7 \\ \hline
 HU-16 & Como usuario avanzado, quiero armar mi propia rutina día por día,
-eligiendo los ejercicios y sus series, repeticiones y descansos. & RF8 \\
+eligiendo los ejercicios y sus series, repeticiones y descansos. & RF8 \\ \hline
 HU-17 & Como usuario, quiero agregar a mi rutina un ejercicio que veo en la
-ficha de una máquina. & RF8 \\
+ficha de una máquina. & RF8 \\ \hline
 HU-18 & Como usuario, quiero tener varias rutinas guardadas, elegir cuál es
-la activa y eliminar las que ya no uso. & RF8 \\
+la activa y eliminar las que ya no uso. & RF8 \\ \hline
 HU-19 & Como usuario, al tocar un ejercicio de mi rutina quiero abrir la
 ficha de su máquina. & RF8 \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -474,14 +474,14 @@ siguiendo la progresión recomendada por \citet{kraemer2004}.
 \centering
 \caption{Reglas de frecuencia semanal según el nivel}
 \label{tab:reglas-frecuencia}
-\begin{tabular}{L{6.5cm} C{3cm}}
-\toprule
-\textbf{Regla} & \textbf{Días por semana} \\
-\midrule
-SI nivel = principiante & 3 \\
-SI nivel = intermedio & 4 \\
+\begin{tabular}{|L{6.5cm}|C{3cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Regla} & \textbf{Días por semana} \\
+\hline
+SI nivel = principiante & 3 \\ \hline
+SI nivel = intermedio & 4 \\ \hline
 SI nivel = avanzado & 5 \\
-\bottomrule
+\hline
 \end{tabular}
 \fuente{Archivo \archivo{utils/generadorRutinas.ts}, con base en \citet{kraemer2004}.}
 \end{table}
@@ -495,15 +495,15 @@ repeticiones y descansos cortos para la resistencia y la pérdida de peso.
 \centering
 \caption{Reglas de variables de carga según el objetivo}
 \label{tab:reglas-parametros}
-\begin{tabular}{L{5.4cm} C{1.6cm} C{2.7cm} C{2.1cm}}
-\toprule
-\textbf{Regla} & \textbf{Series} & \textbf{Repeticiones} & \textbf{Descanso} \\
-\midrule
-SI objetivo = ganar masa muscular & 4 & 9 & 90 s \\
-SI objetivo = mantenimiento & 3 & 12 & 60 s \\
-SI objetivo = perder peso & 3 & 15 & 45 s \\
+\begin{tabular}{|L{5.4cm}|C{1.6cm}|C{2.7cm}|C{2.1cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Regla} & \textbf{Series} & \textbf{Repeticiones} & \textbf{Descanso} \\
+\hline
+SI objetivo = ganar masa muscular & 4 & 9 & 90 s \\ \hline
+SI objetivo = mantenimiento & 3 & 12 & 60 s \\ \hline
+SI objetivo = perder peso & 3 & 15 & 45 s \\ \hline
 SI objetivo = resistencia & 3 & 18 & 30 s \\
-\bottomrule
+\hline
 \end{tabular}
 \fuente{Archivo \archivo{utils/generadorRutinas.ts}, con base en
 \citet{kraemer2004} y \citet{schoenfeld2010}.}
@@ -520,17 +520,17 @@ introduce un día de cardio en lugar de un día de fuerza.
 \centering
 \caption{Reglas de división semanal}
 \label{tab:reglas-division}
-\begin{tabularx}{\textwidth}{C{1.3cm} Y Y}
-\toprule
-\textbf{Días} & \textbf{Objetivo de fuerza (ganar masa, mantenimiento)} &
+\begin{tabularx}{\textwidth}{|C{1.3cm}|Y|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Días} & \textbf{Objetivo de fuerza (ganar masa, mantenimiento)} &
 \textbf{Objetivo con énfasis cardio (perder peso, resistencia)} \\
-\midrule
-3 & Empuje -- Tirón -- Pierna & Empuje -- Cardio -- Pierna \\
+\hline
+3 & Empuje -- Tirón -- Pierna & Empuje -- Cardio -- Pierna \\ \hline
 4 & Empuje -- Tirón -- Pierna -- Cuerpo completo & Empuje -- Tirón -- Cardio
--- Pierna \\
+-- Pierna \\ \hline
 5 & Empuje -- Tirón -- Pierna -- Empuje -- Tirón & Empuje -- Tirón -- Pierna
 -- Cardio -- Cuerpo completo \\
-\bottomrule
+\hline
 \end{tabularx}
 \fuente{Archivo \archivo{utils/generadorRutinas.ts}.}
 \end{table}
@@ -614,21 +614,21 @@ eliminar rutinas y crear nuevas. Las rutinas se observan en tiempo real con
 \centering
 \caption{Criterios de aceptación de la iteración 4}
 \label{tab:ca-it4}
-\begin{tabularx}{\textwidth}{L{1.3cm} Y}
-\toprule
-\textbf{HU} & \textbf{Criterio de aceptación} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{1.3cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{HU} & \textbf{Criterio de aceptación} \\
+\hline
 HU-15 & Para cada una de las doce combinaciones de objetivo y nivel, la
 rutina generada tiene el número de días, la división y las variables de
 carga de las Tablas~\ref{tab:reglas-frecuencia}
-a~\ref{tab:reglas-division}. \\
+a~\ref{tab:reglas-division}. \\ \hline
 HU-16 & Se puede crear una rutina de 1 a 7 días; un día sin ejercicios o
-valores fuera de rango impiden guardar y muestran el motivo. \\
+valores fuera de rango impiden guardar y muestran el motivo. \\ \hline
 HU-17 & El ejercicio se agrega al día elegido; si ya existe en ese día, se
-informa y no se duplica. \\
-HU-18 & La rutina marcada como activa es la que se muestra en el inicio. \\
+informa y no se duplica. \\ \hline
+HU-18 & La rutina marcada como activa es la que se muestra en el inicio. \\ \hline
 HU-19 & Al tocar un ejercicio asociado a una máquina se abre su ficha. \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -645,15 +645,15 @@ HU-19 & Al tocar un ejercicio asociado a una máquina se abre su ficha. \\
 \centering
 \caption{Historias de usuario de la iteración 5}
 \label{tab:hu-it5}
-\begin{tabularx}{\textwidth}{L{1.2cm} Y L{1.5cm}}
-\toprule
-\textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{1.2cm}|Y|L{1.5cm}|}
+\hline
+\rowcolor{encabezado} \textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
+\hline
 HU-20 & Como usuario, quiero ingresar mi peso y mi estatura y conocer mi IMC
-y su clasificación. & RF9 \\
+y su clasificación. & RF9 \\ \hline
 HU-21 & Como usuario, quiero que cada cálculo quede guardado en mi
 historial. & RF9 \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -698,15 +698,15 @@ alimentación.
 \centering
 \caption{Criterios de aceptación de la iteración 5}
 \label{tab:ca-it5}
-\begin{tabularx}{\textwidth}{L{1.3cm} Y}
-\toprule
-\textbf{HU} & \textbf{Criterio de aceptación} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{1.3cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{HU} & \textbf{Criterio de aceptación} \\
+\hline
 HU-20 & Con 70~kg y 175~cm se obtiene un IMC de 22.9, categoría normal;
-valores fuera de rango muestran un mensaje de validación. \\
+valores fuera de rango muestran un mensaje de validación. \\ \hline
 HU-21 & Cada cálculo crea un documento en
 \archivo{registrosNutricionales} con la fecha del servidor. \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -722,19 +722,19 @@ HU-21 & Cada cálculo crea un documento en
 \centering
 \caption{Historias de usuario de la iteración 6}
 \label{tab:hu-it6}
-\begin{tabularx}{\textwidth}{L{1.2cm} Y L{1.5cm}}
-\toprule
-\textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{1.2cm}|Y|L{1.5cm}|}
+\hline
+\rowcolor{encabezado} \textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
+\hline
 HU-22 & Como usuario, quiero registrar mi peso periódicamente sin volver a
-escribir mi estatura cada vez. & RF10 \\
+escribir mi estatura cada vez. & RF10 \\ \hline
 HU-23 & Como usuario, quiero ver un gráfico de la evolución de mi peso. &
-RF11 \\
+RF11 \\ \hline
 HU-24 & Como usuario, quiero saber cuánto ha variado mi peso desde el primer
-registro y cuál es mi categoría de IMC actual. & RF11 \\
+registro y cuál es mi categoría de IMC actual. & RF11 \\ \hline
 HU-25 & Como usuario, quiero ver en el inicio un resumen de mi rutina activa
 y de mis registros. & RF11 \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -767,18 +767,18 @@ máquinas y a las rutinas.
 \centering
 \caption{Criterios de aceptación de la iteración 6}
 \label{tab:ca-it6}
-\begin{tabularx}{\textwidth}{L{1.3cm} Y}
-\toprule
-\textbf{HU} & \textbf{Criterio de aceptación} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{1.3cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{HU} & \textbf{Criterio de aceptación} \\
+\hline
 HU-22 & La estatura del perfil aparece precargada; al guardar se crea el
-registro con su IMC. \\
+registro con su IMC. \\ \hline
 HU-23 & El gráfico se actualiza inmediatamente al agregar un registro y
-muestra como máximo los ocho últimos. \\
+muestra como máximo los ocho últimos. \\ \hline
 HU-24 & Con registros de 80~kg y 77.5~kg se muestra una variación de
-$-2.5$~kg; la categoría corresponde al IMC del último registro. \\
+$-2.5$~kg; la categoría corresponde al IMC del último registro. \\ \hline
 HU-25 & El inicio muestra la rutina activa y el número real de registros. \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 

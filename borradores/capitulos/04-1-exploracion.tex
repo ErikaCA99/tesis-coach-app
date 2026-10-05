@@ -11,21 +11,21 @@ con qué tecnologías, y planificar las iteraciones de la fase de producción.
 \centering
 \caption{Grupos de interesados del proyecto}
 \label{tab:interesados}
-\begin{tabularx}{\textwidth}{L{3.4cm} Y}
-\toprule
-\textbf{Interesado} & \textbf{Rol e interés} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{3.4cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Interesado} & \textbf{Rol e interés} \\
+\hline
 Desarrolladora (autora) & Responsable del análisis, diseño, implementación,
-pruebas y documentación del sistema. \\
+pruebas y documentación del sistema. \\ \hline
 Tutor & Supervisión técnica del producto y de la memoria; validación de que el
-sistema responde a los objetivos del perfil. \\
+sistema responde a los objetivos del perfil. \\ \hline
 Docente de la asignatura & Seguimiento metodológico y verificación del
-cumplimiento del cronograma y del formato. \\
+cumplimiento del cronograma y del formato. \\ \hline
 Usuarios finales & Personas que entrenan en gimnasio, en los niveles
-principiante, intermedio y avanzado (sección~\ref{sec:aa-descripcion}). \\
+principiante, intermedio y avanzado (sección~\ref{sec:aa-descripcion}). \\ \hline
 Administrador del catálogo & Rol técnico que carga y actualiza el catálogo de
 máquinas fuera de la aplicación. \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -56,46 +56,46 @@ alcance se tomaron en esta fase y condicionaron el resto del proyecto:
 La Tabla~\ref{tab:rf} presenta los requerimientos funcionales y su relación
 con los objetivos específicos.
 
-\begin{longtable}{L{1.1cm} L{10.0cm} C{1.9cm}}
+\begin{longtable}{|L{1.1cm}|L{10.0cm}|C{1.9cm}|}
 \caption{Requerimientos funcionales del sistema}
 \label{tab:rf}\\
-\toprule
-\textbf{ID} & \textbf{Descripción} & \textbf{Objetivo} \\
-\midrule
+\hline
+\rowcolor{encabezado} \textbf{ID} & \textbf{Descripción} & \textbf{Objetivo} \\
+\hline
 \endfirsthead
-\toprule
-\textbf{ID} & \textbf{Descripción} & \textbf{Objetivo} \\
-\midrule
+\hline
+\rowcolor{encabezado} \textbf{ID} & \textbf{Descripción} & \textbf{Objetivo} \\
+\hline
 \endhead
-\bottomrule
+
 \endfoot
 RF1 & Registrar usuarios e iniciar sesión con correo y contraseña o con una
-cuenta de Google; recuperar la contraseña por correo y cerrar sesión. & Base \\
+cuenta de Google; recuperar la contraseña por correo y cerrar sesión. & Base \\ \hline
 RF2 & Capturar en el primer ingreso el objetivo de entrenamiento y el nivel de
-experiencia del usuario (\emph{onboarding}). & OE3 \\
+experiencia del usuario (\emph{onboarding}). & OE3 \\ \hline
 RF3 & Consultar el catálogo de máquinas con búsqueda por texto (sin
-distinguir tildes) y filtros por grupo muscular y por tipo de equipo. & OE1 \\
+distinguir tildes) y filtros por grupo muscular y por tipo de equipo. & OE1 \\ \hline
 RF4 & Mostrar la ficha de cada máquina: descripción, músculos principales y
 secundarios, guía de uso paso a paso, errores comunes, prevención de lesiones
-y galería de variantes. & OE1 \\
+y galería de variantes. & OE1 \\ \hline
 RF5 & Mostrar los ejercicios asociados a cada máquina con su animación de
-ejecución, el músculo objetivo y el nivel de dificultad. & OE2 \\
+ejecución, el músculo objetivo y el nivel de dificultad. & OE2 \\ \hline
 RF6 & Escanear una máquina con la cámara y superponer su ficha sobre la imagen
 en vivo; si no se identifica automáticamente, permitir que el usuario la
-confirme en una lista. & OE1 \\
+confirme en una lista. & OE1 \\ \hline
 RF7 & Generar automáticamente una rutina semanal a partir del objetivo y el
-nivel del usuario. & OE3 \\
+nivel del usuario. & OE3 \\ \hline
 RF8 & Crear, editar y eliminar rutinas personalizadas organizadas por días;
 agregar ejercicios desde la ficha de una máquina; marcar una rutina como
-activa. & OE4 \\
+activa. & OE4 \\ \hline
 RF9 & Calcular el índice de masa corporal, clasificarlo según la OMS y guardar
-el historial de mediciones. & OE5 \\
+el historial de mediciones. & OE5 \\ \hline
 RF10 & Registrar el progreso físico (peso y estatura) con cálculo automático
-del IMC. & OE6 \\
+del IMC. & OE6 \\ \hline
 RF11 & Visualizar un reporte del progreso con gráfico de la evolución del
-peso, variación acumulada y categoría de IMC actual. & OE7 \\
+peso, variación acumulada y categoría de IMC actual. & OE7 \\ \hline
 RF12 & Consultar y editar los datos del perfil (nombre, género, estatura,
-peso, objetivo y nivel). & Base \\
+peso, objetivo y nivel). & Base \\ \hline
 \end{longtable}
 
 \subsection{Requerimientos no funcionales}
@@ -107,25 +107,25 @@ calidad de la norma ISO/IEC 25010 (Tabla~\ref{tab:rnf}).
 \centering
 \caption{Requerimientos no funcionales}
 \label{tab:rnf}
-\begin{tabularx}{\textwidth}{L{1.2cm} L{3.1cm} Y}
-\toprule
-\textbf{ID} & \textbf{Característica} & \textbf{Descripción} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{1.2cm}|L{3.1cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{ID} & \textbf{Característica} & \textbf{Descripción} \\
+\hline
 RNF1 & Portabilidad & La aplicación se ejecuta en dispositivos Android con
-la versión mínima soportada por React Native~0.86 (Android~7.0, API~24). \\
+la versión mínima soportada por React Native~0.86 (Android~7.0, API~24). \\ \hline
 RNF2 & Usabilidad & Interfaz en español, navegación por pestañas y acceso a
-cualquier módulo principal en no más de dos toques desde el inicio. \\
+cualquier módulo principal en no más de dos toques desde el inicio. \\ \hline
 RNF3 & Seguridad & Cada usuario solo puede leer y escribir sus propios datos;
 el catálogo es de solo lectura; las reglas del servidor validan tipos y
-rangos. \\
+rangos. \\ \hline
 RNF4 & Fiabilidad & Los cambios en rutinas, IMC y progreso se reflejan en
 tiempo real; la aplicación tolera la pérdida temporal de conexión gracias a la
-caché de Firestore. \\
+caché de Firestore. \\ \hline
 RNF5 & Eficiencia & El catálogo de máquinas se descarga una sola vez por
-sesión y las URL de imágenes se almacenan en caché. \\
+sesión y las URL de imágenes se almacenan en caché. \\ \hline
 RNF6 & Mantenibilidad & Código en TypeScript estricto, organizado en capas
 MVC, sin errores de compilación ni de análisis estático. \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -180,20 +180,20 @@ de la autora con React y TypeScript, que reducía el riesgo del proyecto.
 \centering
 \caption{Comparativa de tecnologías de desarrollo móvil}
 \label{tab:comparativa-framework}
-\begin{tabularx}{\textwidth}{L{3.2cm} Y Y Y}
-\toprule
-\textbf{Criterio} & \textbf{Kotlin nativo} & \textbf{Flutter} &
+\begin{tabularx}{\textwidth}{|L{3.2cm}|Y|Y|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Criterio} & \textbf{Kotlin nativo} & \textbf{Flutter} &
 \textbf{React Native + Expo} \\
-\midrule
-Lenguaje & Kotlin & Dart & TypeScript \\
-Plataformas & Solo Android & Android, iOS, web & Android, iOS, web \\
-Acceso a cámara & Nativo & \emph{Plugin} & \archivo{expo-camera} \\
+\hline
+Lenguaje & Kotlin & Dart & TypeScript \\ \hline
+Plataformas & Solo Android & Android, iOS, web & Android, iOS, web \\ \hline
+Acceso a cámara & Nativo & \emph{Plugin} & \archivo{expo-camera} \\ \hline
 Integración con Firebase & SDK oficial & \emph{Plugin} oficial & SDK web
-modular \\
+modular \\ \hline
 Curva de aprendizaje para la autora & Alta & Media & Baja \\
-\midrule
+\hline
 \textbf{Decisión} & & & \textbf{Seleccionada} \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -209,19 +209,19 @@ suficiente, sin necesidad de administrar infraestructura.
 \centering
 \caption{Comparativa de alternativas para el servidor}
 \label{tab:comparativa-backend}
-\begin{tabularx}{\textwidth}{L{3.2cm} Y Y Y}
-\toprule
-\textbf{Criterio} & \textbf{Firebase} & \textbf{Supabase} &
+\begin{tabularx}{\textwidth}{|L{3.2cm}|Y|Y|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Criterio} & \textbf{Firebase} & \textbf{Supabase} &
 \textbf{Servidor propio} \\
-\midrule
-Modelo de datos & Documental (NoSQL) & Relacional (PostgreSQL) & A elección \\
-Tiempo real & Integrado & Integrado & A implementar \\
-Caché sin conexión & Integrada en el SDK & No integrada & A implementar \\
-Almacenamiento de archivos & Cloud Storage & Storage & A implementar \\
+\hline
+Modelo de datos & Documental (NoSQL) & Relacional (PostgreSQL) & A elección \\ \hline
+Tiempo real & Integrado & Integrado & A implementar \\ \hline
+Caché sin conexión & Integrada en el SDK & No integrada & A implementar \\ \hline
+Almacenamiento de archivos & Cloud Storage & Storage & A implementar \\ \hline
 Infraestructura a mantener & Ninguna & Ninguna & Servidor y base de datos \\
-\midrule
+\hline
 \textbf{Decisión} & \textbf{Seleccionada} & & \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -236,23 +236,23 @@ ya que el producto es propiedad intelectual de la universidad
 \centering
 \caption{Fuentes de datos de ejercicios evaluadas}
 \label{tab:fuentes-datos}
-\begin{tabularx}{\textwidth}{L{2.9cm} Y L{2.6cm} Y}
-\toprule
-\textbf{Fuente} & \textbf{Contenido} & \textbf{Licencia} & \textbf{Uso en el
+\begin{tabularx}{\textwidth}{|L{2.9cm}|Y|L{2.6cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Fuente} & \textbf{Contenido} & \textbf{Licencia} & \textbf{Uso en el
 proyecto} \\
-\midrule
+\hline
 wger \citep{wger} & API REST con ejercicios, categorías y equipos. & Libre
-(AGPL / CC) & Ejercicios para la generación de rutinas. \\
+(AGPL / CC) & Ejercicios para la generación de rutinas. \\ \hline
 free-exercise-db \citep{freeexercisedb} & 876 ejercicios con imágenes de
 posición inicial y final. & Dominio público & Imágenes y referencias de
-ejercicios. \\
+ejercicios. \\ \hline
 WorkoutX \citep{workoutx} & Ejercicios con animaciones GIF. & Plan gratuito
 con condiciones de uso & 95 animaciones de ejecución, descargadas por la API
-oficial. \\
+oficial. \\ \hline
 Contenido propio & Descripciones, guías de uso, errores y prevención de
 lesiones. & Propia & Texto de las fichas, contrastado con guías de
 entrenamiento. \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -267,18 +267,18 @@ alimenta al escáner y a las rutinas, y finalmente los módulos de seguimiento.
 \centering
 \caption{Plan de iteraciones de la fase de producción}
 \label{tab:plan-iteraciones}
-\begin{tabularx}{\textwidth}{C{1.0cm} Y L{3.0cm} C{2.0cm}}
-\toprule
-\textbf{Iter.} & \textbf{Módulo} & \textbf{Requerim.} &
+\begin{tabularx}{\textwidth}{|C{1.0cm}|Y|L{3.0cm}|C{2.0cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Iter.} & \textbf{Módulo} & \textbf{Requerim.} &
 \textbf{Objetivos} \\
-\midrule
-1 & Autenticación, onboarding y perfil & RF1, RF2, RF12 & Base, OE3 \\
-2 & Guía de máquinas y ejercicios & RF3, RF4, RF5 & OE1, OE2 \\
-3 & Escáner de máquinas con realidad aumentada & RF6 & OE1 \\
-4 & Rutinas: generación automática y planificación & RF7, RF8 & OE3, OE4 \\
-5 & Nutrición: calculadora de IMC & RF9 & OE5 \\
+\hline
+1 & Autenticación, onboarding y perfil & RF1, RF2, RF12 & Base, OE3 \\ \hline
+2 & Guía de máquinas y ejercicios & RF3, RF4, RF5 & OE1, OE2 \\ \hline
+3 & Escáner de máquinas con realidad aumentada & RF6 & OE1 \\ \hline
+4 & Rutinas: generación automática y planificación & RF7, RF8 & OE3, OE4 \\ \hline
+5 & Nutrición: calculadora de IMC & RF9 & OE5 \\ \hline
 6 & Progreso físico y reportes & RF10, RF11 & OE6, OE7 \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 

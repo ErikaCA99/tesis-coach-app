@@ -6,7 +6,7 @@
 %  Compilar:  pdflatex main  ->  pdflatex main   (o: latexmk -pdf main.tex)
 %  En Overleaf: subir la carpeta completa y compilar con pdfLaTeX.
 % =====================================================================
-\documentclass[12pt, letterpaper, oneside]{report}
+\documentclass[11pt, letterpaper, oneside]{report}
 
 \input{config/paquetes}
 \input{config/variables}
@@ -21,11 +21,10 @@
 \input{preliminares/02-agradecimientos}
 \input{preliminares/03-ficha-resumen}
 
+% Índice de contenido, de cuadros y de figuras en una sola hoja (guía, punto 4)
 \clearpage
 \tableofcontents
-\clearpage
 \listoftables
-\clearpage
 \listoffigures
 \clearpage
 
@@ -39,5 +38,9 @@
 
 % ---------------- Bibliografía ----------------
 \include{capitulos/bibliografia}
+
+% ---------------- Anexos ----------------
+\appendix
+\include{anexos/anexo-a-comparativas}
 
 \end{document}

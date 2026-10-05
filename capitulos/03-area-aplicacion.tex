@@ -176,110 +176,10 @@ multimedia y ejecución de algoritmos de IA.
 La arquitectura cliente servidor permite garantizar escalabilidad,
 sincronización en tiempo real y disponibilidad permanente del servicio.
 
-\titulillo{Estructura de la arquitectura}
-
-La estructura de la arquitectura del sistema se encuentra basada en capas:
-
-\paragraph{Capa de Presentación}
-
-Tecnologías: React Native + Expo, JavaScript, componentes UI.
-
-\textit{Responsabilidades:}
-
-\begin{itemize}
-    \item Generar la interfaz visual de la aplicación.
-    \item Gestionar la interacción del usuario.
-    \item Capturar entradas como datos personales, selección de máquinas,
-    rutinas y registro nutricional.
-    \item Comunicar solicitudes al backend y mostrar respuestas.
-\end{itemize}
-
-\textit{Componentes clave:}
-
-\begin{itemize}
-    \item Módulo de registro y autenticación.
-    \item Módulo de guía de máquinas y ejercicios.
-    \item Módulo de rutinas personalizadas.
-    \item Módulo de nutrición.
-    \item Módulo de progreso y reportes.
-\end{itemize}
-
-\paragraph{Capa de Lógica de Negocio}
-
-Esta se encuentra dentro de la app y está conectada a servicios externos.
-
-\textit{Responsabilidades:}
-
-\begin{itemize}
-    \item Manejar reglas del sistema (cálculo de IMC, validaciones).
-    \item Procesar datos antes de enviarlos a Firebase.
-    \item Integrar y ejecutar modelos TensorFlow Lite para personalizar
-    rutinas.
-    \item Gestionar filtros, búsqueda de máquinas y procesamiento de
-    ejercicios.
-\end{itemize}
-
-\textit{Componentes de negocio:}
-
-\begin{itemize}
-    \item Controlador de rutinas (IA).
-    \item Controlador de ejercicios y máquinas.
-    \item Controlador de progreso físico.
-    \item Controlador nutricional.
-\end{itemize}
-
-\paragraph{Capa de Servicios}
-
-Esta capa proporciona servicios esenciales para la operación del sistema:
-
-\textit{Firebase Authentication:}
-
-\begin{itemize}
-    \item Registro de usuarios.
-    \item Inicio de sesión.
-    \item Recuperación de contraseñas.
-    \item Seguridad y manejo de tokens.
-\end{itemize}
-
-\textit{Firebase Firestore:}
-
-\begin{itemize}
-    \item Base de datos NoSQL en tiempo real.
-    \item Almacenamiento de rutinas, registros, progreso y máquinas.
-\end{itemize}
-
-\textit{Firebase Storage:}
-
-\begin{itemize}
-    \item Almacenamiento de imágenes, videos o animaciones educativas.
-    \item Contenido para la guía técnica de máquinas.
-\end{itemize}
-
-\textit{Firebase Cloud Functions (opcional):}
-
-\begin{itemize}
-    \item Validación de datos.
-    \item Preprocesamiento de peticiones.
-    \item Actualizaciones automáticas de rutinas.
-\end{itemize}
-
-Estas funciones se integran a través de peticiones HTTP o SDK en tiempo real.
-
-\paragraph{Capa de Inteligencia Artificial}
-
-Tecnología: TensorFlow Lite.
-
-\textit{Responsabilidades:}
-
-\begin{itemize}
-    \item Ejecutar modelos de recomendación ligera para rutinas.
-    \item Ajustar parámetros según peso, nivel, objetivo y progreso del
-    usuario.
-    \item Proveer resultados inmediatos sin depender del servidor.
-\end{itemize}
-
-Este esquema reduce latencia, permite personalización offline y mejora la
-experiencia del usuario.
+La estructura detallada de esta arquitectura, organizada en capas de
+presentación, lógica de negocio, servicios e inteligencia artificial, se
+describe en la sección~\ref{sec:des-arquitectura} del
+Capítulo~\ref{cap:desarrollo}, como parte de la fase de inicialización.
 
 % ---------------------------------------------------------------------
 \subsection{Fase de Producción}
@@ -421,25 +321,24 @@ A continuación, se describen los roles adoptados en el proyecto:
 
 \begin{table}[H]
 \centering
-\caption{Roles establecidos por Mobile-D}
-\label{tab:roles}
-\begin{tabularx}{\textwidth}{L{3.6cm} Y L{3cm}}
-\toprule
-\textbf{Rol} & \textbf{Responsabilidades} & \textbf{Responsable} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{3.6cm}|Y|L{3cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Rol} & \textbf{Responsabilidades} & \textbf{Responsable} \\
+\hline
 Product Owner & Define alcance, objetivos y prioridades del sistema & Erika
-Chino \\
+Chino \\ \hline
 Arquitecto Mobile & Diseña la arquitectura y selecciona las tecnologías & Erika
-Chino \\
+Chino \\ \hline
 Desarrollador móvil & Implementa módulos, interfaces y lógica de negocio &
-Erika Chino \\
+Erika Chino \\ \hline
 Diseñador UI/UX & Diseña prototipos, navegación y experiencia de usuario &
-Erika Chino \\
+Erika Chino \\ \hline
 QA Tester & Realiza pruebas funcionales, de usabilidad y rendimiento & Erika
 Chino \\
-\bottomrule
+\hline
 \end{tabularx}
-\fuente{Elaboración propia.}
+\caption[Roles establecidos por Mobile-D]{Roles establecidos por Mobile-D. \textit{Fuente:} Elaboración propia.}
+\label{tab:roles}
 \end{table}
 
 % =====================================================================

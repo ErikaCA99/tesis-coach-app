@@ -15,24 +15,24 @@ instaladas, tomadas del archivo \archivo{package.json} del proyecto.
 \centering
 \caption{Versiones de las tecnologías utilizadas}
 \label{tab:versiones}
-\begin{tabularx}{\textwidth}{L{5cm} L{2.4cm} Y}
-\toprule
-\textbf{Tecnología} & \textbf{Versión} & \textbf{Función} \\
-\midrule
-Node.js & 22 & Entorno de ejecución de las herramientas \\
-Expo SDK & 57 & Plataforma de desarrollo y módulos nativos \\
-React Native / React & 0.86 / 19.2 & \emph{Framework} de interfaz \\
-TypeScript & 6.0 & Lenguaje con tipado estático (modo estricto) \\
-Expo Router & 57 & Navegación basada en archivos \\
-Firebase JS SDK & 12 & Authentication, Firestore y Storage \\
-NativeWind / Tailwind CSS & 4.2 / 3.4 & Estilos con clases utilitarias \\
-Zustand & 5 & Estado global persistente \\
-Zod & 4 & Validación de esquemas \\
-react-native-chart-kit & 7 & Gráficos del reporte de progreso \\
-expo-camera & 57 & Acceso a la cámara para el escáner \\
-expo-image & 57 & Imágenes y animaciones GIF con caché \\
+\begin{tabularx}{\textwidth}{|L{5cm}|L{2.4cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Tecnología} & \textbf{Versión} & \textbf{Función} \\
+\hline
+Node.js & 22 & Entorno de ejecución de las herramientas \\ \hline
+Expo SDK & 57 & Plataforma de desarrollo y módulos nativos \\ \hline
+React Native / React & 0.86 / 19.2 & \emph{Framework} de interfaz \\ \hline
+TypeScript & 6.0 & Lenguaje con tipado estático (modo estricto) \\ \hline
+Expo Router & 57 & Navegación basada en archivos \\ \hline
+Firebase JS SDK & 12 & Authentication, Firestore y Storage \\ \hline
+NativeWind / Tailwind CSS & 4.2 / 3.4 & Estilos con clases utilitarias \\ \hline
+Zustand & 5 & Estado global persistente \\ \hline
+Zod & 4 & Validación de esquemas \\ \hline
+react-native-chart-kit & 7 & Gráficos del reporte de progreso \\ \hline
+expo-camera & 57 & Acceso a la cámara para el escáner \\ \hline
+expo-image & 57 & Imágenes y animaciones GIF con caché \\ \hline
 Google Sign-In (RN) & 16 & Inicio de sesión con Google \\
-\bottomrule
+\hline
 \end{tabularx}
 \fuente{Archivo \archivo{package.json} del proyecto.}
 \end{table}
@@ -315,15 +315,15 @@ primera disponible, sin que ninguna pantalla deba redirigir manualmente.
 \centering
 \caption{Grupos de rutas habilitados según el estado}
 \label{tab:rutas-protegidas}
-\begin{tabularx}{\textwidth}{Y L{4.3cm}}
-\toprule
-\textbf{Estado} & \textbf{Grupo disponible} \\
-\midrule
-Sin sesión & \archivo{index} (bienvenida) y \archivo{(auth)} \\
-Con sesión, perfil aún cargando & \archivo{(auth)} \\
-Con sesión, sin objetivo ni nivel & \archivo{(onboarding)} \\
+\begin{tabularx}{\textwidth}{|Y|L{4.3cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Estado} & \textbf{Grupo disponible} \\
+\hline
+Sin sesión & \archivo{index} (bienvenida) y \archivo{(auth)} \\ \hline
+Con sesión, perfil aún cargando & \archivo{(auth)} \\ \hline
+Con sesión, sin objetivo ni nivel & \archivo{(onboarding)} \\ \hline
 Con sesión y perfil completo & \archivo{(app)} \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -345,18 +345,18 @@ actividad, y los tonos cálidos se reservan para acentos y alertas.
 \centering
 \caption{Paleta de colores de la aplicación}
 \label{tab:paleta}
-\begin{tabular}{L{3.2cm} C{1.4cm} L{2.2cm} L{5cm}}
-\toprule
-\textbf{Token} & \textbf{Color} & \textbf{Valor} & \textbf{Uso} \\
-\midrule
-\archivo{primary} & \muestra{32A685} & \#32A685 & Botones, pestaña activa \\
-\archivo{primaryLight} & \muestra{ADD9D1} & \#ADD9D1 & Bordes y superficies \\
-\archivo{primaryDark} & \muestra{1F8A6A} & \#1F8A6A & Degradados \\
-\archivo{secondary} & \muestra{F2C0A2} & \#F2C0A2 & Advertencias suaves \\
-\archivo{accent} & \muestra{F29580} & \#F29580 & Acentos \\
-\archivo{accentStrong} & \muestra{D95032} & \#D95032 & Errores y alertas \\
+\begin{tabular}{|L{3.2cm}|C{1.4cm}|L{2.2cm}|L{5cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Token} & \textbf{Color} & \textbf{Valor} & \textbf{Uso} \\
+\hline
+\archivo{primary} & \muestra{32A685} & \#32A685 & Botones, pestaña activa \\ \hline
+\archivo{primaryLight} & \muestra{ADD9D1} & \#ADD9D1 & Bordes y superficies \\ \hline
+\archivo{primaryDark} & \muestra{1F8A6A} & \#1F8A6A & Degradados \\ \hline
+\archivo{secondary} & \muestra{F2C0A2} & \#F2C0A2 & Advertencias suaves \\ \hline
+\archivo{accent} & \muestra{F29580} & \#F29580 & Acentos \\ \hline
+\archivo{accentStrong} & \muestra{D95032} & \#D95032 & Errores y alertas \\ \hline
 \archivo{foreground} & \muestra{1F2937} & \#1F2937 & Texto principal \\
-\bottomrule
+\hline
 \end{tabular}
 \fuente{Archivo \archivo{constants/palette.ts} del proyecto.}
 \end{table}

@@ -29,26 +29,26 @@ sus entidades, su esquema de validación y su repositorio
 \caption{Componentes de cada módulo por capa}
 \label{tab:modulos-capas}
 \small
-\begin{tabularx}{\textwidth}{L{2.1cm} L{4.0cm} Y L{3.0cm}}
-\toprule
-\textbf{Módulo} & \textbf{Controlador} & \textbf{Modelo (entidad /
+\begin{tabularx}{\textwidth}{|L{2.1cm}|L{4.0cm}|Y|L{3.0cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Módulo} & \textbf{Controlador} & \textbf{Modelo (entidad /
 repositorio)} & \textbf{Vista} \\
-\midrule
+\hline
 Autenticación & \archivo{AuthController} & \archivo{Usuario} /
 \archivo{usuarioRepository} & \archivo{(auth)}, \archivo{(onboarding)},
-\archivo{perfil} \\
+\archivo{perfil} \\ \hline
 Máquinas & \archivo{MaquinasController} & \archivo{Maquina} /
-\archivo{maquinaRepository} & \archivo{machines/*} \\
+\archivo{maquinaRepository} & \archivo{machines/*} \\ \hline
 Ejercicios & \archivo{EjerciciosWgerController} &
 \archivo{EjercicioWger} / \archivo{ejercicioWgerRepository} & Modales de
-selección \\
+selección \\ \hline
 Rutinas & \archivo{RutinasController} & \archivo{Rutina} /
-\archivo{rutinaRepository} & \archivo{routines/*} \\
+\archivo{rutinaRepository} & \archivo{routines/*} \\ \hline
 Nutrición & \archivo{NutritionController} & \archivo{RegistroNutricional}
-/ \archivo{nutricionRepository} & \archivo{nutricion} \\
+/ \archivo{nutricionRepository} & \archivo{nutricion} \\ \hline
 Progreso & \archivo{ProgresoController} & \archivo{ProgresoFisico} /
 \archivo{progresoRepository} & \archivo{progress/*}, inicio \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
 
@@ -87,19 +87,19 @@ cierre de la estabilización.
 \centering
 \caption{Tamaño del código fuente por capa}
 \label{tab:metricas}
-\begin{tabular}{L{3.6cm} L{4.6cm} C{1.8cm} C{1.8cm}}
-\toprule
-\textbf{Capa} & \textbf{Carpetas} & \textbf{Archivos} & \textbf{Líneas} \\
-\midrule
-Vista & \archivo{app/}, \archivo{components/} & 32 & 4\,860 \\
+\begin{tabular}{|L{3.6cm}|L{4.6cm}|C{1.8cm}|C{1.8cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Capa} & \textbf{Carpetas} & \textbf{Archivos} & \textbf{Líneas} \\
+\hline
+Vista & \archivo{app/}, \archivo{components/} & 32 & 4\,860 \\ \hline
 Controlador & \archivo{controllers/}, \archivo{utils/}, \archivo{store/},
-\archivo{hooks/} & 15 & 1\,399 \\
-Modelo & \archivo{models/}, \archivo{schemas/} & 21 & 1\,165 \\
-Servicios & \archivo{services/}, \archivo{config/} & 6 & 514 \\
+\archivo{hooks/} & 15 & 1\,399 \\ \hline
+Modelo & \archivo{models/}, \archivo{schemas/} & 21 & 1\,165 \\ \hline
+Servicios & \archivo{services/}, \archivo{config/} & 6 & 514 \\ \hline
 Otros & \archivo{constants/}, \archivo{types/} & 2 & 45 \\
-\midrule
+\hline
 \textbf{Total} & & \textbf{76} & \textbf{7\,983} \\
-\bottomrule
+\hline
 \end{tabular}
 \fuente{Conteo de archivos \archivo{.ts} y \archivo{.tsx} de la carpeta
 \archivo{src/}, incluidos comentarios y líneas en blanco.}
@@ -115,19 +115,19 @@ verificaciones automáticas que el código debe superar
 \centering
 \caption{Verificaciones estáticas del código}
 \label{tab:verificacion-estatica}
-\begin{tabularx}{\textwidth}{L{4.3cm} Y L{3.2cm}}
-\toprule
-\textbf{Verificación} & \textbf{Qué detecta} & \textbf{Resultado} \\
-\midrule
+\begin{tabularx}{\textwidth}{|L{4.3cm}|Y|L{3.2cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Verificación} & \textbf{Qué detecta} & \textbf{Resultado} \\
+\hline
 \archivo{tsc --noEmit} & Errores de tipos en todo el proyecto (TypeScript
-estricto). & 0 errores \\
+estricto). & 0 errores \\ \hline
 \archivo{eslint .} & Errores y malas prácticas, incluidas las reglas de
 \emph{hooks} de React, sin reglas desactivadas. &
-\pendiente{registrar} \\
+\pendiente{registrar} \\ \hline
 \archivo{prettier --check} & Formato no uniforme del código. & 75 de 76
-archivos conformes \\
+archivos conformes \\ \hline
 \archivo{expo export -p web} & Rutas duplicadas, importaciones rotas y
 dependencias faltantes al empaquetar. & \pendiente{registrar} \\
-\bottomrule
+\hline
 \end{tabularx}
 \end{table}
