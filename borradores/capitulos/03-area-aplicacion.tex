@@ -1,0 +1,198 @@
+\chapter{ÁREA DE APLICACIÓN}
+\label{cap:area-aplicacion}
+
+\section{Antecedentes}
+\label{sec:aa-antecedentes}
+
+El área de aplicación del proyecto es el \emph{entrenamiento de fuerza y
+acondicionamiento físico en gimnasios}. Un gimnasio comercial ofrece a sus
+miembros acceso a un conjunto de equipamiento, generalmente distribuido en
+zonas de máquinas de resistencia guiada, poleas, peso libre con bancos y
+racks, y equipos cardiovasculares. La orientación que recibe el usuario
+depende del gimnasio: en algunos casos hay un instructor de sala que atiende a
+todos los presentes, y en la mayoría el usuario entrena solo y recurre a la
+asesoría de un entrenador personal únicamente si puede pagarla.
+
+En este contexto, el conocimiento necesario para entrenar de forma segura y
+eficaz (cómo se ajusta y se usa cada máquina, qué músculos trabaja, cuántas
+series y repeticiones realizar, cómo organizar la semana y cómo saber si se
+está progresando) se transmite de manera informal: por imitación de otros
+usuarios, por videos genéricos o por rutinas copiadas que no consideran el
+nivel ni el objetivo de la persona. Esta situación es la que conduce a las
+barreras descritas en la sección~\ref{sec:problema}.
+
+\section{Descripción del área de aplicación}
+\label{sec:aa-descripcion}
+
+\subsection{Equipamiento de un gimnasio}
+
+Para construir la guía de máquinas se tomó como referencia el catálogo de un
+proveedor nacional de equipamiento para gimnasios. A partir de él se
+identificaron 35 tipos de máquina representativos, agrupados en cuatro tipos
+según su forma de uso (Tabla~\ref{tab:tipos-equipamiento}). Cada tipo agrupa
+varios modelos comerciales, que en la aplicación se muestran como variantes
+del mismo equipo.
+
+\begin{table}[H]
+\centering
+\caption{Tipos de equipamiento considerados en el catálogo}
+\label{tab:tipos-equipamiento}
+\begin{tabularx}{\textwidth}{L{3cm} C{2.0cm} Y}
+\toprule
+\textbf{Tipo} & \textbf{Cantidad} & \textbf{Descripción} \\
+\midrule
+Máquina guiada & 23 & Equipo con trayectoria fija y placas de peso, por
+ejemplo prensa de piernas, extensión de cuádriceps o máquina de pecho. \\
+Banco y rack & 5 & Estructuras para entrenar con barra o mancuernas, como el
+banco plano o el rack de sentadillas. \\
+Cardio & 4 & Equipos de trabajo cardiovascular, como la cinta de correr o la
+bicicleta estática. \\
+Polea & 3 & Estaciones de cable con trayectoria libre, como el cruce de poleas
+o el jalón al pecho. \\
+\midrule
+\textbf{Total} & \textbf{35} & \\
+\bottomrule
+\end{tabularx}
+\fuente{Elaboración propia a partir del catálogo cargado en Cloud Firestore.}
+\end{table}
+
+\subsection{Actores}
+
+En el área de aplicación intervienen los siguientes actores, que se
+corresponden con los perfiles de usuario de la aplicación:
+
+\begin{itemize}
+    \item \textbf{Usuario principiante:} lleva menos de seis meses entrenando
+    o es nuevo en el gimnasio. Necesita, sobre todo, aprender a usar las
+    máquinas y seguir una rutina sencilla. Es el actor con mayor riesgo de
+    abandono.
+    \item \textbf{Usuario intermedio:} entrena con regularidad desde hace seis
+    meses a dos años. Conoce las máquinas básicas y busca una rutina más
+    estructurada y el seguimiento de su progreso.
+    \item \textbf{Usuario avanzado:} entrena desde hace más de dos años. Arma
+    sus propias rutinas y valora la planificación y los reportes.
+    \item \textbf{Administrador del catálogo:} rol técnico, fuera de la
+    aplicación, responsable de cargar y actualizar el contenido de las
+    máquinas mediante scripts con credenciales de servicio.
+\end{itemize}
+
+Los objetivos de entrenamiento que el usuario puede declarar son cuatro:
+\emph{perder peso}, \emph{ganar masa muscular}, \emph{mantenimiento} y
+\emph{resistencia}.
+
+\section{Procesos}
+\label{sec:aa-procesos}
+
+\subsection{Proceso actual}
+
+La Figura~\ref{fig:proceso-actual} representa el proceso que sigue hoy un
+usuario sin guía profesional, y la Tabla~\ref{tab:problemas-proceso} relaciona
+cada paso con el problema que genera.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.45cm and 0.5cm,
+  paso/.style={caja, minimum width=2.6cm, text width=2.5cm, font=\footnotesize},
+  prob/.style={rectangle, draw=red!60!black, fill=red!5, dashed, rounded corners=2pt,
+               text width=2.5cm, align=center, font=\scriptsize}]
+  \node[paso] (a) {Se inscribe en el gimnasio};
+  \node[paso, right=of a] (b) {Imita a otros o copia una rutina genérica};
+  \node[paso, right=of b] (c) {Usa las máquinas sin ajuste ni técnica};
+  \node[paso, right=of c] (d) {No registra su progreso};
+  \node[prob, below=0.7cm of b] (pb) {Rutina sin relación con su objetivo ni nivel};
+  \node[prob, below=0.7cm of c] (pc) {Riesgo de lesión y bajo resultado};
+  \node[prob, below=0.7cm of d] (pd) {No percibe avances};
+  \node[caja, fill=red!12, below=0.7cm of pc, minimum width=5cm] (z) {Desmotivación y abandono};
+  \draw[flecha] (a)--(b); \draw[flecha] (b)--(c); \draw[flecha] (c)--(d);
+  \draw[flechad] (b)--(pb); \draw[flechad] (c)--(pc); \draw[flechad] (d)--(pd);
+  \draw[flecha] (pb) |- (z); \draw[flecha] (pc)--(z); \draw[flecha] (pd) |- (z);
+\end{tikzpicture}
+\caption{Proceso actual de entrenamiento sin guía profesional}
+\label{fig:proceso-actual}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Problemas del proceso actual y respuesta del sistema}
+\label{tab:problemas-proceso}
+\begin{tabularx}{\textwidth}{Y Y C{1.9cm}}
+\toprule
+\textbf{Problema} & \textbf{Respuesta del sistema} & \textbf{Objetivo} \\
+\midrule
+No sabe cómo se ajusta ni cómo se usa cada máquina. & Guía de máquinas con
+instrucciones, errores comunes y prevención de lesiones; escáner con
+cámara. & OE1 \\
+No sabe ejecutar correctamente los ejercicios. & Animaciones de ejecución por
+ejercicio, con músculo objetivo y nivel de dificultad. & OE2 \\
+Su rutina no considera su objetivo ni su nivel. & Generador de rutinas basado
+en reglas de prescripción del ejercicio. & OE3 \\
+No organiza su semana de entrenamiento. & Plan semanal por días y
+planificador de rutinas personalizadas. & OE4 \\
+No controla su composición corporal. & Calculadora de IMC con historial de
+mediciones. & OE5 \\
+No registra su evolución. & Registro de peso, estatura e IMC en el tiempo. &
+OE6 \\
+No percibe sus avances. & Reporte gráfico de la tendencia del peso y
+resumen de la variación. & OE7 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Proceso propuesto}
+
+Con el sistema, el usuario sigue el proceso de la
+Figura~\ref{fig:proceso-propuesto}. Después de registrarse, declara su
+objetivo y su nivel; con esos datos obtiene una rutina semanal generada
+automáticamente o arma la suya. Durante el entrenamiento consulta la guía de
+cada máquina, ya sea buscándola en el catálogo o enfocándola con la cámara, y
+periódicamente registra su peso para visualizar su progreso.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.55cm and 0.45cm,
+  paso/.style={caja, minimum width=2.7cm, text width=2.6cm, font=\footnotesize}]
+  \node[paso, fill=green!8] (a) {Registro o inicio de sesión};
+  \node[paso, fill=green!8, right=of a] (b) {Onboarding: objetivo y nivel};
+  \node[paso, fill=green!8, right=of b] (c) {Rutina generada o personalizada};
+  \node[paso, fill=green!8, right=of c] (d) {Entrenamiento del día};
+  \node[paso, below=1.1cm of d] (e) {Guía de la máquina (catálogo o escáner)};
+  \node[paso, left=of e] (f) {Registro de peso e IMC};
+  \node[paso, left=of f] (g) {Reporte de progreso};
+  \node[paso, left=of g] (h) {Ajuste de la rutina};
+  \draw[flecha] (a)--(b); \draw[flecha] (b)--(c); \draw[flecha] (c)--(d);
+  \draw[flecha] (d)--(e); \draw[flecha] (e)--(f); \draw[flecha] (f)--(g);
+  \draw[flecha] (g)--(h); \draw[flecha] (h) -- ++(0,0.9) -| ($(c.south)+(0,0)$);
+\end{tikzpicture}
+\caption{Proceso propuesto de entrenamiento con el sistema}
+\label{fig:proceso-propuesto}
+\end{figure}
+
+\section{Definiciones}
+\label{sec:aa-definiciones}
+
+\begin{description}[style=nextline, leftmargin=0.6cm, font=\normalfont\bfseries]
+  \item[Repetición] Ejecución completa de un movimiento, desde la posición
+  inicial hasta la final y el retorno.
+  \item[Serie] Conjunto de repeticiones consecutivas realizadas sin descanso.
+  \item[Descanso] Tiempo de recuperación entre series, expresado en segundos.
+  \item[Rutina] Plan de entrenamiento que define, para cada día de la semana,
+  los ejercicios a realizar con sus series, repeticiones y descansos.
+  \item[Plan semanal] Distribución de los días de entrenamiento de una rutina,
+  cada uno con un enfoque muscular (por ejemplo, ``Pecho, Hombros y Brazos'').
+  \item[Rutina activa] Rutina que el usuario sigue actualmente y que se muestra
+  en la pantalla de inicio.
+  \item[Grupo muscular principal y secundario] Músculos que realizan la mayor
+  parte del trabajo en un ejercicio y músculos que colaboran en él,
+  respectivamente.
+  \item[Máquina guiada] Equipo de resistencia con trayectoria fija que limita
+  el movimiento a un plano determinado.
+  \item[Variante] Modelo comercial concreto de un tipo de máquina.
+  \item[Ficha de máquina] Conjunto de información de una máquina en la
+  aplicación: descripción, músculos, guía de uso, errores comunes, prevención
+  de lesiones, variantes y ejercicios asociados.
+  \item[Onboarding] Proceso inicial en el que el usuario recién registrado
+  declara su objetivo y su nivel de experiencia.
+  \item[IMC] Índice de masa corporal (Ecuación~\ref{eq:imc}).
+  \item[Catálogo] Conjunto de datos compartido por todos los usuarios (máquinas
+  y ejercicios), de solo lectura para la aplicación.
+\end{description}

@@ -1,0 +1,133 @@
+% =====================================================================
+\section{Fase de Estabilización}
+\label{sec:estabilizacion}
+
+En esta fase no se agregó funcionalidad nueva. El trabajo se concentró en
+integrar los módulos, uniformar la arquitectura y verificar la calidad del
+código.
+
+\subsection{Integración de los módulos}
+
+Los módulos desarrollados en las ramas \archivo{feature/auth} y
+\archivo{feature/machines} se integraron en \archivo{develop} mediante
+solicitudes de integración. La navegación principal quedó unificada en la
+barra de pestañas de \archivo{(app)} (Inicio, Máquinas, Progreso y
+Nutrición), con las rutinas y el perfil accesibles desde el inicio, y la
+protección de rutas centralizada en el diseño raíz.
+
+\subsection{Refactorización por capas}
+
+Durante las primeras iteraciones, solo el módulo de nutrición cumplía
+completamente la separación en capas; las pantallas de autenticación y de
+máquinas llamaban a Firebase directamente. En la estabilización se extendió el
+patrón a todo el sistema, de modo que cada módulo cuenta con su controlador,
+sus entidades, su esquema de validación y su repositorio
+(Tabla~\ref{tab:modulos-capas}).
+
+\begin{table}[H]
+\centering
+\caption{Componentes de cada módulo por capa}
+\label{tab:modulos-capas}
+\small
+\begin{tabularx}{\textwidth}{L{2.1cm} L{4.0cm} Y L{3.0cm}}
+\toprule
+\textbf{Módulo} & \textbf{Controlador} & \textbf{Modelo (entidad /
+repositorio)} & \textbf{Vista} \\
+\midrule
+Autenticación & \archivo{AuthController} & \archivo{Usuario} /
+\archivo{usuarioRepository} & \archivo{(auth)}, \archivo{(onboarding)},
+\archivo{perfil} \\
+Máquinas & \archivo{MaquinasController} & \archivo{Maquina} /
+\archivo{maquinaRepository} & \archivo{machines/*} \\
+Ejercicios & \archivo{EjerciciosWgerController} &
+\archivo{EjercicioWger} / \archivo{ejercicioWgerRepository} & Modales de
+selección \\
+Rutinas & \archivo{RutinasController} & \archivo{Rutina} /
+\archivo{rutinaRepository} & \archivo{routines/*} \\
+Nutrición & \archivo{NutritionController} & \archivo{RegistroNutricional}
+/ \archivo{nutricionRepository} & \archivo{nutricion} \\
+Progreso & \archivo{ProgresoController} & \archivo{ProgresoFisico} /
+\archivo{progresoRepository} & \archivo{progress/*}, inicio \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Otras mejoras aplicadas en la refactorización fueron:
+
+\begin{itemize}
+    \item \textbf{Tiempo real en lugar de recarga manual.} Las pantallas que
+    consultaban los datos una sola vez y ofrecían una función de recarga
+    pasaron a suscribirse con \archivo{onSnapshot} a través de los métodos
+    \archivo{observar} de cada controlador, con la cancelación de la
+    suscripción al desmontar la pantalla.
+    \item \textbf{Manejo de errores de las suscripciones.} Se añadió un
+    manejador por defecto que, ante un error de lectura, registra un aviso y
+    entrega un resultado vacío para que la interfaz no quede esperando
+    indefinidamente. El error de permisos que se produce al cerrar sesión con
+    suscripciones activas se reconoce como esperado y se ignora.
+    \item \textbf{Limpieza de campos indefinidos.} Firestore rechaza los
+    campos con valor \archivo{undefined}; en lugar de exigir que cada
+    repositorio lo tenga en cuenta, la limpieza se centralizó en
+    \archivo{firestoreService}, el único archivo que usa el SDK.
+    \item \textbf{Validación en el controlador.} Todas las operaciones de
+    escritura validan sus datos con Zod antes de llegar al repositorio, y las
+    reglas de seguridad repiten las validaciones críticas en el servidor.
+    \item \textbf{Reglas alineadas con el modelo real.} Las reglas de
+    Firestore se revisaron campo por campo contra las entidades y los
+    repositorios, de modo que cada escritura que realiza la aplicación
+    satisface su regla y ninguna otra es aceptada.
+\end{itemize}
+
+\subsection{Métricas del código}
+
+La Tabla~\ref{tab:metricas} resume el tamaño del código fuente por capa al
+cierre de la estabilización.
+
+\begin{table}[H]
+\centering
+\caption{Tamaño del código fuente por capa}
+\label{tab:metricas}
+\begin{tabular}{L{3.6cm} L{4.6cm} C{1.8cm} C{1.8cm}}
+\toprule
+\textbf{Capa} & \textbf{Carpetas} & \textbf{Archivos} & \textbf{Líneas} \\
+\midrule
+Vista & \archivo{app/}, \archivo{components/} & 32 & 4\,860 \\
+Controlador & \archivo{controllers/}, \archivo{utils/}, \archivo{store/},
+\archivo{hooks/} & 15 & 1\,399 \\
+Modelo & \archivo{models/}, \archivo{schemas/} & 21 & 1\,165 \\
+Servicios & \archivo{services/}, \archivo{config/} & 6 & 514 \\
+Otros & \archivo{constants/}, \archivo{types/} & 2 & 45 \\
+\midrule
+\textbf{Total} & & \textbf{76} & \textbf{7\,983} \\
+\bottomrule
+\end{tabular}
+\fuente{Conteo de archivos \archivo{.ts} y \archivo{.tsx} de la carpeta
+\archivo{src/}, incluidos comentarios y líneas en blanco.}
+\end{table}
+
+\subsection{Verificación estática}
+
+Como criterio de cierre de la fase se estableció una secuencia de
+verificaciones automáticas que el código debe superar
+(Tabla~\ref{tab:verificacion-estatica}).
+
+\begin{table}[H]
+\centering
+\caption{Verificaciones estáticas del código}
+\label{tab:verificacion-estatica}
+\begin{tabularx}{\textwidth}{L{4.3cm} Y L{3.2cm}}
+\toprule
+\textbf{Verificación} & \textbf{Qué detecta} & \textbf{Resultado} \\
+\midrule
+\archivo{tsc --noEmit} & Errores de tipos en todo el proyecto (TypeScript
+estricto). & 0 errores \\
+\archivo{eslint .} & Errores y malas prácticas, incluidas las reglas de
+\emph{hooks} de React, sin reglas desactivadas. &
+\pendiente{registrar} \\
+\archivo{prettier --check} & Formato no uniforme del código. & 75 de 76
+archivos conformes \\
+\archivo{expo export -p web} & Rutas duplicadas, importaciones rotas y
+dependencias faltantes al empaquetar. & \pendiente{registrar} \\
+\bottomrule
+\end{tabularx}
+\end{table}

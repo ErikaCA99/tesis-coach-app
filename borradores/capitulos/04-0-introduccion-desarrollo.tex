@@ -1,0 +1,41 @@
+En este capítulo se describe el desarrollo del sistema siguiendo las fases de
+la metodología Mobile-D presentadas en la sección~\ref{sec:mt-mobiled}. Para
+cada fase se detallan las actividades realizadas y los artefactos obtenidos.
+La fase de producción se organizó en seis iteraciones, una por módulo
+funcional, y cada iteración se documenta con su planificación, el trabajo de
+diseño e implementación y la liberación con sus criterios de aceptación.
+
+El producto resultante se identifica en este documento como \nombreApp{}, el
+nombre de la aplicación registrado en su configuración de compilación. El
+código fuente se gestiona en un repositorio Git alojado en GitHub, y los
+fragmentos de código que se presentan corresponden a la versión integrada en
+la rama \archivo{develop}.
+
+La Tabla~\ref{tab:resumen-fases} resume la correspondencia entre las fases de
+Mobile-D, las actividades principales y los artefactos producidos.
+
+\begin{table}[H]
+\centering
+\caption{Resumen de las fases de Mobile-D aplicadas al proyecto}
+\label{tab:resumen-fases}
+\begin{tabularx}{\textwidth}{L{2.6cm} Y Y}
+\toprule
+\textbf{Fase} & \textbf{Actividades principales} & \textbf{Artefactos} \\
+\midrule
+Exploración & Identificación de interesados, definición de alcance,
+requerimientos, selección tecnológica y planificación. & Requerimientos
+funcionales y no funcionales, casos de uso, plan de iteraciones. \\
+Inicialización & Configuración del entorno, repositorio, proyecto Firebase,
+arquitectura, modelo de datos y día de prueba. & Arquitectura por capas,
+modelo de datos de Firestore, reglas de seguridad, estructura del
+proyecto. \\
+Producción & Seis iteraciones: autenticación, guía de máquinas, escáner,
+rutinas, nutrición y progreso. & Módulos funcionales integrados por
+\emph{pull request}. \\
+Estabilización & Integración, refactorización por capas, validación y
+verificación estática. & Código uniforme y verificado. \\
+Pruebas del sistema & Pruebas funcionales, de seguridad y de aceptación por
+objetivo específico. & Matriz de casos de prueba y resultados. \\
+\bottomrule
+\end{tabularx}
+\end{table}

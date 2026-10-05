@@ -1,0 +1,98 @@
+% =====================================================================
+%  COMANDOS PROPIOS
+% =====================================================================
+
+% Nombre de archivo, ruta o identificador de código dentro del texto
+\newcommand{\archivo}[1]{\texttt{\small #1}}
+
+% Marca visible para lo que la autora debe completar antes de imprimir.
+% Para ocultar todas las marcas: \renewcommand{\pendiente}[1]{}
+\newcommand{\pendiente}[1]{\textcolor{red!70!black}{\textbf{[PENDIENTE:} #1\textbf{]}}}
+
+% Captura de pantalla de la app.
+%   \captura{archivo-sin-extension}{Leyenda}{etiqueta}
+% Coloca las capturas en figuras/capturas/ (png o jpg). Mientras el archivo
+% no exista, se dibuja un recuadro con el nombre esperado.
+\newcommand{\captura}[3]{%
+  \begin{figure}[H]
+    \centering
+    \IfFileExists{figuras/capturas/#1.png}{%
+      \includegraphics[height=0.42\textheight]{figuras/capturas/#1.png}}{%
+    \IfFileExists{figuras/capturas/#1.jpg}{%
+      \includegraphics[height=0.42\textheight]{figuras/capturas/#1.jpg}}{%
+      \fbox{\parbox[c][0.30\textheight][c]{0.32\textwidth}{\centering\small
+        Captura de pantalla\\[4pt]\texttt{\scriptsize figuras/capturas/}\\\texttt{\scriptsize\detokenize{#1}.png}}}}}
+    \caption{#2}
+    \label{#3}
+  \end{figure}}
+
+% Dos capturas lado a lado
+%   \capturados{archivo1}{subleyenda1}{archivo2}{subleyenda2}{Leyenda}{etiqueta}
+\newcommand{\imagencaptura}[1]{%
+  \IfFileExists{figuras/capturas/#1.png}{%
+    \includegraphics[height=0.36\textheight]{figuras/capturas/#1.png}}{%
+  \IfFileExists{figuras/capturas/#1.jpg}{%
+    \includegraphics[height=0.36\textheight]{figuras/capturas/#1.jpg}}{%
+    \fbox{\parbox[c][0.28\textheight][c]{0.44\textwidth}{\centering\small
+      Captura de pantalla\\[4pt]\texttt{\scriptsize figuras/capturas/}\\\texttt{\scriptsize\detokenize{#1}.png}}}}}}
+\newcommand{\capturados}[6]{%
+  \begin{figure}[H]
+    \centering
+    \begin{minipage}[t]{0.47\textwidth}\centering
+      \imagencaptura{#1}\\[2pt]{\small (a) #2}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.47\textwidth}\centering
+      \imagencaptura{#3}\\[2pt]{\small (b) #4}
+    \end{minipage}
+    \caption{#5}
+    \label{#6}
+  \end{figure}}
+
+% Nota de fuente al pie de tablas y figuras
+\newcommand{\fuente}[1]{\par\vspace{2pt}{\footnotesize\textit{Fuente:} #1}}
+
+% Estilos TikZ comunes para diagramas
+\tikzset{
+  caja/.style={rectangle, rounded corners=3pt, draw=black!70, fill=white,
+               minimum height=0.9cm, align=center, font=\small, inner sep=5pt},
+  capa/.style={rectangle, draw=black!60, fill=#1, minimum width=13.5cm,
+               minimum height=1.6cm, align=left, font=\small},
+  capa/.default={black!5},
+  flecha/.style={-{Stealth[length=2.5mm]}, thick, black!70},
+  flechad/.style={-{Stealth[length=2.5mm]}, thick, dashed, black!60},
+  casouso/.style={ellipse, draw=black!70, fill=green!4, minimum width=3.6cm,
+                  minimum height=0.85cm, align=center, font=\footnotesize, inner sep=1pt},
+  entidad/.style={rectangle, draw=black!70, fill=white, align=left,
+                  font=\scriptsize\ttfamily, inner sep=4pt, rectangle split,
+                  rectangle split parts=2, rectangle split part fill={green!12,white}},
+}
+
+% Actor UML (monigote) — \actor{nombre-nodo}{posición}{etiqueta}
+\newcommand{\actor}[3]{%
+  \begin{scope}[shift={#2}]
+    \draw[thick] (0,0.55) circle (0.18);
+    \draw[thick] (0,0.37) -- (0,-0.15);
+    \draw[thick] (-0.3,0.2) -- (0.3,0.2);
+    \draw[thick] (0,-0.15) -- (-0.25,-0.55);
+    \draw[thick] (0,-0.15) -- (0.25,-0.55);
+    \node[font=\small, below] at (0,-0.6) {#3};
+    \coordinate (#1) at (0.35,0.1);
+  \end{scope}}
+
+% Lista con viñetas dentro de una celda de tabla (columnas p{} / X)
+\newenvironment{tablista}
+  {\begin{itemize}[leftmargin=1.1em, nosep, topsep=0pt, partopsep=0pt,
+     before={\vspace{-0.55\baselineskip}}, after={\vspace{-\baselineskip}}]}
+  {\end{itemize}}
+
+% Párrafo de "Conclusión:" debajo de las tablas comparativas
+\newcommand{\conclusion}[1]{\par\textbf{Conclusión:} #1\par}
+
+% Encabezado en negrita dentro de una sección (sin numerar)
+\newcommand{\titulillo}[1]{\par\medskip\noindent\textbf{#1}\par}
+
+% Lista de referencias con sangría francesa (formato APA)
+\newenvironment{referenciasapa}
+  {\begin{list}{}{\setlength{\leftmargin}{1.27cm}\setlength{\itemindent}{-1.27cm}
+     \setlength{\itemsep}{6pt}\setlength{\parsep}{0pt}}\raggedright}
+  {\end{list}}

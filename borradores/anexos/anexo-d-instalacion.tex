@@ -1,0 +1,77 @@
+\chapter{MANUAL DE INSTALACIÓN Y DESPLIEGUE}
+\label{anx:instalacion}
+
+\section{Requisitos}
+
+\begin{itemize}
+    \item Node.js 22 y npm.
+    \item Android Studio con el SDK de Android y un emulador, o un dispositivo
+    Android con la depuración USB activada.
+    \item Una cuenta de Firebase con un proyecto que tenga habilitados
+    Authentication (correo y Google), Cloud Firestore y Cloud Storage.
+    \item Git, para obtener el código fuente.
+\end{itemize}
+
+\section{Obtención del código e instalación de dependencias}
+
+\begin{lstlisting}[language={}, numbers=none, caption={Instalación del proyecto}, label={lst:instalacion}]
+git clone https://github.com/ErikaCA99/CoachAppProject.git coach-app
+cd coach-app
+git checkout develop
+npm install
+\end{lstlisting}
+
+\section{Configuración de Firebase}
+
+\begin{enumerate}
+    \item En la consola de Firebase, registrar una aplicación Android con el
+    identificador de paquete definido en \archivo{app.json} y descargar el
+    archivo \archivo{google-services.json} en la raíz del proyecto.
+    \item Crear el archivo \archivo{.env} en la raíz con las claves de la
+    aplicación web del proyecto de Firebase (Código~\ref{lst:env}).
+    \item Publicar las reglas de seguridad copiando el contenido de
+    \archivo{firestore.rules} y \archivo{storage.rules} en las secciones de
+    reglas de Firestore y Storage de la consola (Anexo~\ref{anx:reglas}).
+    \item Cargar el catálogo de máquinas ejecutando el \emph{script} de carga
+    con las credenciales de una cuenta de servicio, que nunca deben incluirse
+    en la aplicación.
+\end{enumerate}
+
+\begin{lstlisting}[language={}, numbers=none, caption={Variables de entorno (valores de ejemplo)}, label={lst:env}]
+EXPO_PUBLIC_FIREBASE_API_KEY=...
+EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN=...
+EXPO_PUBLIC_FIREBASE_PROJECT_ID=...
+EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET=...
+EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=...
+EXPO_PUBLIC_FIREBASE_APP_ID=...
+EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID=...
+EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID=...
+\end{lstlisting}
+
+\section{Ejecución en desarrollo}
+
+\begin{lstlisting}[language={}, numbers=none, caption={Compilación y ejecución en Android}, label={lst:ejecucion}]
+npx expo run:android      # compila e instala el development build
+npx expo start            # servidor de desarrollo (en ejecuciones posteriores)
+\end{lstlisting}
+
+\section{Verificación del código}
+
+\begin{lstlisting}[language={}, numbers=none, caption={Verificaciones estáticas}, label={lst:verificacion}]
+npx tsc --noEmit
+npx eslint .
+npx prettier --check "src/**/*.{ts,tsx}"
+npx expo export -p web
+\end{lstlisting}
+
+\section{Generación del instalador}
+
+Con la herramienta EAS de Expo se generan los paquetes de distribución a
+partir de los perfiles de \archivo{eas.json}:
+
+\begin{lstlisting}[language={}, numbers=none, caption={Compilación con EAS}, label={lst:eas}]
+npm install -g eas-cli
+eas login
+eas build --platform android --profile preview      # APK de prueba
+eas build --platform android --profile production   # AAB para Google Play
+\end{lstlisting}

@@ -1,0 +1,210 @@
+% =====================================================================
+\section{Fase de Pruebas del sistema}
+\label{sec:pruebas}
+
+La última fase de Mobile-D verifica que el producto cumpla sus
+requerimientos. Las pruebas se organizaron en cinco niveles, de los más
+automáticos a los que requieren al usuario (Tabla~\ref{tab:estrategia}).
+
+\begin{table}[H]
+\centering
+\caption{Estrategia de pruebas}
+\label{tab:estrategia}
+\begin{tabularx}{\textwidth}{L{3.5cm} Y L{3.4cm}}
+\toprule
+\textbf{Nivel} & \textbf{Objeto de la prueba} & \textbf{Técnica} \\
+\midrule
+Verificación estática & Tipos, calidad y empaquetado de todo el código. &
+Compilador y analizadores (sección~\ref{sec:estabilizacion}) \\
+Lógica de negocio & Funciones puras: generador de rutinas y cálculo del
+IMC. & Pruebas unitarias con valores límite \\
+Reglas de seguridad & Aislamiento entre usuarios y validación de datos en el
+servidor. & Escenarios permitidos y denegados \\
+Funcionales & Cada requerimiento funcional en la aplicación instalada. &
+Caja negra, casos de prueba \\
+Aceptación & Cumplimiento de cada objetivo específico. & Trazabilidad
+objetivo--requerimiento--prueba \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Pruebas de la lógica de negocio}
+
+Las funciones \archivo{generarPlanHeuristico}, \archivo{repartirCantidad},
+\archivo{calcularIMC} y \archivo{clasificarIMC} no dependen de la red ni de la
+base de datos, por lo que se ejercitaron directamente con Node.js~22 sobre el
+código fuente del proyecto, sin modificaciones en su lógica.
+
+\paragraph{Generador de rutinas.} Se evaluaron las doce combinaciones posibles
+de objetivo y nivel. La Tabla~\ref{tab:prueba-generador} muestra los
+resultados obtenidos, que coinciden en todos los casos con las reglas de las
+Tablas~\ref{tab:reglas-frecuencia} a~\ref{tab:reglas-division}.
+
+\begin{table}[H]
+\centering
+\caption{Resultados del generador para las doce combinaciones de entrada}
+\label{tab:prueba-generador}
+\small
+\begin{tabular}{L{2.5cm} L{2.2cm} C{0.9cm} C{1.9cm} L{4.4cm} C{1.1cm}}
+\toprule
+\textbf{Objetivo} & \textbf{Nivel} & \textbf{Días} & \textbf{Series × Rep.
+(desc.)} & \textbf{División obtenida} & \textbf{Ejerc.} \\
+\midrule
+Ganar masa & Principiante & 3 & 4×9 (90 s) & Emp. -- Tir. -- Pie. & 15 \\
+Ganar masa & Intermedio & 4 & 4×9 (90 s) & Emp. -- Tir. -- Pie. -- C.C. & 21 \\
+Ganar masa & Avanzado & 5 & 4×9 (90 s) & Emp. -- Tir. -- Pie. -- Emp. -- Tir. & 25 \\
+Mantenimiento & Principiante & 3 & 3×12 (60 s) & Emp. -- Tir. -- Pie. & 15 \\
+Mantenimiento & Intermedio & 4 & 3×12 (60 s) & Emp. -- Tir. -- Pie. -- C.C. & 21 \\
+Mantenimiento & Avanzado & 5 & 3×12 (60 s) & Emp. -- Tir. -- Pie. -- Emp. -- Tir. & 25 \\
+Perder peso & Principiante & 3 & 3×15 (45 s) & Emp. -- Car. -- Pie. & 14 \\
+Perder peso & Intermedio & 4 & 3×15 (45 s) & Emp. -- Tir. -- Car. -- Pie. & 19 \\
+Perder peso & Avanzado & 5 & 3×15 (45 s) & Emp. -- Tir. -- Pie. -- Car. -- C.C. & 25 \\
+Resistencia & Principiante & 3 & 3×18 (30 s) & Emp. -- Car. -- Pie. & 14 \\
+Resistencia & Intermedio & 4 & 3×18 (30 s) & Emp. -- Tir. -- Car. -- Pie. & 19 \\
+Resistencia & Avanzado & 5 & 3×18 (30 s) & Emp. -- Tir. -- Pie. -- Car. -- C.C. & 25 \\
+\bottomrule
+\end{tabular}
+\fuente{Ejecución de \archivo{generarPlanHeuristico}. Emp.: empuje; Tir.:
+tirón; Pie.: pierna; Car.: cardio; C.C.: cuerpo completo; Ejerc.: total de
+ejercicios por semana.}
+\end{table}
+
+Además, \archivo{repartirCantidad} distribuyó correctamente los ejercicios
+entre las categorías de cada bloque: cinco ejercicios en tres categorías se
+reparten como 2--2--1, seis en tres como 2--2--2 y cuatro en dos como 2--2.
+
+\paragraph{Cálculo del IMC.} Se probaron valores en los límites de cada
+categoría de la OMS (Tabla~\ref{tab:prueba-imc}). Todos los casos produjeron
+el resultado esperado.
+
+\begin{table}[H]
+\centering
+\caption{Pruebas de valores límite del cálculo y la clasificación del IMC}
+\label{tab:prueba-imc}
+\begin{tabular}{C{2.2cm} C{2.4cm} C{2.2cm} L{3.3cm} C{2cm}}
+\toprule
+\textbf{Peso (kg)} & \textbf{Estatura (cm)} & \textbf{IMC} &
+\textbf{Categoría obtenida} & \textbf{Resultado} \\
+\midrule
+50.0 & 170 & 17.3 & Bajo peso & Correcto \\
+53.4 & 170 & 18.5 & Normal & Correcto \\
+70.0 & 175 & 22.9 & Normal & Correcto \\
+72.2 & 170 & 25.0 & Sobrepeso & Correcto \\
+86.7 & 170 & 30.0 & Obesidad & Correcto \\
+100.0 & 170 & 34.6 & Obesidad & Correcto \\
+\midrule
+\multicolumn{2}{c}{IMC = 18.4 / 18.5} & & Bajo peso / Normal & Correcto \\
+\multicolumn{2}{c}{IMC = 24.9 / 25.0} & & Normal / Sobrepeso & Correcto \\
+\multicolumn{2}{c}{IMC = 29.9 / 30.0} & & Sobrepeso / Obesidad & Correcto \\
+\bottomrule
+\end{tabular}
+\fuente{Ejecución de \archivo{calcularIMC} y \archivo{clasificarIMC}.}
+\end{table}
+
+\subsection{Pruebas de las reglas de seguridad}
+
+Las reglas de seguridad son la única barrera real frente a un acceso
+malintencionado, porque las credenciales de Firebase están contenidas en la
+aplicación. La Tabla~\ref{tab:prueba-reglas} define los escenarios evaluados
+y el resultado que exigen las reglas del Anexo~\ref{anx:reglas}. Los
+escenarios se ejecutan con el simulador de reglas de la consola de Firebase
+(\emph{Rules Playground}), autenticando como un usuario $A$ y operando sobre
+datos propios o de otro usuario $B$.
+
+\begin{table}[H]
+\centering
+\caption{Escenarios de prueba de las reglas de seguridad}
+\label{tab:prueba-reglas}
+\small
+\begin{tabularx}{\textwidth}{L{0.9cm} Y C{1.9cm} C{1.9cm}}
+\toprule
+\textbf{ID} & \textbf{Escenario} & \textbf{Esperado} & \textbf{Obtenido} \\
+\midrule
+SEG-01 & Usuario no autenticado lee \archivo{maquinas/\{id\}} & Denegado &
+\pendiente{} \\
+SEG-02 & $A$ lee \archivo{maquinas/\{id\}} & Permitido & \pendiente{} \\
+SEG-03 & $A$ escribe en \archivo{maquinas/\{id\}} & Denegado & \pendiente{} \\
+SEG-04 & $A$ lee \archivo{usuarios/A/rutinas} & Permitido & \pendiente{} \\
+SEG-05 & $A$ lee \archivo{usuarios/B/rutinas} & Denegado & \pendiente{} \\
+SEG-06 & $A$ crea una rutina con \archivo{diasPorSemana = 8} & Denegado &
+\pendiente{} \\
+SEG-07 & $A$ crea una rutina con \archivo{usuarioId = B} en su propia
+subcolección & Denegado & \pendiente{} \\
+SEG-08 & $A$ modifica el campo \archivo{email} de su perfil & Denegado &
+\pendiente{} \\
+SEG-09 & $A$ registra progreso con \archivo{peso = 0} & Denegado &
+\pendiente{} \\
+SEG-10 & $A$ registra ingesta con \archivo{calorias = -100} & Denegado &
+\pendiente{} \\
+SEG-11 & $A$ crea su perfil con \archivo{creadoEn} distinto de la hora del
+servidor & Denegado & \pendiente{} \\
+SEG-12 & $A$ sube un archivo a Storage & Denegado & \pendiente{} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Pruebas funcionales}
+
+Las pruebas funcionales se realizan con la técnica de caja negra sobre el
+\emph{development build} instalado en un dispositivo Android, siguiendo los
+criterios de aceptación definidos en cada iteración. Se definieron 30 casos de
+prueba que cubren los doce requerimientos funcionales; la matriz completa, con
+los pasos, el resultado esperado y el resultado obtenido, se encuentra en el
+Anexo~\ref{anx:casos}. La Tabla~\ref{tab:resumen-funcionales} resume su
+distribución.
+
+\begin{table}[H]
+\centering
+\caption{Distribución de los casos de prueba funcionales}
+\label{tab:resumen-funcionales}
+\begin{tabular}{L{6cm} C{2.5cm} C{2.8cm}}
+\toprule
+\textbf{Módulo} & \textbf{Casos} & \textbf{Requerimientos} \\
+\midrule
+Autenticación, onboarding y perfil & 7 & RF1, RF2, RF12 \\
+Guía de máquinas y ejercicios & 6 & RF3, RF4, RF5 \\
+Escáner con realidad aumentada & 4 & RF6 \\
+Rutinas y planificación & 6 & RF7, RF8 \\
+Nutrición (IMC) & 3 & RF9 \\
+Progreso y reportes & 4 & RF10, RF11 \\
+\midrule
+\textbf{Total} & \textbf{30} & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Dispositivos de prueba.} \pendiente{indicar marca, modelo y versión
+de Android de los dispositivos en que se ejecutaron las pruebas.}
+
+\subsection{Pruebas de aceptación por objetivo}
+
+Finalmente, la Tabla~\ref{tab:trazabilidad} relaciona cada objetivo
+específico con los requerimientos que lo implementan y con las pruebas que lo
+verifican. Esta trazabilidad es la base de la evaluación del cumplimiento de
+objetivos que realiza el tribunal (Artículo~64 del Reglamento de Titulación).
+
+\begin{table}[H]
+\centering
+\caption{Trazabilidad entre objetivos, requerimientos y pruebas}
+\label{tab:trazabilidad}
+\begin{tabularx}{\textwidth}{L{1.1cm} Y L{1.9cm} L{2.9cm}}
+\toprule
+\textbf{Obj.} & \textbf{Funcionalidad entregada} & \textbf{Req.} &
+\textbf{Pruebas} \\
+\midrule
+OE1 & Guía de 35 máquinas con búsqueda, filtros, fichas y escáner con
+realidad aumentada. & RF3, RF4, RF6 & CP-08 a CP-17 \\
+OE2 & Ejercicios con animación, músculo objetivo y dificultad. & RF5 &
+CP-12, CP-13 \\
+OE3 & Onboarding de objetivo y nivel; generador de rutinas basado en
+reglas. & RF2, RF7 & CP-04, CP-05, CP-18, CP-19, Tabla~\ref{tab:prueba-generador} \\
+OE4 & Planificador de rutinas por día, rutina activa y agregado desde la
+ficha. & RF8 & CP-20 a CP-23 \\
+OE5 & Calculadora de IMC con clasificación e historial. & RF9 & CP-24 a
+CP-26, Tabla~\ref{tab:prueba-imc} \\
+OE6 & Registro de peso, estatura e IMC. & RF10 & CP-27, CP-28 \\
+OE7 & Reporte con gráfico, variación y categoría actual. & RF11 & CP-29,
+CP-30 \\
+\bottomrule
+\end{tabularx}
+\end{table}

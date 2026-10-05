@@ -1,0 +1,104 @@
+\chapter{CONCLUSIONES Y RECOMENDACIONES}
+\label{cap:conclusiones}
+
+\section{Conclusiones}
+\label{sec:conclusiones}
+
+El presente proyecto de grado cumplió el objetivo general de desarrollar un
+sistema inteligente para el entrenamiento en gimnasios que proporciona una guía
+estructurada y un seguimiento personalizado de los ejercicios. El producto es
+una aplicación Android construida con React Native, Expo y TypeScript sobre
+los servicios de Firebase, organizada en una arquitectura cliente--servidor con
+capas Modelo--Vista--Controlador y desarrollada con la metodología Mobile-D.
+
+Respecto a cada objetivo específico, se concluye lo siguiente:
+
+\begin{enumerate}[label=\textbf{OE\arabic*.}, leftmargin=3.2em]
+    \item \textbf{Guiar sobre el uso correcto de máquinas.} Se construyó un
+    catálogo de 35 tipos de máquinas, con 288 modelos comerciales como
+    variantes, en el que cada ficha incluye descripción, músculos trabajados,
+    guía de uso paso a paso, errores comunes y pautas de prevención de
+    lesiones redactadas como contenido propio. El catálogo se consulta con
+    búsqueda tolerante a tildes y filtros, y se complementa con un escáner que
+    superpone la ficha de la máquina sobre la imagen en vivo de la cámara.
+    \item \textbf{Instruir en la ejecución correcta de ejercicios.} Cada
+    máquina presenta al menos un ejercicio con su animación de ejecución, su
+    músculo objetivo y su nivel de dificultad, con un total de 95 animaciones
+    obtenidas por la vía oficial de su proveedor.
+    \item \textbf{Diseñar rutinas personalizadas.} Se implementó un generador
+    de rutinas basado en reglas cuya base de conocimiento traduce las pautas
+    de prescripción del ejercicio en reglas de frecuencia, de variables de
+    carga y de división semanal. Las pruebas sobre las doce combinaciones de
+    objetivo y nivel confirmaron que cada rutina generada respeta esas reglas.
+    La elección de un enfoque basado en conocimiento, en lugar de uno de
+    aprendizaje automático, permitió obtener recomendaciones explicables sin
+    disponer de un conjunto de datos de entrenamiento.
+    \item \textbf{Construir herramientas de planificación.} El planificador
+    de rutinas personalizadas permite organizar la semana día por día, ajustar
+    series, repeticiones y descansos, mantener varias rutinas con una activa y
+    agregar ejercicios directamente desde la ficha de una máquina.
+    \item \textbf{Registrar la ingesta de alimentos.} Dentro del alcance
+    definido, que limita este objetivo al control calórico mediante una
+    calculadora de IMC, se implementó el cálculo y la clasificación del IMC
+    según la OMS con el registro histórico de cada medición. El modelo de
+    datos y las reglas de seguridad ya contemplan el registro de ingesta, lo
+    que facilita su ampliación.
+    \item \textbf{Implementar el seguimiento del progreso físico.} El usuario
+    registra su peso y su estatura, el sistema calcula el IMC y el historial
+    se sincroniza en tiempo real en todos sus dispositivos.
+    \item \textbf{Generar reportes de progreso.} El reporte presenta la
+    evolución del peso en un gráfico, la variación acumulada y la categoría de
+    IMC actual, calculados al vuelo a partir del historial para reflejar
+    siempre los datos vigentes.
+\end{enumerate}
+
+En el plano técnico, se concluye además que:
+
+\begin{itemize}
+    \item La separación en capas resultó determinante para la mantenibilidad:
+    al aislar el acceso a Firebase en los repositorios y servicios, cambios
+    como el paso de colecciones raíz a subcolecciones por usuario, o la
+    sustitución de la fuente del catálogo, se resolvieron sin modificar las
+    pantallas.
+    \item Las reglas de seguridad del servidor, que validan propiedad, tipos y
+    rangos, son indispensables en una arquitectura sin servidor propio, porque
+    las credenciales del cliente son públicas por diseño.
+    \item El diseño del reconocimiento automático como un punto de extensión
+    con un contrato definido permite incorporar en el futuro un clasificador
+    de imágenes sin afectar al resto del sistema.
+\end{itemize}
+
+\section{Recomendaciones}
+\label{sec:recomendaciones}
+
+A partir de la experiencia del desarrollo se recomienda, como trabajo futuro:
+
+\begin{itemize}
+    \item \textbf{Reconocimiento automático de máquinas con TensorFlow Lite.}
+    Construir un conjunto de fotografías propias de las 35 máquinas, tomadas
+    en gimnasios con autorización, entrenar un clasificador por transferencia
+    de aprendizaje sobre una arquitectura ligera como MobileNet e implementarlo
+    en la función \archivo{reconocerMaquina}. No deben usarse las animaciones
+    de WorkoutX para el entrenamiento, porque sus condiciones de uso lo
+    prohíben sin permiso escrito.
+    \item \textbf{Realidad aumentada con anclaje tridimensional.} Evaluar
+    ARCore para anclar indicaciones sobre la máquina real (puntos de ajuste,
+    trayectoria del movimiento), como evolución de la superposición basada en
+    cámara.
+    \item \textbf{Progresión de la carga.} Ampliar la base de conocimiento del
+    generador con reglas de sobrecarga progresiva que ajusten la rutina según
+    el historial del usuario.
+    \item \textbf{Diario de alimentación.} Incorporar la interfaz de registro
+    de ingesta sobre el modelo ya preparado y mostrar el historial de IMC en
+    la pantalla de nutrición.
+    \item \textbf{Pruebas automatizadas.} Instalar \archivo{jest-expo} y
+    React Native Testing Library para convertir las pruebas de la lógica de
+    negocio en una suite ejecutable en integración continua, y probar las
+    reglas con el emulador de Firebase.
+    \item \textbf{Validación con usuarios.} Realizar un estudio de usabilidad
+    con usuarios reales de gimnasio, por ejemplo con el cuestionario SUS, y
+    medir el efecto de la aplicación en la permanencia de los usuarios nuevos.
+    \item \textbf{Publicación.} Antes de publicar la aplicación en Google
+    Play, obtener la autorización del proveedor de las fotografías del
+    catálogo y verificar las condiciones de uso de las animaciones.
+\end{itemize}

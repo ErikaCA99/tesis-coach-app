@@ -1,0 +1,43 @@
+% =====================================================================
+%  PROYECTO DE GRADO — Ingeniería de Sistemas, UMSS
+%  Sistema Inteligente de Entrenamiento en Gimnasios con Realidad
+%  Aumentada e Inteligencia Artificial
+%
+%  Compilar:  pdflatex main  ->  pdflatex main   (o: latexmk -pdf main.tex)
+%  En Overleaf: subir la carpeta completa y compilar con pdfLaTeX.
+% =====================================================================
+\documentclass[12pt, letterpaper, oneside]{report}
+
+\input{config/paquetes}
+\input{config/variables}
+\input{config/comandos}
+
+\begin{document}
+
+% ---------------- Páginas preliminares ----------------
+\input{preliminares/00-caratula}
+
+\pagenumbering{roman}
+\input{preliminares/02-agradecimientos}
+\input{preliminares/03-ficha-resumen}
+
+\clearpage
+\tableofcontents
+\clearpage
+\listoftables
+\clearpage
+\listoffigures
+\clearpage
+
+% ---------------- Cuerpo ----------------
+\pagenumbering{arabic}
+
+\include{capitulos/01-introduccion}
+\include{capitulos/02-marco-teorico}
+\include{capitulos/03-area-aplicacion}
+\include{capitulos/04-desarrollo}
+
+% ---------------- Bibliografía ----------------
+\include{capitulos/bibliografia}
+
+\end{document}

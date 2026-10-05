@@ -1,0 +1,31 @@
+BORRADORES (no se compilan con main.tex)
+
+Esta carpeta contiene una propuesta de redacción que NO forma parte de tu
+documento Word original. Se generó a partir del código real de coach-app
+(carpeta coach-app/src) y del Reglamento de Titulación:
+
+  capitulos/04-*.tex      Capítulo IV completo por fases de Mobile-D
+                          (exploración, inicialización, 6 iteraciones de
+                          producción, estabilización y pruebas)
+  capitulos/05-conclusiones.tex   Conclusiones y recomendaciones
+  anexos/                 Anexos: reglas de seguridad, código fuente,
+                          casos de prueba, manual de instalación
+  capitulos/01..03        Versión alternativa de los capítulos I-III
+                          (más alineada con el código actual)
+  referencias.bib + apalike-es.bst   Bibliografía en BibTeX que usan
+                          estos borradores (\cite{...})
+
+Para usar el Capítulo IV del borrador:
+  1. Copia borradores/capitulos/04-*.tex a capitulos/.
+  2. En main.tex reemplaza  \include{capitulos/04-desarrollo}  por:
+        \chapter{DESARROLLO DEL PROYECTO}
+        \input{capitulos/04-0-introduccion-desarrollo}
+        \input{capitulos/04-1-exploracion}  ... hasta 04-5-pruebas
+  3. Los borradores citan con \cite{...}. Puedes reemplazar esas citas por
+     texto "(Autor, año)" como en el resto del documento y agregar las
+     referencias a capitulos/bibliografia.tex, o activar BibTeX añadiendo
+     antes de la bibliografía:
+        \bibliographystyle{borradores/apalike-es}
+        \bibliography{borradores/referencias}
+  4. Las capturas de pantalla se colocan en figuras/capturas/ con el nombre
+     que indica cada recuadro.

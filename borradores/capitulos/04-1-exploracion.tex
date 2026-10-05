@@ -1,0 +1,320 @@
+% =====================================================================
+\section{Fase de Exploración}
+\label{sec:exploracion}
+
+El objetivo de esta fase fue establecer qué se iba a construir, para quién y
+con qué tecnologías, y planificar las iteraciones de la fase de producción.
+
+\subsection{Establecimiento de los interesados}
+
+\begin{table}[H]
+\centering
+\caption{Grupos de interesados del proyecto}
+\label{tab:interesados}
+\begin{tabularx}{\textwidth}{L{3.4cm} Y}
+\toprule
+\textbf{Interesado} & \textbf{Rol e interés} \\
+\midrule
+Desarrolladora (autora) & Responsable del análisis, diseño, implementación,
+pruebas y documentación del sistema. \\
+Tutor & Supervisión técnica del producto y de la memoria; validación de que el
+sistema responde a los objetivos del perfil. \\
+Docente de la asignatura & Seguimiento metodológico y verificación del
+cumplimiento del cronograma y del formato. \\
+Usuarios finales & Personas que entrenan en gimnasio, en los niveles
+principiante, intermedio y avanzado (sección~\ref{sec:aa-descripcion}). \\
+Administrador del catálogo & Rol técnico que carga y actualiza el catálogo de
+máquinas fuera de la aplicación. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Definición del alcance}
+
+El alcance del producto se fijó a partir de los objetivos específicos y de las
+limitaciones descritas en la sección~\ref{sec:alcance}. Dos decisiones de
+alcance se tomaron en esta fase y condicionaron el resto del proyecto:
+
+\begin{enumerate}
+    \item \textbf{Inteligencia artificial basada en conocimiento para las
+    rutinas.} Generar rutinas con un modelo de aprendizaje automático habría
+    requerido un conjunto de datos de rutinas etiquetadas por resultados, del
+    que no se dispone. En cambio, las pautas de prescripción del ejercicio
+    están consolidadas en la literatura (sección~\ref{sec:mt-entrenamiento}).
+    Por ello se optó por un sistema basado en reglas, que además produce
+    recomendaciones explicables.
+    \item \textbf{Realidad aumentada basada en cámara.} Se implementa la
+    superposición de la ficha de la máquina sobre la imagen en vivo de la
+    cámara. El reconocimiento automático con un clasificador de imágenes se
+    diseña como un punto de extensión, porque requiere un conjunto de
+    fotografías de máquinas con permiso de uso que no forma parte del
+    alcance.
+\end{enumerate}
+
+\subsection{Requerimientos funcionales}
+
+La Tabla~\ref{tab:rf} presenta los requerimientos funcionales y su relación
+con los objetivos específicos.
+
+\begin{longtable}{L{1.1cm} L{10.0cm} C{1.9cm}}
+\caption{Requerimientos funcionales del sistema}
+\label{tab:rf}\\
+\toprule
+\textbf{ID} & \textbf{Descripción} & \textbf{Objetivo} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Descripción} & \textbf{Objetivo} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+RF1 & Registrar usuarios e iniciar sesión con correo y contraseña o con una
+cuenta de Google; recuperar la contraseña por correo y cerrar sesión. & Base \\
+RF2 & Capturar en el primer ingreso el objetivo de entrenamiento y el nivel de
+experiencia del usuario (\emph{onboarding}). & OE3 \\
+RF3 & Consultar el catálogo de máquinas con búsqueda por texto (sin
+distinguir tildes) y filtros por grupo muscular y por tipo de equipo. & OE1 \\
+RF4 & Mostrar la ficha de cada máquina: descripción, músculos principales y
+secundarios, guía de uso paso a paso, errores comunes, prevención de lesiones
+y galería de variantes. & OE1 \\
+RF5 & Mostrar los ejercicios asociados a cada máquina con su animación de
+ejecución, el músculo objetivo y el nivel de dificultad. & OE2 \\
+RF6 & Escanear una máquina con la cámara y superponer su ficha sobre la imagen
+en vivo; si no se identifica automáticamente, permitir que el usuario la
+confirme en una lista. & OE1 \\
+RF7 & Generar automáticamente una rutina semanal a partir del objetivo y el
+nivel del usuario. & OE3 \\
+RF8 & Crear, editar y eliminar rutinas personalizadas organizadas por días;
+agregar ejercicios desde la ficha de una máquina; marcar una rutina como
+activa. & OE4 \\
+RF9 & Calcular el índice de masa corporal, clasificarlo según la OMS y guardar
+el historial de mediciones. & OE5 \\
+RF10 & Registrar el progreso físico (peso y estatura) con cálculo automático
+del IMC. & OE6 \\
+RF11 & Visualizar un reporte del progreso con gráfico de la evolución del
+peso, variación acumulada y categoría de IMC actual. & OE7 \\
+RF12 & Consultar y editar los datos del perfil (nombre, género, estatura,
+peso, objetivo y nivel). & Base \\
+\end{longtable}
+
+\subsection{Requerimientos no funcionales}
+
+Los requerimientos no funcionales se organizaron según las características de
+calidad de la norma ISO/IEC 25010 (Tabla~\ref{tab:rnf}).
+
+\begin{table}[H]
+\centering
+\caption{Requerimientos no funcionales}
+\label{tab:rnf}
+\begin{tabularx}{\textwidth}{L{1.2cm} L{3.1cm} Y}
+\toprule
+\textbf{ID} & \textbf{Característica} & \textbf{Descripción} \\
+\midrule
+RNF1 & Portabilidad & La aplicación se ejecuta en dispositivos Android con
+la versión mínima soportada por React Native~0.86 (Android~7.0, API~24). \\
+RNF2 & Usabilidad & Interfaz en español, navegación por pestañas y acceso a
+cualquier módulo principal en no más de dos toques desde el inicio. \\
+RNF3 & Seguridad & Cada usuario solo puede leer y escribir sus propios datos;
+el catálogo es de solo lectura; las reglas del servidor validan tipos y
+rangos. \\
+RNF4 & Fiabilidad & Los cambios en rutinas, IMC y progreso se reflejan en
+tiempo real; la aplicación tolera la pérdida temporal de conexión gracias a la
+caché de Firestore. \\
+RNF5 & Eficiencia & El catálogo de máquinas se descarga una sola vez por
+sesión y las URL de imágenes se almacenan en caché. \\
+RNF6 & Mantenibilidad & Código en TypeScript estricto, organizado en capas
+MVC, sin errores de compilación ni de análisis estático. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Casos de uso}
+
+La Figura~\ref{fig:casos-uso} presenta el diagrama de casos de uso del
+sistema. El actor principal es el usuario; Firebase participa como actor
+secundario que provee autenticación, persistencia y archivos.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\footnotesize, lbl/.style={font=\scriptsize, fill=white, inner sep=1pt}]
+  \actor{usr}{(0,-0.5)}{Usuario}
+  \actor{fb}{(13.6,-0.5)}{Firebase}
+  \node[draw, rounded corners, minimum width=9.8cm, minimum height=12.6cm,
+        label={[font=\small\bfseries]above:Sistema \nombreApp}] (sis) at (6.75,-0.5) {};
+  \node[casouso] (u1) at (4.2, 5.0) {Registrarse / iniciar sesión};
+  \node[casouso] (u2) at (4.2, 3.8) {Completar onboarding};
+  \node[casouso] (u3) at (4.2, 2.6) {Consultar guía de máquinas};
+  \node[casouso] (u4) at (4.2, 1.4) {Ver ficha y ejercicios};
+  \node[casouso] (u5) at (4.2, 0.2) {Escanear máquina (RA)};
+  \node[casouso] (u6) at (4.2,-1.0) {Generar rutina automática};
+  \node[casouso] (u7) at (4.2,-2.2) {Crear rutina personalizada};
+  \node[casouso] (u8) at (4.2,-3.4) {Calcular IMC};
+  \node[casouso] (u9) at (4.2,-4.6) {Registrar progreso};
+  \node[casouso] (u11) at (4.2,-5.8) {Gestionar perfil};
+  \node[casouso] (u12) at (9.3, 1.4) {Agregar ejercicio a rutina};
+  \node[casouso] (u13) at (9.3,-1.0) {Activar rutina};
+  \node[casouso] (u10) at (9.3,-4.6) {Ver reporte de progreso};
+  \foreach \u in {u1,u2,u3,u4,u5,u6,u7,u8,u9,u11} \draw (usr) -- (\u.west);
+  \draw[flechad] (u12) -- node[lbl, above=2pt]{«extend»} (u4);
+  \draw[flechad] (u5) -- node[lbl, right=2pt]{«include»} (u4);
+  \draw[flechad] (u13) -- node[lbl, above=2pt]{«extend»} (u6);
+  \draw[flechad] (u10) -- node[lbl, above=2pt]{«extend»} (u9);
+  \foreach \u in {u12,u13,u10} \draw (\u.east) -- (fb);
+\end{tikzpicture}
+\caption{Diagrama de casos de uso del sistema}
+\label{fig:casos-uso}
+\end{figure}
+
+\subsection{Selección de tecnologías}
+
+\subsubsection{Framework de desarrollo}
+
+Se compararon tres alternativas para construir la aplicación Android
+(Tabla~\ref{tab:comparativa-framework}). Se eligió React Native con Expo por
+permitir una sola base de código tipada con TypeScript, por contar con módulos
+mantenidos para la cámara y las imágenes animadas, y por la experiencia previa
+de la autora con React y TypeScript, que reducía el riesgo del proyecto.
+
+\begin{table}[H]
+\centering
+\caption{Comparativa de tecnologías de desarrollo móvil}
+\label{tab:comparativa-framework}
+\begin{tabularx}{\textwidth}{L{3.2cm} Y Y Y}
+\toprule
+\textbf{Criterio} & \textbf{Kotlin nativo} & \textbf{Flutter} &
+\textbf{React Native + Expo} \\
+\midrule
+Lenguaje & Kotlin & Dart & TypeScript \\
+Plataformas & Solo Android & Android, iOS, web & Android, iOS, web \\
+Acceso a cámara & Nativo & \emph{Plugin} & \archivo{expo-camera} \\
+Integración con Firebase & SDK oficial & \emph{Plugin} oficial & SDK web
+modular \\
+Curva de aprendizaje para la autora & Alta & Media & Baja \\
+\midrule
+\textbf{Decisión} & & & \textbf{Seleccionada} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Servicios del servidor}
+
+Para el servidor se evaluaron Firebase, Supabase y un servidor propio
+(Tabla~\ref{tab:comparativa-backend}). Se eligió Firebase porque ofrece
+persistencia sin conexión y escuchas en tiempo real integradas en el SDK,
+almacenamiento de archivos, inicio de sesión con Google y un nivel gratuito
+suficiente, sin necesidad de administrar infraestructura.
+
+\begin{table}[H]
+\centering
+\caption{Comparativa de alternativas para el servidor}
+\label{tab:comparativa-backend}
+\begin{tabularx}{\textwidth}{L{3.2cm} Y Y Y}
+\toprule
+\textbf{Criterio} & \textbf{Firebase} & \textbf{Supabase} &
+\textbf{Servidor propio} \\
+\midrule
+Modelo de datos & Documental (NoSQL) & Relacional (PostgreSQL) & A elección \\
+Tiempo real & Integrado & Integrado & A implementar \\
+Caché sin conexión & Integrada en el SDK & No integrada & A implementar \\
+Almacenamiento de archivos & Cloud Storage & Storage & A implementar \\
+Infraestructura a mantener & Ninguna & Ninguna & Servidor y base de datos \\
+\midrule
+\textbf{Decisión} & \textbf{Seleccionada} & & \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Fuentes de datos de ejercicios}
+
+El contenido de la guía de máquinas y ejercicios requiere textos, imágenes y
+animaciones. Se evaluaron las fuentes disponibles considerando su licencia,
+ya que el producto es propiedad intelectual de la universidad
+(Tabla~\ref{tab:fuentes-datos}).
+
+\begin{table}[H]
+\centering
+\caption{Fuentes de datos de ejercicios evaluadas}
+\label{tab:fuentes-datos}
+\begin{tabularx}{\textwidth}{L{2.9cm} Y L{2.6cm} Y}
+\toprule
+\textbf{Fuente} & \textbf{Contenido} & \textbf{Licencia} & \textbf{Uso en el
+proyecto} \\
+\midrule
+wger \citep{wger} & API REST con ejercicios, categorías y equipos. & Libre
+(AGPL / CC) & Ejercicios para la generación de rutinas. \\
+free-exercise-db \citep{freeexercisedb} & 876 ejercicios con imágenes de
+posición inicial y final. & Dominio público & Imágenes y referencias de
+ejercicios. \\
+WorkoutX \citep{workoutx} & Ejercicios con animaciones GIF. & Plan gratuito
+con condiciones de uso & 95 animaciones de ejecución, descargadas por la API
+oficial. \\
+Contenido propio & Descripciones, guías de uso, errores y prevención de
+lesiones. & Propia & Texto de las fichas, contrastado con guías de
+entrenamiento. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Planificación de las iteraciones}
+
+La funcionalidad se distribuyó en seis iteraciones de producción
+(Tabla~\ref{tab:plan-iteraciones}), ordenadas de modo que cada una se apoye en
+las anteriores: primero la identidad del usuario, luego el catálogo, que
+alimenta al escáner y a las rutinas, y finalmente los módulos de seguimiento.
+
+\begin{table}[H]
+\centering
+\caption{Plan de iteraciones de la fase de producción}
+\label{tab:plan-iteraciones}
+\begin{tabularx}{\textwidth}{C{1.0cm} Y L{3.0cm} C{2.0cm}}
+\toprule
+\textbf{Iter.} & \textbf{Módulo} & \textbf{Requerim.} &
+\textbf{Objetivos} \\
+\midrule
+1 & Autenticación, onboarding y perfil & RF1, RF2, RF12 & Base, OE3 \\
+2 & Guía de máquinas y ejercicios & RF3, RF4, RF5 & OE1, OE2 \\
+3 & Escáner de máquinas con realidad aumentada & RF6 & OE1 \\
+4 & Rutinas: generación automática y planificación & RF7, RF8 & OE3, OE4 \\
+5 & Nutrición: calculadora de IMC & RF9 & OE5 \\
+6 & Progreso físico y reportes & RF10, RF11 & OE6, OE7 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Cronograma}
+
+La Figura~\ref{fig:cronograma} muestra el cronograma del proyecto en
+semanas, dentro del período de cinco a ocho meses que establece el Artículo~5
+del Reglamento de Titulación.
+
+\begin{figure}[H]
+\centering
+\begin{ganttchart}[
+    hgrid, vgrid={*1{draw=black!10}},
+    x unit=0.52cm, y unit chart=0.55cm,
+    title label font=\scriptsize\bfseries,
+    bar label font=\scriptsize,
+    group label font=\scriptsize\bfseries,
+    bar/.append style={fill=green!35, draw=black!60},
+    group/.append style={fill=black!60},
+    bar height=0.5, group peaks height=0.25
+  ]{1}{24}
+  \gantttitle{Semanas}{24} \\
+  \gantttitlelist{1,...,24}{1} \\
+  \ganttbar{Exploración}{1}{2} \\
+  \ganttbar{Inicialización}{3}{4} \\
+  \ganttgroup{Producción}{5}{18} \\
+  \ganttbar{It.1 Autenticación}{5}{6} \\
+  \ganttbar{It.2 Guía de máquinas}{7}{9} \\
+  \ganttbar{It.3 Escáner RA}{10}{11} \\
+  \ganttbar{It.4 Rutinas}{12}{14} \\
+  \ganttbar{It.5 Nutrición}{15}{16} \\
+  \ganttbar{It.6 Progreso}{17}{18} \\
+  \ganttbar{Estabilización}{19}{20} \\
+  \ganttbar{Pruebas del sistema}{21}{22} \\
+  \ganttbar{Memoria y defensa}{1}{24}
+\end{ganttchart}
+\caption{Cronograma del proyecto}
+\label{fig:cronograma}
+\end{figure}

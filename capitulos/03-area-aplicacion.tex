@@ -1,0 +1,461 @@
+\chapter{ÁREA DE APLICACIÓN}
+\label{cap:area-aplicacion}
+
+El presente capítulo describe el enfoque metodológico adoptado para el
+desarrollo del sistema inteligente de entrenamiento en gimnasios con realidad
+aumentada e inteligencia artificial. El propósito es garantizar un proceso de
+construcción ordenado, iterativo y orientado a la calidad, acorde a las
+necesidades específicas del desarrollo móvil. Para ello, se selecciona la
+metodología ágil Mobile-D, diseñada especialmente para proyectos móviles con
+ciclos de producción rápidos, entregas frecuentes y constante
+retroalimentación.
+
+% =====================================================================
+\section{Antecedentes}
+\label{sec:aa-antecedentes}
+
+\subsection{Enfoque metodológico}
+
+La metodología es el conjunto de procedimientos, técnicas y estrategias que
+orienta la ejecución de un proyecto de investigación o desarrollo tecnológico.
+En el presente trabajo, el enfoque metodológico define la manera en que se
+estructura el proceso de diseñar, desarrollar y evaluar el sistema. El proyecto
+adopta un enfoque cuantitativo-aplicado porque se medirá métricas objetivas del
+sistema inteligente, como también se realizará la creación de una solución
+tecnológica concreta mediante el uso de técnicas de ingeniería de software,
+inteligencia artificial y realidad aumentada. En este caso, se emplean
+fundamentos de biomecánica, visión por computadora, aprendizaje automático y
+diseño de software para desarrollar una herramienta que facilite el uso
+correcto de máquinas, la corrección técnica de ejercicios y la personalización
+del entrenamiento.
+
+% =====================================================================
+\section{Metodología de desarrollo}
+\label{sec:aa-metodologia}
+
+La metodología Mobile-D fue seleccionada para guiar el proceso de desarrollo
+del sistema debido a que está específicamente diseñada para proyectos de
+software orientados a dispositivos móviles, caracterizados por ciclos de
+producción rápidos, restricciones de hardware y cambios frecuentes en los
+requerimientos.
+
+Mobile-D es una metodología ágil diseñada para el desarrollo de aplicaciones
+móviles, que requiere ciclos de entrega cortos, validación continua, pruebas en
+dispositivos reales y flexibilidad ante cambios de interfaz o funcionalidad. El
+presente proyecto integra módulos de guía interactiva mediante imágenes,
+animaciones o realidad aumentada, generación de rutinas personalizadas mediante
+inteligencia artificial, herramientas de seguimiento físico y una interfaz
+altamente intuitiva.
+
+Mobile-D permite abordar de forma progresiva y controlada, los elementos
+principales del proyecto:
+
+\begin{itemize}
+    \item La guía visual sobre el uso correcto de máquinas y la ejecución de
+    ejercicios, que exige pruebas de usabilidad desde las primeras etapas.
+    \item La generación de rutinas personalizadas mediante algoritmos de IA,
+    cuya precisión y utilidad deben ajustarse iterativamente.
+    \item Los módulos de planificación y seguimiento, que requieren
+    refinamientos sucesivos para asegurar claridad, funcionalidad y coherencia
+    en la experiencia del usuario.
+    \item La interfaz móvil, que debe ser evaluada continuamente para
+    garantizar facilidad de uso, accesibilidad y entendimiento para usuarios
+    principiantes.
+\end{itemize}
+
+% =====================================================================
+\section{Aplicación de la Metodología Mobile-D}
+\label{sec:aa-aplicacion-mobiled}
+
+La metodología Mobile-D se implementa en el presente proyecto mediante cinco
+fases que permiten estructurar el desarrollo de la aplicación de manera
+incremental, verificable y orientada a la calidad. A continuación, se detalla
+la aplicación específica de cada fase al sistema inteligente de entrenamiento.
+
+% ---------------------------------------------------------------------
+\subsection{Fase de Exploración}
+
+En esta etapa se definen las bases conceptuales, técnicas y organizativas del
+presente proyecto.
+
+\titulillo{Módulos principales del sistema}
+
+El sistema propuesto está compuesto por los siguientes módulos esenciales:
+
+\begin{itemize}
+    \item Registro y autenticación de usuarios.
+    \item Guía detallada del uso correcto de máquinas de gimnasio.
+    \item Ejecución técnica correcta de ejercicios específicos.
+    \item Rutinas personalizadas mediante inteligencia artificial.
+    \item Registro nutricional básico (calorías diarias).
+    \item Seguimiento del progreso físico (peso, IMC, medidas).
+    \item Reportes estadísticos y visualización del avance.
+\end{itemize}
+
+\titulillo{Requerimientos de sistema}
+
+\textit{Requerimientos Funcionales}
+
+\begin{itemize}
+    \item RF1: Registrar y autenticar usuarios mediante correo y contraseña.
+    \item RF2: Mostrar información técnica y visual de cada máquina de gimnasio.
+    \item RF3: Generar rutinas personalizadas mediante IA según edad, peso, nivel
+    y objetivo.
+    \item RF4: Registrar peso, estatura, IMC y progreso físico.
+    \item RF5: Registrar ingesta calórica diaria del usuario.
+    \item RF6: Visualizar reportes y estadísticas del progreso físico.
+\end{itemize}
+
+\textit{Requerimientos No Funcionales}
+
+\begin{itemize}
+    \item RNF1: La aplicación debe ejecutarse en Android versión 8.0 o superior.
+    \item RNF2: La interfaz debe ser intuitiva, rápida y adaptable a diferentes
+    pantallas.
+    \item RNF3: La sincronización de datos debe realizarse en tiempo real
+    mediante Firebase.
+\end{itemize}
+
+\titulillo{Selección de Tecnologías}
+
+\textit{Frontend}
+
+\begin{itemize}
+    \item \textbf{React Native:} Es un framework multiplataforma, que permite
+    desarrollar aplicaciones móviles para dispositivos Android.
+    \item \textbf{JavaScript:} Lenguaje de programación principal para el
+    desarrollo de las interfaces y la lógica del lado del cliente.
+    \item \textbf{Figma:} Herramienta de diseño utilizada para crear prototipos
+    interactivos, pantallas iniciales, facilitando la validación visual del
+    producto.
+\end{itemize}
+
+\textit{Backend}
+
+\begin{itemize}
+    \item \textbf{Firebase Authentication:} Servicio que permite gestionar el
+    registro, inicio de sesión y recuperación de credenciales de forma segura.
+    \item \textbf{Firebase Firestore:} Base de datos NoSQL en la nube que
+    proporciona sincronización en tiempo real y escalabilidad para manejar
+    información de usuarios, ejercicios, rutinas y progreso.
+    \item \textbf{Firebase Storage:} Servicio destinado al almacenamiento de
+    imágenes, animaciones y videos que acompañan la guía técnica del sistema.
+    \item \textbf{TensorFlow Lite:} Biblioteca optimizada para ejecutar modelos
+    de inteligencia artificial directamente en el dispositivo móvil, utilizada
+    para generar rutinas personalizadas basadas en parámetros del usuario.
+\end{itemize}
+
+% ---------------------------------------------------------------------
+\subsection{Fase de Inicialización}
+
+En esta fase se prepara el entorno de desarrollo, la planificación inicial y la
+definición de la arquitectura del sistema. También se establecen los
+lineamientos de codificación y los mecanismos de control de versiones (Git).
+
+\titulillo{Configuración del entorno}
+
+Las principales actividades a realizar para la preparación del ambiente, son:
+
+\begin{itemize}
+    \item Instalación de Node.js.
+    \item Instalación de Expo CLI.
+    \item Creación de proyecto en Firebase y configuración de los servicios de
+    autenticación, Firestore y Storage.
+    \item Integración de la librería de TensorFlow Lite.
+    \item Creación del repositorio en GitHub y definición de las ramas
+    principales.
+\end{itemize}
+
+\titulillo{Arquitectura del sistema}
+
+La arquitectura definida para el desarrollo de la aplicación es el de
+cliente-servidor, donde la aplicación móvil actúa como cliente y los servicios
+en la nube proporcionan autenticación, almacenamiento de datos, persistencia
+multimedia y ejecución de algoritmos de IA.
+
+La arquitectura cliente servidor permite garantizar escalabilidad,
+sincronización en tiempo real y disponibilidad permanente del servicio.
+
+\titulillo{Estructura de la arquitectura}
+
+La estructura de la arquitectura del sistema se encuentra basada en capas:
+
+\paragraph{Capa de Presentación}
+
+Tecnologías: React Native + Expo, JavaScript, componentes UI.
+
+\textit{Responsabilidades:}
+
+\begin{itemize}
+    \item Generar la interfaz visual de la aplicación.
+    \item Gestionar la interacción del usuario.
+    \item Capturar entradas como datos personales, selección de máquinas,
+    rutinas y registro nutricional.
+    \item Comunicar solicitudes al backend y mostrar respuestas.
+\end{itemize}
+
+\textit{Componentes clave:}
+
+\begin{itemize}
+    \item Módulo de registro y autenticación.
+    \item Módulo de guía de máquinas y ejercicios.
+    \item Módulo de rutinas personalizadas.
+    \item Módulo de nutrición.
+    \item Módulo de progreso y reportes.
+\end{itemize}
+
+\paragraph{Capa de Lógica de Negocio}
+
+Esta se encuentra dentro de la app y está conectada a servicios externos.
+
+\textit{Responsabilidades:}
+
+\begin{itemize}
+    \item Manejar reglas del sistema (cálculo de IMC, validaciones).
+    \item Procesar datos antes de enviarlos a Firebase.
+    \item Integrar y ejecutar modelos TensorFlow Lite para personalizar
+    rutinas.
+    \item Gestionar filtros, búsqueda de máquinas y procesamiento de
+    ejercicios.
+\end{itemize}
+
+\textit{Componentes de negocio:}
+
+\begin{itemize}
+    \item Controlador de rutinas (IA).
+    \item Controlador de ejercicios y máquinas.
+    \item Controlador de progreso físico.
+    \item Controlador nutricional.
+\end{itemize}
+
+\paragraph{Capa de Servicios}
+
+Esta capa proporciona servicios esenciales para la operación del sistema:
+
+\textit{Firebase Authentication:}
+
+\begin{itemize}
+    \item Registro de usuarios.
+    \item Inicio de sesión.
+    \item Recuperación de contraseñas.
+    \item Seguridad y manejo de tokens.
+\end{itemize}
+
+\textit{Firebase Firestore:}
+
+\begin{itemize}
+    \item Base de datos NoSQL en tiempo real.
+    \item Almacenamiento de rutinas, registros, progreso y máquinas.
+\end{itemize}
+
+\textit{Firebase Storage:}
+
+\begin{itemize}
+    \item Almacenamiento de imágenes, videos o animaciones educativas.
+    \item Contenido para la guía técnica de máquinas.
+\end{itemize}
+
+\textit{Firebase Cloud Functions (opcional):}
+
+\begin{itemize}
+    \item Validación de datos.
+    \item Preprocesamiento de peticiones.
+    \item Actualizaciones automáticas de rutinas.
+\end{itemize}
+
+Estas funciones se integran a través de peticiones HTTP o SDK en tiempo real.
+
+\paragraph{Capa de Inteligencia Artificial}
+
+Tecnología: TensorFlow Lite.
+
+\textit{Responsabilidades:}
+
+\begin{itemize}
+    \item Ejecutar modelos de recomendación ligera para rutinas.
+    \item Ajustar parámetros según peso, nivel, objetivo y progreso del
+    usuario.
+    \item Proveer resultados inmediatos sin depender del servidor.
+\end{itemize}
+
+Este esquema reduce latencia, permite personalización offline y mejora la
+experiencia del usuario.
+
+% ---------------------------------------------------------------------
+\subsection{Fase de Producción}
+
+Esta es la etapa central del desarrollo. Dentro de esta etapa se implementan
+los módulos de IA, seguimiento físico y rutinas personalizadas. Esta fase de
+producción se organiza en iteraciones cortas, cada una de las cuales agrega un
+conjunto de funcionalidades al sistema.
+
+\titulillo{\textit{Día de prueba}}
+
+En este día se verifica que toda la plataforma técnica funcione correctamente
+antes de empezar a desarrollar funcionalidades reales.
+
+Se debe realizar las siguientes acciones:
+
+\begin{itemize}
+    \item \textbf{Verificación de la integración con Firebase}
+
+    Se realizarán pruebas básicas con los servicios principales de Firebase
+    para garantizar su correcto funcionamiento:
+    \begin{itemize}
+        \item \textbf{Authentication:} creación de usuarios de prueba,
+        validación de inicio de sesión y manejo de errores.
+        \item \textbf{Firestore:} creación de colecciones temporales, escritura
+        y lectura de documentos, y verificación de permisos básicos.
+        \item \textbf{Storage:} carga y visualización de archivos multimedia
+        para garantizar el acceso correcto al módulo de almacenamiento.
+    \end{itemize}
+    Estas pruebas aseguran que la aplicación pueda gestionar información real
+    durante la fase de producción.
+\end{itemize}
+
+\textbf{Validación del entorno móvil}
+
+Se verifica la correcta compilación del proyecto tanto en un dispositivo físico
+como en un emulador. Además, se comprueba la navegación entre pantallas
+iniciales y la ejecución estable del entorno Expo.
+
+\textbf{Prueba preliminar del modelo TensorFlow Lite}
+
+Se verifica la carga del modelo de inteligencia artificial y su ejecución
+básica en el dispositivo, con el fin de confirmar la compatibilidad entre
+TensorFlow Lite y la plataforma móvil utilizada.
+
+\textbf{Validación del control de versiones}
+
+Se realiza una prueba de uso del repositorio GitHub, asegurando que se pueden
+subir y descargar cambios correctamente, lo cual es indispensable para mantener
+un desarrollo organizado.
+
+\titulillo{\textit{Día de salida}}
+
+En este día se cierra la fase de inicialización, aquí no se realizan pruebas
+sino ajustes finales y organización para dejar el proyecto listo para comenzar
+la fase de producción.
+
+Para esto, se debe realizar:
+
+\textbf{Organización y limpieza del proyecto}
+
+Se reorganiza la estructura interna del proyecto siguiendo la arquitectura
+definida, agrupando componentes, servicios, pantallas y modelos de datos en
+carpetas específicas. Asimismo, se eliminaron archivos temporales o de prueba
+utilizados en fases previas.
+
+\textbf{Configuración de variables y llaves de entorno}
+
+Se definieron archivos seguros para almacenar las credenciales de Firebase y
+otras configuraciones sensibles, evitando que estas sean expuestas en el
+repositorio de código.
+
+\textbf{Creación de ramas base de desarrollo en GitHub}
+
+Se estableció una estructura de ramas para gestionar el desarrollo:
+
+\begin{itemize}
+    \item \texttt{main}: versión estable.
+    \item \texttt{development}: versión en progreso.
+    \item \texttt{feature/nombre-del-módulo}: para cada nueva funcionalidad.
+\end{itemize}
+
+Esta estructura permite un control ordenado de versiones.
+
+% ---------------------------------------------------------------------
+\subsection{Fase de Estabilización}
+
+Dentro de esta fase se integran y verifican los componentes desarrollados,
+asegurando consistencia, rendimiento y compatibilidad entre módulos. Las
+pruebas de usabilidad y validación funcional se intensifican.
+
+Las actividades a realizarse en esta fase son:
+
+\begin{itemize}
+    \item Refactorizar código para mejorar legibilidad.
+    \item Optimizar carga de imágenes y videos.
+    \item Ajustar tiempos de respuesta del sistema.
+    \item Revisar el diseño visual para mejorar usabilidad.
+    \item Corregir detalles detectados durante las pruebas en dispositivos
+    reales.
+\end{itemize}
+
+% ---------------------------------------------------------------------
+\subsection{Fase de Pruebas del sistema}
+
+Se ejecutan pruebas de aceptación, evaluación del modelo de IA, pruebas en
+dispositivos reales y corrección final de errores. El objetivo es garantizar
+que el sistema sea estable y esté listo para su uso práctico.
+
+Esto mediante las siguientes pruebas:
+
+\begin{itemize}
+    \item \textbf{Pruebas Funcionales:} Las pruebas funcionales son un tipo de
+    verificación que evalúa si el sistema cumple correctamente con los
+    requerimientos establecidos, las pruebas funcionales se basan en técnicas
+    de caja negra, donde el evaluador verifica funciones, escenarios y
+    respuestas del sistema desde la perspectiva del usuario final (IEEE, 1990).
+    \item \textbf{Pruebas de Usabilidad:} Las pruebas de usabilidad se enfocan
+    en analizar qué tan fácil, eficiente y satisfactoria es la interacción de un
+    usuario con la interfaz del sistema. Se fundamenta en principios como
+    facilidad de aprendizaje, eficiencia, reducción de errores y satisfacción
+    del usuario (Nielsen, 1993).
+    \item \textbf{Pruebas de Aceptación:} Las pruebas de aceptación validan que
+    el sistema completo cumpla con los requerimientos acordados, estas pruebas
+    representan la etapa final de validación del producto e incluyen la
+    ejecución de escenarios reales que reflejan el uso cotidiano de la
+    aplicación (Pressman, 2010).
+\end{itemize}
+
+% =====================================================================
+\section{Roles}
+\label{sec:aa-roles}
+
+Dentro de la metodología Mobile-D, los roles cumplen la función de organizar
+las responsabilidades durante el desarrollo del proyecto, aun cuando éste sea
+desarrollado por una sola persona.
+
+A continuación, se describen los roles adoptados en el proyecto:
+
+\begin{table}[H]
+\centering
+\caption{Roles establecidos por Mobile-D}
+\label{tab:roles}
+\begin{tabularx}{\textwidth}{L{3.6cm} Y L{3cm}}
+\toprule
+\textbf{Rol} & \textbf{Responsabilidades} & \textbf{Responsable} \\
+\midrule
+Product Owner & Define alcance, objetivos y prioridades del sistema & Erika
+Chino \\
+Arquitecto Mobile & Diseña la arquitectura y selecciona las tecnologías & Erika
+Chino \\
+Desarrollador móvil & Implementa módulos, interfaces y lógica de negocio &
+Erika Chino \\
+Diseñador UI/UX & Diseña prototipos, navegación y experiencia de usuario &
+Erika Chino \\
+QA Tester & Realiza pruebas funcionales, de usabilidad y rendimiento & Erika
+Chino \\
+\bottomrule
+\end{tabularx}
+\fuente{Elaboración propia.}
+\end{table}
+
+% =====================================================================
+\section{Técnicas e instrumentos de recolección de información}
+\label{sec:aa-tecnicas}
+
+Para fundamentar el diseño y funcionamiento del sistema se utilizarán las
+siguientes técnicas:
+
+\begin{itemize}
+    \item \textbf{Revisión documental:} Investigación de aplicaciones similares,
+    biomecánica, técnica correcta de ejercicios y libros especializados.
+    \item \textbf{Observación directa:} Registro del uso real de máquinas en
+    gimnasios locales.
+    \item \textbf{Entrevistas informales:} Conversaciones con usuarios
+    principiantes para conocer sus dificultades reales en el gimnasio.
+    \item \textbf{Prototipado:} Elaboración de pantallas en Figma para validar
+    la experiencia de usuario antes del desarrollo.
+\end{itemize}

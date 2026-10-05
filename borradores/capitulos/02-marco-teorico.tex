@@ -1,0 +1,530 @@
+\chapter{MARCO TEÓRICO}
+\label{cap:marco}
+
+En este capítulo se presentan los fundamentos conceptuales que sustentan el
+desarrollo del proyecto. Se revisan el área de conocimiento, las tecnologías de
+desarrollo móvil empleadas, los conceptos de arquitectura de software, los
+servicios en la nube, los fundamentos de inteligencia artificial y realidad
+aumentada aplicados al producto, las bases fisiológicas de la prescripción del
+ejercicio y la metodología de desarrollo adoptada.
+
+% =====================================================================
+\section{Área de conocimiento}
+\label{sec:mt-area}
+
+\subsection{Programación móvil}
+
+\subsubsection*{Definición}
+
+La programación móvil es la rama de la ingeniería de software dedicada al
+diseño, construcción y mantenimiento de aplicaciones que se ejecutan en
+dispositivos portátiles, principalmente teléfonos inteligentes y tabletas.
+A diferencia del software de escritorio, una aplicación móvil debe operar con
+recursos limitados de batería, memoria y conectividad, y aprovechar sensores
+propios del dispositivo, como la cámara, el GPS o el acelerómetro
+\citep{sommerville2011}.
+
+\subsubsection*{Características}
+
+\begin{itemize}
+    \item \textbf{Movilidad y contexto:} el usuario utiliza la aplicación en
+    cualquier lugar, en este caso, dentro del gimnasio y entre series.
+    \item \textbf{Recursos restringidos:} la interfaz y la lógica deben ser
+    eficientes en consumo de memoria, red y batería.
+    \item \textbf{Conectividad variable:} la aplicación debe tolerar
+    desconexiones temporales y sincronizar datos cuando la red vuelva.
+    \item \textbf{Interacción táctil:} la interfaz se diseña para pantallas
+    pequeñas y gestos, con elementos de tamaño adecuado para el dedo.
+    \item \textbf{Distribución mediante tiendas:} las aplicaciones se publican
+    en tiendas como Google Play, que imponen requisitos de empaquetado y de
+    permisos.
+\end{itemize}
+
+\subsubsection*{Elementos: tipos de aplicaciones móviles}
+
+Según la forma de construirlas, las aplicaciones móviles se clasifican en tres
+grandes grupos, resumidos en la Tabla~\ref{tab:tipos-apps}.
+
+\begin{table}[H]
+\centering
+\caption{Tipos de aplicaciones móviles según su construcción}
+\label{tab:tipos-apps}
+\begin{tabularx}{\textwidth}{L{2.8cm} Y Y}
+\toprule
+\textbf{Tipo} & \textbf{Descripción} & \textbf{Ventajas y desventajas} \\
+\midrule
+Nativa & Se desarrolla con el lenguaje y SDK de cada plataforma (Kotlin para
+Android, Swift para iOS). & Máximo rendimiento y acceso al hardware; requiere
+una base de código por plataforma. \\
+Híbrida & Aplicación web empaquetada dentro de un contenedor nativo
+(\emph{WebView}). & Rápida de construir; rendimiento y experiencia inferiores a
+una nativa. \\
+Multiplata\-forma nativa & Un solo código fuente que se traduce a componentes
+nativos de cada plataforma (React Native, Flutter). & Una sola base de código
+con interfaz nativa y buen rendimiento; depende del ecosistema del
+\emph{framework}. \\
+\bottomrule
+\end{tabularx}
+\fuente{Elaboración propia con base en \citet{reactnative} y \citet{sommerville2011}.}
+\end{table}
+
+\subsection{Sistemas de información}
+
+Un sistema de información es un conjunto de componentes interrelacionados que
+recolectan, procesan, almacenan y distribuyen información para apoyar la toma
+de decisiones y el control \citep{laudon2016}. Sus actividades básicas son la
+\emph{entrada} de datos, su \emph{procesamiento} para convertirlos en
+información útil y la \emph{salida} hacia las personas que la necesitan,
+complementadas con una \emph{retroalimentación} que permite evaluar y corregir
+la entrada.
+
+En el presente proyecto, la aplicación es un sistema de información personal:
+recibe los datos del usuario (objetivo, nivel, peso, estatura), los procesa
+(generación de rutinas, cálculo del IMC, agregación del historial) y devuelve
+información accionable (la rutina del día, la categoría de IMC, la tendencia
+del peso), cerrando el ciclo cuando el usuario registra nuevas mediciones.
+
+% =====================================================================
+\section{Desarrollo móvil multiplataforma}
+\label{sec:mt-multiplataforma}
+
+\subsection{React Native}
+
+React Native es un \emph{framework} de código abierto creado por Meta que
+permite construir aplicaciones móviles nativas con JavaScript o TypeScript y el
+modelo de componentes de React \citep{reactnative}. A diferencia de las
+aplicaciones híbridas, los componentes declarados (\archivo{View},
+\archivo{Text}, \archivo{Image}) se traducen en vistas nativas de Android o
+iOS. Su arquitectura actual, basada en la interfaz JSI y el renderizador
+\emph{Fabric}, comunica el código JavaScript con el nativo de forma síncrona y
+sin serialización intermedia.
+
+\subsection{Expo}
+
+Expo es una plataforma construida sobre React Native que provee un conjunto de
+módulos nativos mantenidos (cámara, imágenes, fuentes, enlaces profundos,
+pantalla de bienvenida), herramientas de línea de comandos y servicios de
+compilación en la nube (EAS) \citep{expo}. Cada versión del SDK de Expo fija un
+conjunto compatible de bibliotecas, lo que reduce los conflictos de versiones.
+Cuando la aplicación necesita módulos nativos adicionales se utiliza un
+\emph{development build}, una versión de desarrollo propia de la aplicación
+que reemplaza a la aplicación genérica Expo Go.
+
+\subsection{Expo Router}
+
+Expo Router es el sistema de navegación oficial de Expo, basado en el sistema
+de archivos: cada archivo dentro de la carpeta \archivo{app/} se convierte en
+una ruta de la aplicación \citep{exporouter}. Los grupos de rutas, escritos
+entre paréntesis (por ejemplo \archivo{(auth)}), organizan las pantallas sin
+afectar la URL, y los archivos \archivo{\_layout.tsx} definen la navegación
+contenedora (pila, pestañas). Desde el SDK~53 incorpora las \emph{rutas
+protegidas} (\archivo{Stack.Protected}), que muestran u ocultan grupos de
+pantallas según una condición booleana, como la existencia de una sesión.
+
+\subsection{TypeScript}
+
+TypeScript es un superconjunto de JavaScript desarrollado por Microsoft que
+añade tipado estático opcional \citep{typescript}. El compilador verifica los
+tipos antes de la ejecución y detecta errores como propiedades inexistentes o
+argumentos incorrectos, lo que resulta especialmente útil cuando los datos
+provienen de servicios externos con estructuras complejas.
+
+\subsection{Bibliotecas complementarias}
+
+\begin{itemize}
+    \item \textbf{NativeWind:} adapta las clases utilitarias de Tailwind CSS a
+    los estilos de React Native, de modo que la interfaz se estiliza con
+    clases como \archivo{bg-primary} o \archivo{text-foreground} a partir de
+    una paleta centralizada \citep{nativewind}.
+    \item \textbf{Zustand:} biblioteca minimalista de gestión de estado global
+    basada en \emph{hooks}, con soporte de persistencia
+    \citep{zustand}.
+    \item \textbf{Zod:} biblioteca de declaración y validación de esquemas que
+    infiere los tipos de TypeScript a partir del esquema, de modo que la misma
+    definición valida los datos en tiempo de ejecución y los tipa en tiempo de
+    compilación \citep{zod}.
+\end{itemize}
+
+% =====================================================================
+\section{Arquitectura de software}
+\label{sec:mt-arquitectura}
+
+\subsection{Arquitectura cliente--servidor}
+
+En el modelo cliente--servidor, los procesos se dividen en clientes que
+solicitan servicios y servidores que los proveen \citep{tanenbaum2007}. En una
+aplicación móvil, el cliente es la aplicación instalada en el teléfono, que se
+encarga de la presentación y de parte de la lógica, mientras que el servidor
+centraliza la autenticación, la persistencia de los datos y la distribución de
+contenidos multimedia. Esta separación permite que los datos de un usuario
+estén disponibles en cualquier dispositivo y que el contenido compartido, como
+un catálogo, se actualice sin publicar una nueva versión de la aplicación.
+
+\subsection{Patrón Modelo--Vista--Controlador}
+
+El patrón Modelo--Vista--Controlador (MVC), descrito originalmente para
+Smalltalk-80 por \citet{krasner1988}, separa una aplicación interactiva en tres
+responsabilidades:
+
+\begin{itemize}
+    \item \textbf{Modelo:} representa los datos y las reglas de acceso a ellos.
+    \item \textbf{Vista:} presenta la información al usuario y captura sus
+    acciones.
+    \item \textbf{Controlador:} recibe las acciones de la vista, aplica la
+    lógica de negocio y coordina al modelo.
+\end{itemize}
+
+La separación reduce el acoplamiento: la interfaz puede rediseñarse sin tocar
+las reglas de negocio, y la fuente de datos puede cambiar sin afectar a la
+interfaz. \citet{martin2017} generaliza esta idea en la \emph{regla de
+dependencia}: las capas externas (interfaz, bases de datos, servicios) dependen
+de las internas (reglas de negocio), y nunca a la inversa.
+
+\subsection{Patrón repositorio}
+
+El patrón repositorio media entre la lógica de negocio y la capa de acceso a
+datos mediante una interfaz similar a una colección de objetos del dominio
+\citep{fowler2002}. El resto del sistema pide ``las rutinas del usuario'' sin
+conocer en qué colección, tabla o servicio se almacenan. En este proyecto, los
+repositorios son el único lugar que conoce la estructura real de la base de
+datos.
+
+% =====================================================================
+\section{Plataforma Firebase}
+\label{sec:mt-firebase}
+
+Firebase es una plataforma de Google que ofrece servicios administrados para
+aplicaciones móviles y web bajo el modelo de \emph{backend como servicio}
+(BaaS): el desarrollador consume autenticación, base de datos y almacenamiento
+a través de SDK cliente, sin desplegar servidores propios \citep{firebase}.
+
+\subsection{Firebase Authentication}
+
+Servicio de identidad que gestiona el registro, el inicio de sesión y la
+recuperación de contraseñas con distintos proveedores (correo y contraseña,
+Google, entre otros). Cada usuario recibe un identificador único (\emph{uid})
+que se adjunta a sus solicitudes y que las reglas de seguridad utilizan para
+autorizar el acceso a los datos.
+
+\subsection{Cloud Firestore}
+
+Cloud Firestore es una base de datos NoSQL orientada a documentos. Los datos se
+organizan en \emph{colecciones} que contienen \emph{documentos}, y cada
+documento es un conjunto de pares campo--valor que puede contener, a su vez,
+\emph{subcolecciones} \citep{firestore}. Sus características relevantes para
+el proyecto son:
+
+\begin{itemize}
+    \item \textbf{Escuchas en tiempo real:} mediante \archivo{onSnapshot}, el
+    cliente recibe automáticamente cada cambio de los documentos que observa,
+    sin volver a consultar.
+    \item \textbf{Persistencia sin conexión:} el SDK mantiene una caché local
+    que permite leer y escribir sin red y sincroniza al reconectarse.
+    \item \textbf{Marcas de tiempo del servidor:} el valor
+    \archivo{serverTimestamp()} se reemplaza por la hora del servidor al
+    confirmar la escritura, evitando depender del reloj del teléfono.
+    \item \textbf{Subcolecciones por propietario:} los datos que pertenecen a
+    un único usuario pueden anidarse bajo su documento
+    (\archivo{usuarios/\{uid\}/...}), de modo que la propia ruta expresa la
+    pertenencia.
+\end{itemize}
+
+\subsection{Cloud Storage para Firebase}
+
+Servicio de almacenamiento de objetos para archivos de gran tamaño, como
+imágenes y animaciones. Los archivos se identifican por una ruta dentro del
+\emph{bucket} y se obtienen mediante una URL de descarga generada a partir de
+esa ruta.
+
+\subsection{Reglas de seguridad}
+
+Las credenciales de configuración de Firebase viajan dentro de la aplicación
+instalada y son, por diseño, públicas. La protección de los datos recae en las
+\emph{reglas de seguridad}, un lenguaje declarativo que el servidor evalúa en
+cada lectura y escritura \citep{firestorerules}. Las reglas pueden comprobar la
+identidad del solicitante (\archivo{request.auth.uid}), la ruta del documento y
+el contenido de los datos que se intentan escribir
+(\archivo{request.resource.data}), lo que permite validar tipos y rangos en el
+servidor además de en el cliente.
+
+% =====================================================================
+\section{Inteligencia artificial}
+\label{sec:mt-ia}
+
+\subsection{Definición y enfoques}
+
+\citet{russell2020} definen la inteligencia artificial (IA) como el estudio de
+los agentes que perciben su entorno y actúan para alcanzar sus objetivos de la
+mejor manera posible. Dentro de la disciplina coexisten dos grandes enfoques:
+
+\begin{itemize}
+    \item \textbf{IA simbólica o basada en conocimiento:} representa
+    explícitamente el conocimiento de un dominio mediante reglas, hechos y
+    estructuras lógicas, y lo aplica mediante un mecanismo de inferencia. Su
+    razonamiento es transparente y explicable.
+    \item \textbf{Aprendizaje automático:} el sistema infiere un modelo a partir
+    de ejemplos, sin que las reglas se programen explícitamente. Incluye el
+    aprendizaje profundo con redes neuronales \citep{goodfellow2016}.
+\end{itemize}
+
+\subsection{Sistemas basados en reglas}
+
+Un sistema basado en reglas, o sistema experto, es un programa que emula el
+razonamiento de un especialista humano en un dominio acotado
+\citep{giarratano2005}. Sus componentes son:
+
+\begin{itemize}
+    \item \textbf{Base de conocimiento:} conjunto de reglas de producción del
+    tipo \emph{SI condición ENTONCES acción}, obtenidas de expertos o de la
+    literatura del dominio.
+    \item \textbf{Memoria de trabajo:} los hechos del caso concreto, por ejemplo,
+    el objetivo y el nivel de un usuario.
+    \item \textbf{Motor de inferencia:} selecciona y aplica las reglas cuyas
+    condiciones se cumplen sobre los hechos para obtener una conclusión.
+\end{itemize}
+
+Este enfoque es adecuado cuando el conocimiento del dominio está
+consolidado y documentado, como ocurre con las pautas de prescripción del
+ejercicio publicadas por el American College of Sports Medicine, y cuando se
+requiere que cada recomendación pueda justificarse. Además, no necesita un
+conjunto de datos de entrenamiento, del que el proyecto no dispone.
+
+\subsection{Visión por computadora en dispositivos móviles}
+
+La clasificación de imágenes con redes neuronales convolucionales (CNN) asigna
+a una fotografía una etiqueta de un conjunto predefinido con una probabilidad
+asociada \citep{goodfellow2016}. Arquitecturas ligeras como MobileNet
+\citep{howard2017} reducen el costo computacional para ejecutarse en el
+teléfono. TensorFlow Lite, actualmente llamado LiteRT, es el entorno de
+ejecución de Google para modelos de aprendizaje automático en dispositivos
+móviles \citep{tflite}; permite cargar un modelo entrenado previamente y
+ejecutar la inferencia localmente, sin enviar la imagen a un servidor.
+Entrenar un clasificador de este tipo requiere un conjunto de imágenes
+etiquetadas con permiso de uso para cada clase a reconocer.
+
+% =====================================================================
+\section{Realidad aumentada}
+\label{sec:mt-ra}
+
+\citet{azuma1997} define la realidad aumentada (RA) como un sistema que
+combina lo real y lo virtual, es interactivo en tiempo real y registra los
+objetos virtuales en el espacio real. \citet{milgram1994} la ubican dentro de
+un continuo que va del entorno completamente real al completamente virtual,
+donde la RA corresponde a la vista del mundo real enriquecida con elementos
+generados por computadora.
+
+Según la técnica de registro, la RA móvil se clasifica en:
+
+\begin{itemize}
+    \item \textbf{Basada en marcadores:} reconoce una imagen o código impreso y
+    dibuja el contenido sobre él.
+    \item \textbf{Sin marcadores (con seguimiento del entorno):} detecta
+    superficies y puntos característicos para anclar objetos en tres
+    dimensiones; en Android se implementa con ARCore \citep{arcore}.
+    \item \textbf{Basada en la cámara con superposición de información:}
+    muestra la imagen en vivo de la cámara y superpone sobre ella información
+    contextual del objeto enfocado, sin anclaje tridimensional. Es la forma
+    más ligera de RA y no requiere hardware certificado.
+\end{itemize}
+
+En el proyecto se implementa la tercera modalidad: el escáner muestra la
+cámara en vivo, un marco de encuadre y, una vez identificada la máquina, su
+ficha superpuesta sobre la imagen real.
+
+% =====================================================================
+\section{Fundamentos del entrenamiento de fuerza}
+\label{sec:mt-entrenamiento}
+
+\subsection{Principios del entrenamiento}
+
+La prescripción del ejercicio se rige por principios ampliamente aceptados
+\citep{acsm2021, kraemer2004}:
+
+\begin{itemize}
+    \item \textbf{Especificidad:} las adaptaciones dependen del tipo de
+    estímulo; entrenar para fuerza, hipertrofia o resistencia exige variables
+    distintas.
+    \item \textbf{Sobrecarga progresiva:} para seguir progresando, el estímulo
+    debe aumentar gradualmente.
+    \item \textbf{Individualización:} la carga debe ajustarse a la experiencia,
+    la condición física y los objetivos de cada persona.
+    \item \textbf{Recuperación:} los grupos musculares necesitan entre 48 y 72
+    horas de descanso entre sesiones intensas \citep{garber2011}.
+\end{itemize}
+
+\subsection{Variables de prescripción}
+
+Las principales variables de una rutina de fuerza son la frecuencia semanal, la
+selección de ejercicios, el número de series, el número de repeticiones y el
+tiempo de descanso entre series. La Tabla~\ref{tab:variables-objetivo} resume
+los rangos recomendados según el objetivo.
+
+\begin{table}[H]
+\centering
+\caption{Variables de prescripción según el objetivo del entrenamiento}
+\label{tab:variables-objetivo}
+\begin{tabularx}{\textwidth}{L{3.3cm} C{1.6cm} C{2.8cm} C{2.4cm} Y}
+\toprule
+\textbf{Objetivo} & \textbf{Series} & \textbf{Repeticiones} &
+\textbf{Descanso} & \textbf{Observación} \\
+\midrule
+Hipertrofia (ganar masa) & 3--6 & 6--12 & 60--120 s & Cargas moderadas a
+altas \\
+Resistencia muscular & 2--3 & 15--25 & 30--60 s & Cargas bajas, descansos
+cortos \\
+Salud / mantenimiento & 2--4 & 8--15 & 60 s & Mínimo dos sesiones por semana \\
+Pérdida de grasa & 2--4 & 12--20 & 30--60 s & Combinar con trabajo
+cardiovascular \\
+\bottomrule
+\end{tabularx}
+\fuente{Elaboración propia con base en \citet{kraemer2004},
+\citet{schoenfeld2010} y \citet{acsm2021}.}
+\end{table}
+
+\subsection{División del entrenamiento}
+
+La forma en que se reparten los grupos musculares a lo largo de la semana se
+denomina división (\emph{split}). Las más comunes son el entrenamiento de
+cuerpo completo, adecuado para principiantes con pocas sesiones semanales, y
+la división empuje--tirón--pierna (\emph{push--pull--legs}), que agrupa los
+músculos que empujan (pecho, hombros, tríceps), los que tiran (espalda,
+bíceps) y el tren inferior, permitiendo más volumen por grupo con la
+recuperación adecuada \citep{kraemer2004}. La frecuencia recomendada aumenta
+con la experiencia: dos a tres sesiones semanales para principiantes, tres a
+cuatro para intermedios y cuatro a seis para avanzados.
+
+\subsection{Técnica y prevención de lesiones}
+
+La ejecución correcta de cada ejercicio (postura, rango de movimiento,
+velocidad controlada, ajuste de la máquina a la anatomía del usuario) es
+condición para que el entrenamiento sea eficaz y seguro. Las máquinas de
+resistencia guiada reducen la exigencia de estabilización y son recomendables
+para iniciar, siempre que se ajusten correctamente el asiento, los topes y los
+apoyos \citep{acsm2021}.
+
+\subsection{Índice de masa corporal}
+
+El índice de masa corporal (IMC) es un indicador de la relación entre el peso y
+la estatura, utilizado como aproximación poblacional al estado nutricional
+\citep{oms2000}. Se calcula como:
+
+\begin{equation}
+\mathrm{IMC} = \frac{\text{peso (kg)}}{\text{estatura (m)}^2}
+\label{eq:imc}
+\end{equation}
+
+La Tabla~\ref{tab:imc-oms} presenta la clasificación de la Organización
+Mundial de la Salud. El IMC no distingue entre masa muscular y grasa, por lo
+que en personas muy musculadas debe interpretarse con cautela.
+
+\begin{table}[H]
+\centering
+\caption{Clasificación del IMC en adultos según la OMS}
+\label{tab:imc-oms}
+\begin{tabular}{L{5cm} C{4cm}}
+\toprule
+\textbf{Clasificación} & \textbf{IMC (kg/m$^2$)} \\
+\midrule
+Bajo peso & $< 18.5$ \\
+Peso normal & $18.5 - 24.9$ \\
+Sobrepeso & $25.0 - 29.9$ \\
+Obesidad & $\geq 30.0$ \\
+\bottomrule
+\end{tabular}
+\fuente{\citet{oms2000}.}
+\end{table}
+
+% =====================================================================
+\section{Metodología Mobile-D}
+\label{sec:mt-mobiled}
+
+Mobile-D es una metodología ágil propuesta por el centro VTT de Finlandia para
+el desarrollo de aplicaciones móviles \citep{abrahamsson2004}. Combina
+prácticas de Programación Extrema (programación en ciclos cortos, integración
+continua, refactorización), de Crystal (escalabilidad para equipos pequeños) y
+del Proceso Unificado (ciclo de vida por fases). Está pensada para equipos de
+menos de diez personas y proyectos de pocos meses. Su ciclo se divide en las
+cinco fases de la Figura~\ref{fig:mobiled}.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.35cm,
+  fase/.style={rectangle, rounded corners=4pt, draw=black!70, fill=#1,
+  minimum width=2.45cm, minimum height=1.25cm, align=center, font=\footnotesize\bfseries}]
+  \node[fase=green!10] (e) {Exploración};
+  \node[fase=green!18, right=of e] (i) {Inicialización};
+  \node[fase=green!26, right=of i] (p) {Producción};
+  \node[fase=green!34, right=of p] (s) {Estabilización};
+  \node[fase=green!42, right=of s] (t) {Pruebas del\\sistema};
+  \foreach \a/\b in {e/i,i/p,p/s,s/t} \draw[flecha] (\a) -- (\b);
+  \draw[flechad] (p.south) to[out=-60,in=-120,looseness=4] node[below,font=\scriptsize]{iteraciones} (p.south);
+  \node[below=1.1cm of e, text width=2.5cm, align=center, font=\scriptsize]
+    {Alcance, requerimientos, plan};
+  \node[below=1.1cm of i, text width=2.5cm, align=center, font=\scriptsize]
+    {Entorno, arquitectura, día de prueba};
+  \node[below=1.1cm of s, text width=2.5cm, align=center, font=\scriptsize]
+    {Integración y refactorización};
+  \node[below=1.1cm of t, text width=2.5cm, align=center, font=\scriptsize]
+    {Verificación y corrección};
+\end{tikzpicture}
+\caption{Fases de la metodología Mobile-D}
+\label{fig:mobiled}
+\fuente{Adaptado de \citet{abrahamsson2004}.}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Exploración:} se identifican los interesados, se define el
+    alcance, se recogen los requerimientos y se planifica el proyecto.
+    \item \textbf{Inicialización:} se prepara el entorno técnico, se define la
+    arquitectura y se realiza un \emph{día de prueba} para validar que las
+    herramientas funcionan de extremo a extremo.
+    \item \textbf{Producción:} se implementa la funcionalidad en iteraciones;
+    cada una se compone de un \emph{día de planificación}, \emph{días de
+    trabajo} y un \emph{día de liberación} en el que se verifica lo construido
+    con pruebas de aceptación.
+    \item \textbf{Estabilización:} se integran los módulos, se refactoriza y se
+    completa la documentación, sin agregar funcionalidad nueva.
+    \item \textbf{Pruebas del sistema:} se verifica que el producto cumpla los
+    requerimientos y se corrigen los defectos encontrados.
+\end{itemize}
+
+% =====================================================================
+\section{Calidad del software}
+\label{sec:mt-calidad}
+
+La norma ISO/IEC 25010 define un modelo de calidad del producto de software
+con ocho características: adecuación funcional, eficiencia de desempeño,
+compatibilidad, usabilidad, fiabilidad, seguridad, mantenibilidad y
+portabilidad \citep{iso25010}. En este proyecto el modelo se utiliza como
+referencia para formular los requerimientos no funcionales y para organizar
+las pruebas del sistema.
+
+% =====================================================================
+\section{Herramientas de desarrollo}
+\label{sec:mt-herramientas}
+
+\begin{table}[H]
+\centering
+\caption{Herramientas utilizadas en el desarrollo}
+\label{tab:herramientas}
+\begin{tabularx}{\textwidth}{L{3.6cm} Y}
+\toprule
+\textbf{Herramienta} & \textbf{Uso en el proyecto} \\
+\midrule
+Visual Studio Code & Editor de código principal, con extensiones de
+TypeScript, ESLint, Prettier y Tailwind. \\
+Android Studio & SDK de Android, emulador y compilación del
+\emph{development build}. \\
+Node.js y npm & Entorno de ejecución de las herramientas y gestor de
+dependencias. \\
+Git y GitHub & Control de versiones con ramas \archivo{main},
+\archivo{develop} y \archivo{feature/*}, y solicitudes de integración
+(\emph{pull requests}). \\
+Consola de Firebase & Configuración de Authentication, Firestore, Storage y
+publicación de reglas de seguridad. \\
+ESLint y Prettier & Análisis estático y formato uniforme del código. \\
+Expo CLI y EAS & Servidor de desarrollo, compilación y generación de los
+paquetes de instalación. \\
+\bottomrule
+\end{tabularx}
+\end{table}

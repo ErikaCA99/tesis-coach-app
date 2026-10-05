@@ -1,0 +1,786 @@
+% =====================================================================
+\section{Fase de Producción}
+\label{sec:produccion}
+
+La fase de producción se desarrolló en las seis iteraciones planificadas en la
+Tabla~\ref{tab:plan-iteraciones}. Siguiendo Mobile-D, cada iteración comenzó
+con un \emph{día de planificación}, en el que se redactaron las historias de
+usuario y sus criterios de aceptación; continuó con los \emph{días de
+trabajo}, dedicados al diseño y la implementación; y cerró con un \emph{día de
+liberación}, en el que se verificaron los criterios de aceptación y el
+módulo se integró en la rama \archivo{develop}. Los resultados detallados de
+la verificación se consolidan en la sección~\ref{sec:pruebas} y en el
+Anexo~\ref{anx:casos}.
+
+% ---------------------------------------------------------------------
+\subsection{Iteración 1: Autenticación, onboarding y perfil}
+\label{subsec:it1}
+
+\subsubsection{Planificación}
+
+\begin{table}[H]
+\centering
+\caption{Historias de usuario de la iteración 1}
+\label{tab:hu-it1}
+\begin{tabularx}{\textwidth}{L{1.2cm} Y L{1.5cm}}
+\toprule
+\textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
+\midrule
+HU-01 & Como usuario nuevo, quiero registrarme con mi nombre, correo y
+contraseña para tener una cuenta propia. & RF1 \\
+HU-02 & Como usuario, quiero iniciar sesión con mi cuenta de Google para no
+recordar otra contraseña. & RF1 \\
+HU-03 & Como usuario, quiero recuperar mi contraseña por correo si la
+olvido. & RF1 \\
+HU-04 & Como usuario recién registrado, quiero indicar mi objetivo y mi nivel
+para recibir recomendaciones acordes. & RF2 \\
+HU-05 & Como usuario, al terminar el registro quiero elegir entre generar una
+rutina automática o armar la mía. & RF2 \\
+HU-06 & Como usuario, quiero editar mis datos de perfil y cerrar sesión. &
+RF12 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Trabajo}
+
+\paragraph{Controlador de autenticación.} Toda la interacción con Firebase
+Authentication se concentró en \archivo{AuthController}. El registro crea la
+cuenta y, a continuación, el documento de perfil \archivo{usuarios/\{uid\}}.
+En el inicio de sesión con Google, Firebase crea la cuenta pero no el perfil,
+por lo que el controlador invoca \archivo{asegurarPerfil}, que lo crea solo si
+no existe (Código~\ref{lst:auth-registro}).
+
+\begin{lstlisting}[language=TypeScript, caption={Registro e inicio de sesión con Google en \texttt{AuthController}}, label={lst:auth-registro}]
+async registrar(datos: DatosRegistro): Promise<string> {
+  const credencial = await createUserWithEmailAndPassword(
+    auth, datos.correo, datos.contrasena);
+  const uid = credencial.user.uid;
+  await crearPerfilUsuario(uid, {
+    nombre: datos.nombre, apellidos: datos.apellidos,
+    genero: datos.genero, email: datos.correo,
+  });
+  return uid;
+},
+
+async iniciarSesionConGoogle(idToken: string): Promise<UsuarioSesion> {
+  const credencial = GoogleAuthProvider.credential(idToken);
+  const { user } = await signInWithCredential(auth, credencial);
+  await AuthController.asegurarPerfil(user.uid, {
+    nombre: user.displayName, email: user.email,
+  });
+  return aUsuarioSesion(user);
+},
+\end{lstlisting}
+
+Los formularios se validan con esquemas Zod antes de llamar al controlador:
+el registro exige nombre y apellido, un correo válido, una contraseña de al
+menos seis caracteres y la coincidencia con su confirmación.
+
+\paragraph{Estado de la sesión.} El estado global se gestiona con un
+\emph{store} de Zustand persistido en el dispositivo, alimentado por dos
+suscripciones montadas una sola vez en el diseño raíz: \archivo{useAuthListener},
+que refleja los cambios de sesión de Firebase, y \archivo{usePerfilListener},
+que observa en tiempo real el documento del perfil y calcula si está completo.
+La regla de negocio es explícita: un perfil está completo cuando tiene
+objetivo y nivel, los datos mínimos para generar una rutina. La
+Figura~\ref{fig:secuencia-login} muestra cómo estos elementos colaboran en el
+inicio de sesión.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\scriptsize, x=2.45cm, y=0.62cm,
+  part/.style={rectangle, draw=black!70, fill=green!8, minimum width=2.0cm,
+    minimum height=0.6cm, align=center, font=\tiny\bfseries},
+  msg/.style={-{Stealth[length=2mm]}, thick},
+  ret/.style={-{Stealth[length=2mm]}, dashed, black!60}]
+  \foreach \i/\n in {0/Usuario, 1/LoginScreen, 2/AuthController, 3/Firebase Auth, 4/Firestore, 5/Layout raíz} {
+    \node[part] (p\i) at (\i,0) {\n};
+    \draw[black!40, dashed] (\i,-0.5) -- (\i,-12.2);
+  }
+  \draw[msg] (0,-1.6) -- node[above]{correo y contraseña} (1,-1.6);
+  \node[draw, fill=white, font=\tiny, anchor=west] at (1.05,-2.3) {valida con Zod};
+  \draw[msg] (1,-3.4) -- node[above]{iniciarSesion()} (2,-3.4);
+  \draw[msg] (2,-4.4) -- node[above]{signInWith...()} (3,-4.4);
+  \draw[ret] (3,-5.4) -- node[above]{sesión (uid)} (2,-5.4);
+  \draw[ret] (3,-6.6) -- node[above, pos=0.5]{onAuthStateChanged $\rightarrow$ store} (5,-6.6);
+  \draw[msg] (5,-7.8) -- node[above]{observar usuarios/\{uid\}} (4,-7.8);
+  \draw[ret] (4,-9.0) -- node[above]{perfil} (5,-9.0);
+  \node[draw, fill=white, align=left, font=\scriptsize, anchor=north east] at (5.1,-9.6)
+    {¿perfil completo?\\sí $\rightarrow$ \texttt{(app)}\\no $\rightarrow$ \texttt{(onboarding)}};
+\end{tikzpicture}
+\caption{Diagrama de secuencia del inicio de sesión}
+\label{fig:secuencia-login}
+\end{figure}
+
+\paragraph{Onboarding.} El grupo \archivo{(onboarding)} tiene dos pantallas.
+En \archivo{TargetSelectionScreen} el usuario elige uno de los cuatro
+objetivos y uno de los tres niveles de experiencia, cada uno con una
+descripción que lo ayuda a ubicarse (por ejemplo, ``Principiante: soy nuevo
+en el gimnasio o llevo menos de 6 meses''). En \archivo{RoutineChoiceScreen}
+decide si quiere generar una rutina automática, crear una personalizada o
+continuar sin rutina. Al guardar el objetivo y el nivel en Firestore, el
+listener del perfil cambia el estado y el diseño raíz habilita
+\archivo{(app)}; la opción elegida queda registrada en el \emph{store} y la
+pantalla de inicio la abre automáticamente.
+
+\subsubsection{Liberación}
+
+\begin{table}[H]
+\centering
+\caption{Criterios de aceptación de la iteración 1}
+\label{tab:ca-it1}
+\begin{tabularx}{\textwidth}{L{1.3cm} Y}
+\toprule
+\textbf{HU} & \textbf{Criterio de aceptación} \\
+\midrule
+HU-01 & Con datos válidos se crea la cuenta y el documento
+\archivo{usuarios/\{uid\}}; con un correo inválido, contraseñas distintas o
+de menos de seis caracteres se muestra el mensaje correspondiente. \\
+HU-02 & El inicio con Google crea el perfil la primera vez y no lo
+sobrescribe en accesos posteriores. \\
+HU-03 & Se envía el correo de restablecimiento a la dirección ingresada. \\
+HU-04 & Un usuario sin objetivo o sin nivel es dirigido al onboarding y no
+puede acceder a \archivo{(app)}. \\
+HU-05 & La opción elegida abre la pantalla de generación o de rutina
+personalizada al llegar al inicio. \\
+HU-06 & Los cambios del perfil se guardan; al cerrar sesión se vuelve a la
+bienvenida. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\capturados{login}{Inicio de sesión}{registro}{Registro}
+  {Pantallas de inicio de sesión y registro}{fig:cap-auth}
+\capturados{onboarding-objetivo}{Objetivo y nivel}{onboarding-rutina}{Elección de rutina}
+  {Pantallas del onboarding}{fig:cap-onboarding}
+
+% ---------------------------------------------------------------------
+\subsection{Iteración 2: Guía de máquinas y ejercicios}
+\label{subsec:it2}
+
+\subsubsection{Planificación}
+
+\begin{table}[H]
+\centering
+\caption{Historias de usuario de la iteración 2}
+\label{tab:hu-it2}
+\begin{tabularx}{\textwidth}{L{1.2cm} Y L{1.5cm}}
+\toprule
+\textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
+\midrule
+HU-07 & Como usuario, quiero buscar una máquina por su nombre o por el músculo
+que trabaja, aunque no escriba las tildes. & RF3 \\
+HU-08 & Como usuario, quiero filtrar el catálogo por grupo muscular y por tipo
+de equipo. & RF3 \\
+HU-09 & Como principiante, quiero ver paso a paso cómo se usa una máquina, qué
+errores evitar y cómo prevenir lesiones. & RF4 \\
+HU-10 & Como usuario, quiero ver una animación de cada ejercicio con su
+músculo objetivo y su dificultad. & RF5 \\
+HU-11 & Como usuario, quiero ver cómo luce la máquina en distintos modelos
+comerciales para reconocerla en mi gimnasio. & RF4 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Trabajo}
+
+\paragraph{Construcción del catálogo.} El contenido de la guía se preparó
+fuera de la aplicación mediante un proceso de cuatro pasos
+(Figura~\ref{fig:pipeline-catalogo}):
+
+\begin{enumerate}
+    \item \textbf{Selección de máquinas:} a partir del catálogo de un
+    proveedor nacional se definieron 35 tipos de máquina, que agrupan 288
+    modelos comerciales como variantes; se excluyeron los accesorios
+    (agarres, barras y soportes).
+    \item \textbf{Mapeo de ejercicios:} cada tipo se asoció manualmente con
+    sus ejercicios en wger (98 ejercicios) y en free-exercise-db (91
+    ejercicios). El mapeo se hizo a mano porque la coincidencia automática por
+    nombre producía asociaciones incorrectas.
+    \item \textbf{Contenido propio:} para cada máquina se redactaron la
+    descripción, los músculos principales y secundarios, la guía de uso, los
+    errores comunes y las pautas de prevención de lesiones, contrastando la
+    información con guías de entrenamiento reconocidas sin copiar sus textos.
+    \item \textbf{Animaciones:} se asociaron 95 animaciones GIF de WorkoutX,
+    al menos una por máquina, descargadas mediante su API oficial y
+    respetando sus condiciones de uso.
+\end{enumerate}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.45cm, font=\footnotesize,
+  p/.style={caja, text width=2.35cm, minimum height=1.4cm}]
+  \node[p] (a) {Catálogo del proveedor\\(35 tipos)};
+  \node[p, right=of a] (b) {Mapeo a wger y free-exercise-db};
+  \node[p, right=of b] (c) {Fichas con contenido propio};
+  \node[p, right=of c] (d) {GIF de WorkoutX (API)};
+  \node[p, fill=orange!8, below=0.9cm of c] (e) {Script de carga (SDK Admin)};
+  \node[p, fill=orange!8, left=1.2cm of e] (f) {Firestore:\\texto};
+  \node[p, fill=orange!8, right=1.2cm of e] (g) {Storage:\\imágenes y GIF};
+  \draw[flecha] (a)--(b); \draw[flecha] (b)--(c); \draw[flecha] (c)--(d);
+  \draw[flecha] (d) |- (e); \draw[flecha] (e)--(f); \draw[flecha] (e)--(g);
+\end{tikzpicture}
+\caption{Proceso de construcción y carga del catálogo de máquinas}
+\label{fig:pipeline-catalogo}
+\end{figure}
+
+El \emph{script} de carga es idempotente: puede ejecutarse varias veces sin
+duplicar documentos. Guarda el texto en \archivo{maquinas/\{id\}} y los
+archivos multimedia en Storage, registrando en el documento la ruta de cada
+archivo. Cada ejercicio conserva los identificadores de su fuente de origen,
+lo que da trazabilidad sobre qué contenido es propio y cuál proviene de
+fuentes abiertas.
+
+\paragraph{Repositorio con caché.} El catálogo es pequeño (35 documentos,
+alrededor de 150~KB), por lo que \archivo{maquinaRepository} lo descarga una
+sola vez por sesión, valida cada documento con un esquema Zod (los documentos
+inválidos se omiten con un aviso, en lugar de romper la pantalla) y lo
+mantiene en memoria. Las búsquedas y filtros se resuelven localmente, sin
+nuevas consultas a la red (RNF5). El Código~\ref{lst:filtrar} muestra la regla
+de filtrado del controlador, que normaliza el texto para ignorar mayúsculas y
+tildes.
+
+\begin{lstlisting}[language=TypeScript, caption={Regla de filtrado del catálogo en \texttt{MaquinasController}}, label={lst:filtrar}]
+function normalizar(texto: string): string {
+  return texto.normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .toLowerCase().trim();
+}
+
+filtrar(catalogo: Maquina[], filtros: FiltrosMaquinas): Maquina[] {
+  const texto = filtros.busqueda ? normalizar(filtros.busqueda) : "";
+  return catalogo.filter((m) => {
+    if (filtros.categoria && m.categoria !== filtros.categoria) return false;
+    if (filtros.tipo && m.tipo !== filtros.tipo) return false;
+    if (!texto) return true;
+    const campos = [m.nombre, m.categoria, ...m.musculosPrincipales,
+      ...m.musculosSecundarios, ...m.ejercicios.map((e) => e.nombre),
+      ...m.ejerciciosGif.map((e) => e.nombre)];
+    return campos.some((campo) => normalizar(campo).includes(texto));
+  });
+},
+\end{lstlisting}
+
+\paragraph{Imágenes desde Storage.} Las rutas de Storage se convierten en URL
+de descarga mediante \archivo{storageService}, que almacena en caché cada URL
+ya resuelta. En la interfaz, el componente \archivo{ImagenStorage}, construido
+sobre \archivo{expo-image}, muestra tanto imágenes estáticas como animaciones
+GIF.
+
+\paragraph{Pantallas.} La guía consta de dos pantallas:
+
+\begin{itemize}
+    \item \textbf{Catálogo} (\archivo{machines/index}): cuadrícula de dos
+    columnas con buscador, fichas de filtro por grupo muscular y por tipo, y
+    actualización por arrastre.
+    \item \textbf{Ficha} (\archivo{machines/[id]}): portada, botón ``Ver en
+    Realidad Aumentada'', descripción, músculos, ejercicios con su animación y
+    nivel de dificultad, guía de uso numerada, errores comunes, sección de
+    seguridad, galería de variantes y atribución de las fuentes.
+\end{itemize}
+
+\subsubsection{Liberación}
+
+\begin{table}[H]
+\centering
+\caption{Criterios de aceptación de la iteración 2}
+\label{tab:ca-it2}
+\begin{tabularx}{\textwidth}{L{1.3cm} Y}
+\toprule
+\textbf{HU} & \textbf{Criterio de aceptación} \\
+\midrule
+HU-07 & Buscar ``biceps'' o ``prensa'' devuelve las mismas máquinas que
+``bíceps'' o ``Prensa''. \\
+HU-08 & Los filtros de grupo muscular y tipo se combinan entre sí y con la
+búsqueda. \\
+HU-09 & Cada una de las 35 fichas muestra guía de uso, errores comunes y
+pautas de seguridad. \\
+HU-10 & Cada máquina presenta al menos un ejercicio con su animación,
+músculo objetivo y dificultad. \\
+HU-11 & La galería muestra hasta ocho variantes comerciales de la máquina. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\capturados{maquinas-catalogo}{Catálogo con filtros}{maquinas-ficha}{Ficha de máquina}
+  {Guía de máquinas}{fig:cap-maquinas}
+
+% ---------------------------------------------------------------------
+\subsection{Iteración 3: Escáner de máquinas con realidad aumentada}
+\label{subsec:it3}
+
+\subsubsection{Planificación}
+
+\begin{table}[H]
+\centering
+\caption{Historias de usuario de la iteración 3}
+\label{tab:hu-it3}
+\begin{tabularx}{\textwidth}{L{1.2cm} Y L{1.5cm}}
+\toprule
+\textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
+\midrule
+HU-12 & Como usuario, quiero enfocar una máquina con la cámara y ver su
+información sobre la imagen real. & RF6 \\
+HU-13 & Como usuario, si la máquina no se reconoce, quiero elegirla de una
+lista sin salir del escáner. & RF6 \\
+HU-14 & Como usuario, desde la ficha de una máquina quiero verla en modo de
+realidad aumentada. & RF6 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Trabajo}
+
+\paragraph{Diseño.} El escáner (\archivo{machines/escaner}) se modeló como una
+máquina de estados de cinco fases (Figura~\ref{fig:estados-escaner}). La
+cámara se obtiene con \archivo{expo-camera}, solicitando el permiso con un
+mensaje que explica su propósito. Durante el escaneo se dibuja un marco de
+encuadre sobre la imagen en vivo; al confirmar la máquina, su nombre, tipo,
+músculos y ejercicios con su dificultad se superponen sobre la cámara, junto
+con un acceso a la ficha completa.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=2.0cm and 1.8cm, font=\footnotesize,
+  est/.style={rectangle, rounded corners=8pt, draw=black!70, fill=green!8,
+    minimum width=2.3cm, minimum height=0.8cm, align=center}]
+  \node[est] (ini) at (0,0) {inicio};
+  \node[est] (esc) at (3.8,0) {escaneando};
+  \node[est] (ana) at (7.6,0) {analizando};
+  \node[est] (eli) at (7.6,-2.6) {eligiendo};
+  \node[est, fill=green!25] (det) at (3.8,-2.6) {detectada};
+  \draw[flecha] (ini) -- node[above, font=\scriptsize]{permiso} (esc);
+  \draw[flecha] (esc) -- node[above, font=\scriptsize]{capturar} (ana);
+  \draw[flecha] (ana) -- node[right, font=\scriptsize, align=left]{sin modelo o\\confianza $<0.7$} (eli);
+  \draw[flecha] (ana) -- node[above, sloped, font=\scriptsize, pos=0.45]{confianza $\geq 0.7$} (det);
+  \draw[flecha] (eli) -- node[below, font=\scriptsize]{el usuario confirma} (det);
+  \draw[flecha] (det.north) -- node[left, font=\scriptsize]{escanear otra} (esc.south);
+  \draw[flecha] (ini.south) |- node[pos=0.75, below, font=\scriptsize]{desde la ficha (\texttt{?maquinaId})} (det.west);
+\end{tikzpicture}
+\caption{Diagrama de estados del escáner de máquinas}
+\label{fig:estados-escaner}
+\end{figure}
+
+\paragraph{Punto de extensión para el reconocimiento automático.} La
+identificación automática de la máquina se aisló en una única función,
+\archivo{reconocerMaquina}, en la capa de servicios
+(Código~\ref{lst:reconocimiento}). Su contrato recibe la fotografía y devuelve
+el identificador de la máquina del catálogo con un valor de confianza entre 0
+y 1. El controlador solo acepta la predicción si supera el umbral de 0.7; en
+caso contrario, o si no hay modelo, la vista pasa al estado \emph{eligiendo} y
+el usuario confirma la máquina en una lista con búsqueda.
+
+\begin{lstlisting}[language=TypeScript, caption={Contrato del reconocimiento de máquinas y su uso en el controlador}, label={lst:reconocimiento}]
+// services/ai/reconocimientoMaquinas.ts
+export interface ResultadoReconocimiento {
+  maquinaId: string;
+  confianza: number; // 0..1
+}
+export const CONFIANZA_MINIMA = 0.7;
+export async function reconocerMaquina(
+  _fotoUri: string,
+): Promise<ResultadoReconocimiento | null> {
+  return null; // sin modelo entrenado: la Vista pide confirmación
+}
+
+// controllers/MaquinasController.ts
+async reconocerDesdeFoto(fotoUri: string): Promise<Maquina | null> {
+  const resultado = await reconocerMaquina(fotoUri);
+  if (!resultado || resultado.confianza < CONFIANZA_MINIMA) return null;
+  return obtenerMaquina(resultado.maquinaId);
+},
+\end{lstlisting}
+
+Con este diseño, incorporar un clasificador de imágenes con TensorFlow Lite
+consiste en implementar esa sola función; ni el controlador ni la vista deben
+modificarse. Durante la iteración se constató que las animaciones de WorkoutX
+no pueden usarse para entrenar modelos sin permiso escrito de su proveedor,
+por lo que el conjunto de datos para el clasificador deberá construirse con
+fotografías propias o con autorización (sección~\ref{sec:recomendaciones}).
+
+\subsubsection{Liberación}
+
+\begin{table}[H]
+\centering
+\caption{Criterios de aceptación de la iteración 3}
+\label{tab:ca-it3}
+\begin{tabularx}{\textwidth}{L{1.3cm} Y}
+\toprule
+\textbf{HU} & \textbf{Criterio de aceptación} \\
+\midrule
+HU-12 & Con el permiso concedido se muestra la cámara en vivo con el marco
+de encuadre, y la ficha resumida se superpone sobre la imagen. \\
+HU-13 & Sin reconocimiento automático, la lista con búsqueda permite elegir
+cualquiera de las 35 máquinas y pasar al estado \emph{detectada}. \\
+HU-14 & Al abrir el escáner desde una ficha, la máquina se muestra
+directamente sobre la cámara. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\capturados{escaner-camara}{Escaneo}{escaner-detectada}{Ficha superpuesta}
+  {Escáner de máquinas con realidad aumentada}{fig:cap-escaner}
+
+% ---------------------------------------------------------------------
+\subsection{Iteración 4: Rutinas personalizadas y planificación}
+\label{subsec:it4}
+
+\subsubsection{Planificación}
+
+\begin{table}[H]
+\centering
+\caption{Historias de usuario de la iteración 4}
+\label{tab:hu-it4}
+\begin{tabularx}{\textwidth}{L{1.2cm} Y L{1.5cm}}
+\toprule
+\textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
+\midrule
+HU-15 & Como usuario, quiero que la aplicación genere una rutina semanal
+adecuada a mi objetivo y mi nivel. & RF7 \\
+HU-16 & Como usuario avanzado, quiero armar mi propia rutina día por día,
+eligiendo los ejercicios y sus series, repeticiones y descansos. & RF8 \\
+HU-17 & Como usuario, quiero agregar a mi rutina un ejercicio que veo en la
+ficha de una máquina. & RF8 \\
+HU-18 & Como usuario, quiero tener varias rutinas guardadas, elegir cuál es
+la activa y eliminar las que ya no uso. & RF8 \\
+HU-19 & Como usuario, al tocar un ejercicio de mi rutina quiero abrir la
+ficha de su máquina. & RF8 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Trabajo}
+
+\paragraph{Generador de rutinas basado en reglas.} El componente inteligente
+del sistema es un generador de rutinas basado en conocimiento, cuya estructura
+sigue la de un sistema experto (sección~\ref{sec:mt-ia}):
+
+\begin{itemize}
+    \item La \textbf{memoria de trabajo} contiene los hechos del usuario: su
+    objetivo y su nivel, tomados del perfil.
+    \item La \textbf{base de conocimiento} está formada por tres conjuntos de
+    reglas derivadas de las pautas de prescripción del ejercicio
+    (Tablas~\ref{tab:reglas-frecuencia}, \ref{tab:reglas-parametros}
+    y~\ref{tab:reglas-division}).
+    \item El \textbf{motor de inferencia} aplica las reglas en secuencia y
+    produce un plan semanal, que luego se completa con ejercicios reales de la
+    API de wger.
+\end{itemize}
+
+La primera regla determina la frecuencia semanal según la experiencia,
+siguiendo la progresión recomendada por \citet{kraemer2004}.
+
+\begin{table}[H]
+\centering
+\caption{Reglas de frecuencia semanal según el nivel}
+\label{tab:reglas-frecuencia}
+\begin{tabular}{L{6.5cm} C{3cm}}
+\toprule
+\textbf{Regla} & \textbf{Días por semana} \\
+\midrule
+SI nivel = principiante & 3 \\
+SI nivel = intermedio & 4 \\
+SI nivel = avanzado & 5 \\
+\bottomrule
+\end{tabular}
+\fuente{Archivo \archivo{utils/generadorRutinas.ts}, con base en \citet{kraemer2004}.}
+\end{table}
+
+La segunda regla fija las variables de carga según el objetivo, dentro de los
+rangos de la Tabla~\ref{tab:variables-objetivo}: más series, menos
+repeticiones y descansos largos para la hipertrofia; menos carga, más
+repeticiones y descansos cortos para la resistencia y la pérdida de peso.
+
+\begin{table}[H]
+\centering
+\caption{Reglas de variables de carga según el objetivo}
+\label{tab:reglas-parametros}
+\begin{tabular}{L{5.4cm} C{1.6cm} C{2.7cm} C{2.1cm}}
+\toprule
+\textbf{Regla} & \textbf{Series} & \textbf{Repeticiones} & \textbf{Descanso} \\
+\midrule
+SI objetivo = ganar masa muscular & 4 & 9 & 90 s \\
+SI objetivo = mantenimiento & 3 & 12 & 60 s \\
+SI objetivo = perder peso & 3 & 15 & 45 s \\
+SI objetivo = resistencia & 3 & 18 & 30 s \\
+\bottomrule
+\end{tabular}
+\fuente{Archivo \archivo{utils/generadorRutinas.ts}, con base en
+\citet{kraemer2004} y \citet{schoenfeld2010}.}
+\end{table}
+
+La tercera regla define la división semanal combinando la frecuencia con el
+objetivo. Se utilizan cinco bloques de día: \emph{empuje} (pecho, hombros y
+brazos), \emph{tirón} (espalda y abdominales), \emph{pierna} (piernas y
+pantorrillas), \emph{cardio} (cardio y abdominales) y \emph{cuerpo completo}.
+Cuando el objetivo es perder peso o mejorar la resistencia, la regla
+introduce un día de cardio en lugar de un día de fuerza.
+
+\begin{table}[H]
+\centering
+\caption{Reglas de división semanal}
+\label{tab:reglas-division}
+\begin{tabularx}{\textwidth}{C{1.3cm} Y Y}
+\toprule
+\textbf{Días} & \textbf{Objetivo de fuerza (ganar masa, mantenimiento)} &
+\textbf{Objetivo con énfasis cardio (perder peso, resistencia)} \\
+\midrule
+3 & Empuje -- Tirón -- Pierna & Empuje -- Cardio -- Pierna \\
+4 & Empuje -- Tirón -- Pierna -- Cuerpo completo & Empuje -- Tirón -- Cardio
+-- Pierna \\
+5 & Empuje -- Tirón -- Pierna -- Empuje -- Tirón & Empuje -- Tirón -- Pierna
+-- Cardio -- Cuerpo completo \\
+\bottomrule
+\end{tabularx}
+\fuente{Archivo \archivo{utils/generadorRutinas.ts}.}
+\end{table}
+
+Cada bloque indica de qué categorías de ejercicios de wger tomar los
+ejercicios y cuántos (entre cuatro y seis). El controlador reparte esa
+cantidad entre las categorías del bloque lo más parejo posible, consulta los
+ejercicios de cada categoría y elige al azar, sin repetir, los necesarios,
+lo que da variedad entre rutinas generadas con los mismos datos. La
+Figura~\ref{fig:flujo-generador} resume el proceso completo.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.42cm, font=\footnotesize,
+  p/.style={caja, text width=4.6cm}]
+  \node[p, fill=green!8] (a) {Hechos: objetivo y nivel del perfil};
+  \node[p, below=of a] (b) {Validar con Zod (\archivo{generarRutinaIASchema})};
+  \node[p, below=of b] (c) {Regla 1: días por semana según nivel};
+  \node[p, below=of c] (d) {Regla 2: series, repeticiones y descanso según objetivo};
+  \node[p, below=of d] (e) {Regla 3: bloques de la semana según días y objetivo};
+  \node[p, below=of e] (f) {Por cada día: repartir cantidad entre categorías y
+    elegir ejercicios de wger al azar};
+  \node[p, fill=orange!8, below=of f] (g) {Guardar en \archivo{usuarios/\{uid\}/rutinas} y marcar como activa};
+  \foreach \x/\y in {a/b,b/c,c/d,d/e,e/f,f/g} \draw[flecha] (\x)--(\y);
+  \node[draw, dashed, rounded corners, fit=(c)(d)(e), inner sep=5pt,
+    label={[font=\scriptsize\itshape]right:base de conocimiento}] {};
+\end{tikzpicture}
+\caption{Flujo del generador de rutinas basado en reglas}
+\label{fig:flujo-generador}
+\end{figure}
+
+El Código~\ref{lst:generador} muestra el punto de entrada del motor de reglas.
+Es una función pura, sin acceso a la red ni a la base de datos, lo que la hace
+fácil de verificar y de reemplazar en el futuro por un modelo aprendido sin
+modificar el controlador. El archivo completo se incluye en el
+Anexo~\ref{anx:codigo}.
+
+\begin{lstlisting}[language=TypeScript, caption={Punto de entrada del generador basado en reglas}, label={lst:generador}]
+const PARAMETROS_POR_OBJETIVO: Record<ObjetivoUsuario, ParametrosSerie> = {
+  perder_peso:   { series: 3, repeticiones: 15, descansoSegundos: 45 },
+  ganar_masa:    { series: 4, repeticiones: 9,  descansoSegundos: 90 },
+  mantenimiento: { series: 3, repeticiones: 12, descansoSegundos: 60 },
+  resistencia:   { series: 3, repeticiones: 18, descansoSegundos: 30 },
+};
+
+const DIAS_POR_NIVEL: Record<NivelExperiencia, number> = {
+  principiante: 3, intermedio: 4, avanzado: 5,
+};
+
+export function generarPlanHeuristico(
+  objetivo: ObjetivoUsuario, nivel: NivelExperiencia,
+): PlanHeuristico {
+  const diasPorSemana = DIAS_POR_NIVEL[nivel];
+  return {
+    diasPorSemana,
+    parametrosSerie: PARAMETROS_POR_OBJETIVO[objetivo],
+    bloques: bloquesPorDias(diasPorSemana, objetivo),
+  };
+}
+\end{lstlisting}
+
+\paragraph{Rutina personalizada y planificación.} Para el objetivo OE4 se
+construyó el planificador \archivo{routines/personalizada}, donde el usuario
+agrega días, asigna a cada uno un enfoque y elige ejercicios desde un modal
+de búsqueda, ajustando series, repeticiones y descanso. Los datos se validan
+con Zod con límites razonables (de 1 a 7 días, de 1 a 20 series, de 1 a 100
+repeticiones y hasta 10 minutos de descanso). Desde la ficha de cualquier
+máquina, el botón ``Agregar a Mi Rutina'' permite añadir uno de sus
+ejercicios a un día de la rutina activa; el controlador rechaza duplicados en
+el mismo día.
+
+La pantalla \archivo{routines/index} presenta el plan semanal de la rutina
+activa como una lista de días expandibles y permite cambiar la rutina activa,
+eliminar rutinas y crear nuevas. Las rutinas se observan en tiempo real con
+\archivo{onSnapshot}, por lo que cualquier cambio se refleja sin recargar
+(RNF4).
+
+\subsubsection{Liberación}
+
+\begin{table}[H]
+\centering
+\caption{Criterios de aceptación de la iteración 4}
+\label{tab:ca-it4}
+\begin{tabularx}{\textwidth}{L{1.3cm} Y}
+\toprule
+\textbf{HU} & \textbf{Criterio de aceptación} \\
+\midrule
+HU-15 & Para cada una de las doce combinaciones de objetivo y nivel, la
+rutina generada tiene el número de días, la división y las variables de
+carga de las Tablas~\ref{tab:reglas-frecuencia}
+a~\ref{tab:reglas-division}. \\
+HU-16 & Se puede crear una rutina de 1 a 7 días; un día sin ejercicios o
+valores fuera de rango impiden guardar y muestran el motivo. \\
+HU-17 & El ejercicio se agrega al día elegido; si ya existe en ese día, se
+informa y no se duplica. \\
+HU-18 & La rutina marcada como activa es la que se muestra en el inicio. \\
+HU-19 & Al tocar un ejercicio asociado a una máquina se abre su ficha. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\capturados{rutina-generada}{Rutina generada}{rutina-personalizada}{Planificador personalizado}
+  {Módulo de rutinas}{fig:cap-rutinas}
+
+% ---------------------------------------------------------------------
+\subsection{Iteración 5: Nutrición y calculadora de IMC}
+\label{subsec:it5}
+
+\subsubsection{Planificación}
+
+\begin{table}[H]
+\centering
+\caption{Historias de usuario de la iteración 5}
+\label{tab:hu-it5}
+\begin{tabularx}{\textwidth}{L{1.2cm} Y L{1.5cm}}
+\toprule
+\textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
+\midrule
+HU-20 & Como usuario, quiero ingresar mi peso y mi estatura y conocer mi IMC
+y su clasificación. & RF9 \\
+HU-21 & Como usuario, quiero que cada cálculo quede guardado en mi
+historial. & RF9 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Trabajo}
+
+De acuerdo con el alcance, el control calórico se resolvió mediante una
+calculadora de IMC. El módulo fue el primero en implementarse respetando las
+cuatro capas y sirvió como referencia para el resto: la regla de cálculo es
+una función pura en \archivo{utils/imcCalculator.ts}
+(Código~\ref{lst:imc}), que implementa la Ecuación~\ref{eq:imc} y la
+clasificación de la Tabla~\ref{tab:imc-oms}; el controlador
+\archivo{NutritionController} valida los datos (peso entre 10 y 500~kg y
+estatura entre 50 y 300~cm), calcula, clasifica y guarda el registro en
+\archivo{usuarios/\{uid\}/registrosNutricionales}; y la vista solo muestra el
+resultado con una escala de colores de las cuatro categorías.
+
+\begin{lstlisting}[language=TypeScript, caption={Cálculo y clasificación del IMC}, label={lst:imc}]
+export function calcularIMC(pesoKg: number, alturaCm: number): number {
+  const alturaM = alturaCm / 100;
+  return Number((pesoKg / (alturaM * alturaM)).toFixed(1));
+}
+
+export function clasificarIMC(imc: number): BmiCategory {
+  if (imc < 18.5) return "BAJO";
+  if (imc < 25) return "NORMALIDAD";
+  if (imc < 30) return "SOBREPESO";
+  return "OBESIDAD";
+}
+\end{lstlisting}
+
+Una decisión de diseño fue que un fallo al guardar no impida mostrar el
+resultado: el cálculo no depende de la red, de modo que el controlador
+registra el error y devuelve igualmente el IMC al usuario. El modelo
+\archivo{RegistroNutricional} y su esquema de validación contemplan también
+el registro de ingesta (alimento, calorías y cantidad), con su regla de
+seguridad correspondiente, lo que deja preparada la ampliación a un diario de
+alimentación.
+
+\subsubsection{Liberación}
+
+\begin{table}[H]
+\centering
+\caption{Criterios de aceptación de la iteración 5}
+\label{tab:ca-it5}
+\begin{tabularx}{\textwidth}{L{1.3cm} Y}
+\toprule
+\textbf{HU} & \textbf{Criterio de aceptación} \\
+\midrule
+HU-20 & Con 70~kg y 175~cm se obtiene un IMC de 22.9, categoría normal;
+valores fuera de rango muestran un mensaje de validación. \\
+HU-21 & Cada cálculo crea un documento en
+\archivo{registrosNutricionales} con la fecha del servidor. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\captura{nutricion-imc}{Calculadora de IMC}{fig:cap-imc}
+
+% ---------------------------------------------------------------------
+\subsection{Iteración 6: Progreso físico y reportes}
+\label{subsec:it6}
+
+\subsubsection{Planificación}
+
+\begin{table}[H]
+\centering
+\caption{Historias de usuario de la iteración 6}
+\label{tab:hu-it6}
+\begin{tabularx}{\textwidth}{L{1.2cm} Y L{1.5cm}}
+\toprule
+\textbf{ID} & \textbf{Historia de usuario} & \textbf{RF} \\
+\midrule
+HU-22 & Como usuario, quiero registrar mi peso periódicamente sin volver a
+escribir mi estatura cada vez. & RF10 \\
+HU-23 & Como usuario, quiero ver un gráfico de la evolución de mi peso. &
+RF11 \\
+HU-24 & Como usuario, quiero saber cuánto ha variado mi peso desde el primer
+registro y cuál es mi categoría de IMC actual. & RF11 \\
+HU-25 & Como usuario, quiero ver en el inicio un resumen de mi rutina activa
+y de mis registros. & RF11 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Trabajo}
+
+\paragraph{Registro del progreso.} \archivo{ProgresoController} valida el
+peso (entre 10 y 500~kg), la estatura opcional y unas notas de hasta 500
+caracteres; si hay estatura, calcula el IMC reutilizando
+\archivo{imcCalculator}, y guarda el registro en
+\archivo{usuarios/\{uid\}/progresoFisico}. Para evitar que el usuario
+reescriba su estatura, la pantalla la precarga desde el perfil.
+
+\paragraph{Reporte.} La pantalla de progreso se suscribe en tiempo real a los
+registros y deriva de ellos el reporte, sin almacenar datos calculados: un
+gráfico de líneas con los últimos ocho registros, construido con
+\archivo{react-native-chart-kit}; la variación del peso entre el primer y el
+último registro; la categoría de IMC del último registro; y el historial de
+mediciones. No se creó una colección de reportes porque el
+reporte es una vista derivada del historial: calcularlo al vuelo garantiza que
+siempre refleje los datos actuales y evita duplicarlos.
+
+\paragraph{Inicio.} La pantalla de inicio reúne, en tiempo real, el saludo
+con el nombre del usuario, la rutina activa con su número de ejercicios, el
+número de registros de progreso y accesos directos al escáner, a la guía de
+máquinas y a las rutinas.
+
+\subsubsection{Liberación}
+
+\begin{table}[H]
+\centering
+\caption{Criterios de aceptación de la iteración 6}
+\label{tab:ca-it6}
+\begin{tabularx}{\textwidth}{L{1.3cm} Y}
+\toprule
+\textbf{HU} & \textbf{Criterio de aceptación} \\
+\midrule
+HU-22 & La estatura del perfil aparece precargada; al guardar se crea el
+registro con su IMC. \\
+HU-23 & El gráfico se actualiza inmediatamente al agregar un registro y
+muestra como máximo los ocho últimos. \\
+HU-24 & Con registros de 80~kg y 77.5~kg se muestra una variación de
+$-2.5$~kg; la categoría corresponde al IMC del último registro. \\
+HU-25 & El inicio muestra la rutina activa y el número real de registros. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\capturados{progreso-reporte}{Reporte de progreso}{inicio}{Pantalla de inicio}
+  {Progreso físico y pantalla de inicio}{fig:cap-progreso}

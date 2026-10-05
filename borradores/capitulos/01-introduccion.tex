@@ -1,0 +1,232 @@
+\chapter{INTRODUCCIÓN}
+\label{cap:introduccion}
+
+\section{Antecedentes}
+\label{sec:antecedentes}
+
+\subsection{Antecedentes generales}
+
+La práctica regular de actividad física es una de las recomendaciones más
+consistentes de la medicina preventiva: el \citet{acsm2021} recomienda que
+los adultos combinen ejercicio cardiorrespiratorio con al menos dos sesiones
+semanales de entrenamiento de fuerza que involucren los principales grupos
+musculares. Los gimnasios se han convertido en el espacio más accesible para
+cumplir esa recomendación, porque concentran en un mismo lugar máquinas de
+resistencia guiada, poleas, bancos, racks y equipos de cardio.
+
+Sin embargo, inscribirse en un gimnasio no garantiza la permanencia. En un
+estudio de seguimiento de un año a nuevos miembros de clubes de
+entrenamiento, \citet{gjestvang2020} analizaron los motivos y las barreras
+que influyen en el inicio y el mantenimiento del ejercicio, y mostraron que
+una parte importante de los usuarios deja de entrenar con regularidad en los
+primeros meses. En la misma línea, \citet{sperandei2016} estudiaron los
+registros de asistencia de miles de usuarios de un centro de
+acondicionamiento físico en un entorno sin supervisión y encontraron que la
+mayoría abandonaba la actividad antes de completar los primeros meses. En
+conjunto, se estima que entre el 40\,\% y el 65\,\% de los usuarios nuevos
+abandona el gimnasio durante los primeros meses, principalmente por la falta
+de guía y de seguimiento personalizado.
+
+La alternativa tradicional a ese problema es el entrenador personal, que
+enseña la técnica, diseña la rutina y controla el progreso. Su costo, sin
+embargo, deja fuera a la mayor parte de los usuarios, que terminan copiando
+rutinas genéricas o usando las máquinas por imitación, con el riesgo de
+lesión que eso implica.
+
+Paralelamente, el teléfono inteligente se ha convertido en el dispositivo
+personal por excelencia. En Bolivia, más del 90\,\% de los teléfonos móviles
+utiliza el sistema operativo Android \citep{statcounter2025}, lo que convierte
+a una aplicación Android en el canal con mayor alcance para llevar una guía de
+entrenamiento al bolsillo de cada usuario. Las tecnologías actuales de
+desarrollo multiplataforma, como React Native y Expo, y las plataformas de
+servicios en la nube, como Firebase, permiten construir este tipo de
+aplicaciones con un costo de infraestructura bajo y con tiempos de desarrollo
+acotados.
+
+\subsection{Antecedentes específicos}
+
+En el mercado existen aplicaciones de entrenamiento que abordan parte del
+problema. \emph{BodBot} \citep{bodbot} se presenta como un entrenador personal
+basado en inteligencia artificial que genera planes de ejercicio a partir de
+los objetivos y el equipamiento disponible del usuario; su modelo es de
+suscripción y sus contenidos están en inglés. Las aplicaciones de
+\emph{Leap Fitness Group} \citep{leapfitness}, muy difundidas en Android,
+ofrecen rutinas predefinidas con animaciones, pero están orientadas al
+entrenamiento en casa sin equipamiento, por lo que no enseñan el uso de las
+máquinas de un gimnasio.
+
+Ninguna de estas soluciones integra, en una misma aplicación en español y sin
+costo para el usuario, los cuatro elementos que la literatura señala como
+causas del abandono: la guía sobre el uso correcto de las máquinas, la
+planificación estructurada del entrenamiento, el seguimiento del progreso
+físico y una herramienta de control de la composición corporal. Esa
+integración es el punto de partida del presente proyecto de grado.
+
+\section{Definición del problema}
+\label{sec:problema}
+
+\subsection{Planteamiento del problema}
+
+Los usuarios de gimnasio, en particular quienes recién comienzan, enfrentan
+un conjunto de barreras que se refuerzan entre sí y que desembocan en el
+abandono temprano de la actividad física:
+
+\begin{itemize}
+    \item \textbf{Desconocimiento del uso correcto de las máquinas y de la
+    postura:} la ejecución por imitación produce errores técnicos que pueden
+    causar lesiones y dificultan el progreso hacia los objetivos físicos.
+    \item \textbf{Costo elevado de un entrenador personal:} la mayoría de los
+    usuarios no puede pagar una guía profesional permanente.
+    \item \textbf{Carencia de una planificación estructurada:} sin una rutina
+    clara, el usuario no sabe qué grupos musculares trabajar cada día ni con
+    cuántas series, repeticiones o tiempo de descanso, y desaprovecha su
+    tiempo de entrenamiento.
+    \item \textbf{Falta de seguimiento del progreso:} al no registrar su peso
+    ni su composición corporal, el usuario no percibe sus avances, lo que
+    reduce su motivación.
+\end{itemize}
+
+\subsection{Formulación del problema}
+
+¿Cómo desarrollar una aplicación para gimnasios que ofrezca guía, rutinas de
+ejercicio personalizadas mediante inteligencia artificial y seguimiento del
+progreso físico, de forma accesible para el usuario?
+
+\section{Objetivos}
+\label{sec:objetivos}
+
+\subsection{Objetivo general}
+
+Desarrollar un sistema inteligente para el entrenamiento en gimnasios,
+proporcionando una guía estructurada y seguimiento personalizado de los
+ejercicios.
+
+\subsection{Objetivos específicos}
+\label{subsec:objetivos-especificos}
+
+\begin{enumerate}[label=\textbf{OE\arabic*.}, leftmargin=3.2em]
+    \item Guiar sobre el uso correcto de máquinas.
+    \item Instruir en la ejecución correcta de ejercicios específicos.
+    \item Diseñar rutinas de entrenamiento personalizadas y estructuradas,
+    adaptadas a los objetivos de cada usuario.
+    \item Construir herramientas de planificación que permitan a los usuarios
+    organizar sus entrenamientos de manera eficiente.
+    \item Registrar la ingesta de alimentos con el fin de controlar y evaluar
+    las calorías consumidas por el usuario.
+    \item Implementar un sistema de seguimiento del progreso físico.
+    \item Generar reportes personalizados de progreso físico.
+\end{enumerate}
+
+\section{Área de conocimiento}
+\label{sec:area}
+
+\textbf{Área:} Programación Móvil.\\
+\textbf{Subárea:} Sistemas de Información.
+
+\section{Alcance y limitaciones}
+\label{sec:alcance}
+
+\subsection{Alcance}
+
+\begin{itemize}
+    \item El sistema funciona en dispositivos con sistema operativo Android.
+    \item Registro e inicio de sesión de usuarios con correo electrónico y
+    contraseña, o con una cuenta de Google, mediante una interfaz intuitiva.
+    \item Guía sobre el uso correcto de las máquinas de gimnasio: un catálogo
+    de 35 tipos de máquinas con descripción, músculos trabajados,
+    instrucciones paso a paso, errores comunes, prevención de lesiones,
+    galería de variantes y animaciones de ejecución de los ejercicios
+    asociados.
+    \item Escáner de máquinas con la cámara del teléfono, que superpone la
+    ficha de la máquina sobre la imagen en vivo (realidad aumentada basada en
+    cámara). La identificación de la máquina la confirma el usuario; la
+    arquitectura deja definido el punto de extensión para un clasificador de
+    imágenes.
+    \item Creación de rutinas personalizadas según el objetivo y el nivel del
+    usuario, generadas automáticamente por un sistema basado en reglas, o
+    armadas manualmente día por día.
+    \item Registro del progreso físico (peso, estatura e índice de masa
+    corporal) con historial y reportes gráficos.
+    \item El registro de alimentación se limita al control calórico mediante
+    una calculadora de índice de masa corporal (IMC) con historial de
+    mediciones.
+\end{itemize}
+
+\subsection{Limitaciones}
+
+\begin{itemize}
+    \item El sistema no reemplaza la supervisión profesional de entrenadores
+    ni de nutricionistas.
+    \item No se contempla la integración con dispositivos externos
+    (relojes inteligentes, bandas de frecuencia cardíaca, entre otros).
+    \item No se desarrolla una versión para iOS, aunque la tecnología elegida
+    lo permitiría en el futuro.
+    \item El reconocimiento automático de máquinas mediante un modelo de
+    aprendizaje profundo (TensorFlow Lite) y la realidad aumentada con anclaje
+    tridimensional (ARCore) quedan fuera del producto entregado; se documenta
+    su diseño como trabajo futuro (véase la sección~\ref{sec:recomendaciones}).
+    \item El contenido del catálogo de máquinas corresponde al equipamiento de
+    un proveedor nacional de referencia y no a un gimnasio en particular.
+\end{itemize}
+
+\section{Justificación}
+\label{sec:justificacion}
+
+\subsection{Justificación técnica}
+
+\begin{itemize}
+    \item El uso de React Native con Expo y TypeScript permite obtener una
+    aplicación Android nativa a partir de una sola base de código tipada, con
+    acceso a la cámara y a los demás recursos del dispositivo.
+    \item Firebase provee autenticación, base de datos documental en tiempo
+    real y almacenamiento de archivos como servicios administrados, lo que
+    elimina la necesidad de desplegar y mantener un servidor propio.
+    \item La arquitectura por capas (Modelo--Vista--Controlador) aísla la
+    lógica de negocio de la interfaz y de los servicios externos, de modo que
+    componentes como el generador de rutinas o el reconocimiento de máquinas
+    pueden evolucionar sin afectar al resto del sistema.
+\end{itemize}
+
+\subsection{Justificación económica}
+
+\begin{itemize}
+    \item La aplicación ofrece al usuario una guía de entrenamiento sin el
+    costo recurrente de un entrenador personal.
+    \item Las herramientas de desarrollo empleadas son libres o gratuitas, y
+    los servicios de Firebase cuentan con un nivel gratuito suficiente para la
+    etapa de validación.
+    \item El catálogo se construyó a partir de fuentes de acceso libre (wger,
+    free-exercise-db) y de contenido propio, sin licencias de pago.
+\end{itemize}
+
+\subsection{Justificación social}
+
+\begin{itemize}
+    \item Contribuye a reducir el abandono de la actividad física al atacar
+    sus causas principales: desconocimiento, falta de estructura y falta de
+    seguimiento.
+    \item Disminuye el riesgo de lesiones al enseñar la ejecución correcta y
+    los errores que deben evitarse en cada máquina.
+    \item Pone a disposición de cualquier persona con un teléfono Android, y en
+    español, una guía que antes dependía de poder pagar asesoría profesional.
+\end{itemize}
+
+\section{Metodología}
+\label{sec:metodologia}
+
+Para el desarrollo del producto se adoptó la metodología ágil Mobile-D
+\citep{abrahamsson2004}, diseñada específicamente para proyectos de
+aplicaciones móviles con equipos pequeños y ciclos de entrega cortos. El
+trabajo se organizó en sus cinco fases: \emph{Exploración}, donde se
+establecieron los requerimientos y se seleccionaron las tecnologías;
+\emph{Inicialización}, donde se preparó el entorno, se definió la arquitectura
+y se diseñó el modelo de datos; \emph{Producción}, donde se implementaron los
+módulos funcionales en iteraciones sucesivas; \emph{Estabilización}, donde se
+integraron los módulos y se refactorizó el código; y \emph{Pruebas del
+sistema}, donde se verificó el producto contra los requerimientos. El
+Capítulo~\ref{cap:desarrollo} describe cada fase en detalle.
+
+En la parte documental se aplicó investigación bibliográfica sobre
+prescripción del ejercicio, inteligencia artificial basada en conocimiento,
+realidad aumentada y desarrollo móvil, que sustenta el marco teórico del
+Capítulo~\ref{cap:marco}.
