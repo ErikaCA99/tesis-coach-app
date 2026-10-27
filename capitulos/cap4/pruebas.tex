@@ -1,0 +1,403 @@
+\newcommand{\pendcorto}{\textcolor{red!70!black}{\textbf{[PEND.]}}}
+% =====================================================================
+\section{Fase de Pruebas del sistema}
+\label{sec:des-pruebas}
+
+La última fase de Mobile-D verifica que el producto cumpla sus
+requerimientos. Las pruebas se organizaron en seis niveles, de los más
+automáticos a los que requieren al usuario (Tabla~\ref{tab:estrategia}).
+
+\begin{table}[H]
+\centering
+\caption{Estrategia de pruebas}
+\label{tab:estrategia}
+\begin{tabularx}{\textwidth}{|L{3.5cm}|Y|L{3.4cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Nivel} & \textbf{Objeto de la prueba} & \textbf{Técnica} \\
+\hline
+Verificación estática & Tipos y calidad de todo el código. & Compilador y
+analizadores (sección~\ref{sec:des-estabilizacion}) \\ \hline
+Lógica de negocio & Funciones puras: generador de rutinas, IMC, estadísticas
+de entrenamiento, porciones de alimentos y traducción de consultas. &
+Pruebas unitarias con valores límite \\ \hline
+Reglas de seguridad & Aislamiento entre usuarios y validación de datos en el
+servidor. & Escenarios permitidos y denegados \\ \hline
+Funcionales & Cada requerimiento funcional en la aplicación instalada. &
+Caja negra, casos de prueba \\ \hline
+Usabilidad & Facilidad de uso de las tareas principales. & Tareas con
+usuarios \\ \hline
+Aceptación & Cumplimiento de cada objetivo específico. & Trazabilidad
+objetivo--requerimiento--prueba \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{Pruebas de la lógica de negocio}
+\label{subsec:pruebas-logica}
+
+Las funciones de las reglas de negocio no dependen de la red ni de la base de
+datos, por lo que se ejercitaron directamente con Node.js~22 sobre el código
+fuente del proyecto, sin modificar su lógica. Las funciones del controlador de
+nutrición se copiaron textualmente a un archivo auxiliar para aislarlas del SDK
+de Firebase. La ejecución se realizó el 14 de octubre de 2026.
+
+\paragraph{Generador de rutinas.} Se evaluaron las doce combinaciones posibles
+de objetivo y nivel. La Tabla~\ref{tab:prueba-generador} muestra los
+resultados obtenidos, que coinciden en todos los casos con las reglas de las
+Tablas~\ref{tab:reglas-frecuencia} a~\ref{tab:reglas-division}.
+
+\begin{table}[H]
+\centering
+\caption{Resultados del generador para las doce combinaciones de entrada}
+\label{tab:prueba-generador}
+\small
+\begin{tabular}{|L{2.5cm}|L{2.2cm}|C{0.9cm}|C{1.9cm}|L{4.4cm}|C{1.1cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Objetivo} & \textbf{Nivel} & \textbf{Días} & \textbf{Series × Rep.
+(desc.)} & \textbf{División obtenida} & \textbf{Ejerc.} \\
+\hline
+Ganar masa & Principiante & 3 & 4×9 (90 s) & Emp. -- Tir. -- Pie. & 15 \\ \hline
+Ganar masa & Intermedio & 4 & 4×9 (90 s) & Emp. -- Tir. -- Pie. -- C.C. & 21 \\ \hline
+Ganar masa & Avanzado & 5 & 4×9 (90 s) & Emp. -- Tir. -- Pie. -- Emp. -- Tir. & 25 \\ \hline
+Mantenimiento & Principiante & 3 & 3×12 (60 s) & Emp. -- Tir. -- Pie. & 15 \\ \hline
+Mantenimiento & Intermedio & 4 & 3×12 (60 s) & Emp. -- Tir. -- Pie. -- C.C. & 21 \\ \hline
+Mantenimiento & Avanzado & 5 & 3×12 (60 s) & Emp. -- Tir. -- Pie. -- Emp. -- Tir. & 25 \\ \hline
+Perder peso & Principiante & 3 & 3×15 (45 s) & Emp. -- Car. -- Pie. & 14 \\ \hline
+Perder peso & Intermedio & 4 & 3×15 (45 s) & Emp. -- Tir. -- Car. -- Pie. & 19 \\ \hline
+Perder peso & Avanzado & 5 & 3×15 (45 s) & Emp. -- Tir. -- Pie. -- Car. -- C.C. & 25 \\ \hline
+Resistencia & Principiante & 3 & 3×18 (30 s) & Emp. -- Car. -- Pie. & 14 \\ \hline
+Resistencia & Intermedio & 4 & 3×18 (30 s) & Emp. -- Tir. -- Car. -- Pie. & 19 \\ \hline
+Resistencia & Avanzado & 5 & 3×18 (30 s) & Emp. -- Tir. -- Pie. -- Car. -- C.C. & 25 \\
+\hline
+\end{tabular}
+\fuente{Ejecución de \archivo{generarPlanHeuristico} (comportamiento base, sin
+edad, IMC ni días disponibles). Emp.: empuje; Tir.:
+tirón; Pie.: pierna; Car.: cardio; C.C.: cuerpo completo; Ejerc.: total de
+ejercicios por semana.}
+\end{table}
+
+\paragraph{Cálculo del IMC.} Se probaron valores en los límites de cada
+categoría de la OMS (Tabla~\ref{tab:prueba-imc}). Todos los casos produjeron
+el resultado esperado.
+
+\begin{table}[H]
+\centering
+\caption{Pruebas de valores límite del cálculo y la clasificación del IMC}
+\label{tab:prueba-imc}
+\small
+\begin{tabular}{|C{2.2cm}|C{2.4cm}|C{2.2cm}|L{3.3cm}|C{2cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Peso (kg)} & \textbf{Estatura (cm)} & \textbf{IMC} &
+\textbf{Categoría obtenida} & \textbf{Resultado} \\
+\hline
+50.0 & 170 & 17.3 & Bajo peso & Correcto \\ \hline
+53.4 & 170 & 18.5 & Normal & Correcto \\ \hline
+70.0 & 175 & 22.9 & Normal & Correcto \\ \hline
+72.2 & 170 & 25.0 & Sobrepeso & Correcto \\ \hline
+86.7 & 170 & 30.0 & Obesidad & Correcto \\ \hline
+100.0 & 170 & 34.6 & Obesidad & Correcto \\ \hline
+\multicolumn{3}{|c|}{Clasificación de 18.4 / 18.5} & Bajo peso / Normal & Correcto \\ \hline
+\multicolumn{3}{|c|}{Clasificación de 24.9 / 25.0} & Normal / Sobrepeso & Correcto \\ \hline
+\multicolumn{3}{|c|}{Clasificación de 29.9 / 30.0} & Sobrepeso / Obesidad & Correcto \\
+\hline
+\end{tabular}
+\fuente{Ejecución de \archivo{calcularIMC} y \archivo{clasificarIMC}.}
+\end{table}
+
+\paragraph{Reparto, entrenamientos, porciones y traducción.} La
+Tabla~\ref{tab:prueba-otras} reúne las demás pruebas de funciones puras. Para
+las estadísticas de entrenamiento se fijó la fecha actual en el miércoles 14 de
+octubre de 2026.
+
+\begin{table}[H]
+\centering
+\caption{Otras pruebas de la lógica de negocio}
+\label{tab:prueba-otras}
+\footnotesize
+\begin{tabularx}{\textwidth}{|L{1.1cm}|L{4.1cm}|Y|Y|}
+\hline
+\rowcolor{encabezado} \textbf{ID} & \textbf{Función} & \textbf{Entrada} & \textbf{Resultado obtenido} \\
+\hline
+PL-01 & \archivo{repartirCantidad} & 5 ejercicios en 3 categorías & 2 -- 2 -- 1 \\ \hline
+PL-02 & \archivo{repartirCantidad} & 6 ejercicios en 3 categorías & 2 -- 2 -- 2 \\ \hline
+PL-03 & \archivo{repartirCantidad} & 4 ejercicios en 2 categorías & 2 -- 2 \\ \hline
+PL-04 & Estadísticas de entrenamiento & Días 12, 13 y 14 de octubre (hoy
+incluido) & Racha 3; semana 3; total 3 \\ \hline
+PL-05 & Estadísticas de entrenamiento & Días 12 y 13 (hoy sin completar) &
+Racha 2; semana 2 \\ \hline
+PL-06 & Estadísticas de entrenamiento & Días 10 y 12 (falta el día 13) &
+Racha 0; semana 1 \\ \hline
+PL-07 & Estadísticas de entrenamiento & Diez días consecutivos hasta hoy &
+Racha 10; semana 3; total 10 \\ \hline
+PL-08 & Estadísticas de entrenamiento & Sin registros & Racha 0; semana 0;
+total 0 \\ \hline
+PL-09 & \archivo{calcularPorcion} & Arroz (130~kcal, 2.7~g P, 28~g C, 0.3~g
+G por 100~g), 200~g & 260~kcal; 5.4~g P; 56~g C; 0.6~g G \\ \hline
+PL-10 & \archivo{calcularPorcion} & Pollo (165~kcal, 31~g P por 100~g), 150~g
+& 248~kcal; 46.5~g P; 0~g C; 5.4~g G \\ \hline
+PL-11 & \archivo{calcularPorcion} & Cualquier alimento, 0~g & Todos los
+valores en 0 \\ \hline
+PL-12 & \archivo{calcularResumenDiario} & Dos alimentos de hoy (arroz y pollo),
+uno de otra fecha y un cálculo de IMC & Solo suma los dos de hoy: 508~kcal,
+quedan 1\,492; 25.4\,\% de la meta de referencia (2\,000~kcal) \\ \hline
+PL-13 & \archivo{calcularResumenDiario} & Un alimento de 2\,600~kcal & Porcentaje
+limitado a 100\,\%; restantes 0 \\ \hline
+PL-14 & \archivo{traducirConsulta} & ``pechuga de pollo'', ``Plátano'',
+``leche descremada'' & ``chicken breast'', ``banana'', ``milk nonfat'' \\ \hline
+PL-15 & \archivo{traducirConsulta} & ``chicken'' y ``a'' & ``chicken'' sin
+cambio; ``a'' no genera consulta \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{Pruebas unitarias automáticas}
+\label{sec:pruebas-unitarias}
+
+Las pruebas anteriores se ejecutaron una vez, con \emph{scripts} auxiliares.
+Para que las reglas de negocio puedan verificarse de forma repetible después de
+cada cambio, se escribieron cinco suites de Jest con 66 pruebas
+(Tabla~\ref{tab:suites-jest}), que se ejecutan con \archivo{npm test}. Las
+funciones probadas son puras, por lo que las pruebas no requieren Firebase ni
+un dispositivo. Entre los casos cubiertos están:
+
+\begin{itemize}
+    \item \textbf{IMC:} los límites exactos de cada categoría de la OMS
+    (18,4 es bajo peso; 18,5 es normal; 24,9 es normal; 25 es sobrepeso; 30 es
+    obesidad).
+    \item \textbf{Metas nutricionales:} que un hombre de 25 años, 75~kg y
+    178~cm, que entrena cuatro días para ganar masa, obtenga una tasa basal de
+    1\,743~kcal y una meta de 3\,001~kcal; que perder peso aplique un déficit de
+    500~kcal; que nunca se baje del piso calórico (1\,200~kcal para mujeres y
+    1\,500~kcal para hombres); y que los macronutrientes no sean negativos y
+    reconstruyan las calorías con una tolerancia de 10~kcal.
+    \item \textbf{Generador de rutinas:} que el orden de las seis plantillas y
+    de los cuatro esquemas coincida con el del \emph{script} de entrenamiento
+    del modelo (si cambiara, el modelo dejaría de ser válido); que IMC $\geq$ 30
+    active el énfasis en cardio; que los mayores de 60 años no reciban
+    hipertrofia ni esquema metabólico y los menores de 16 no reciban
+    hipertrofia; y que cualquier combinación de perfil produzca clases
+    válidas.
+    \item \textbf{Vector de entrada del modelo:} el orden de las diez
+    características, la codificación \emph{one-hot} del objetivo y los valores
+    por defecto cuando faltan datos del perfil.
+    \item \textbf{Estadísticas de entrenamiento:} racha, semana y total.
+\end{itemize}
+
+\pendiente{ejecutar \texttt{npm test} en el repositorio y registrar el número
+de suites y de pruebas aprobadas; las 66 pruebas se verificaron al escribirlas
+en un proyecto aislado, no en la máquina de la autora.}
+
+\subsection{Evaluación de los modelos de inteligencia artificial}
+\label{sec:pruebas-ia}
+
+Los dos modelos de TensorFlow Lite se evaluaron durante su entrenamiento, no
+con usuarios. Los resultados completos están en las
+Tablas~\ref{tab:metricas-rutinas} (recomendador de rutinas),
+\ref{tab:metricas-reconocimiento} y~\ref{tab:umbral-reconocimiento}
+(reconocimiento de máquinas). En resumen:
+
+\begin{itemize}
+    \item El \textbf{recomendador de rutinas} reproduce las reglas con una
+    exactitud del 99,8\,\% sobre datos sintéticos y del 97,1\,\% sobre una
+    cuadrícula exhaustiva de perfiles, con los errores concentrados junto a los
+    umbrales. Como las etiquetas provienen de las mismas reglas, esta prueba
+    mide la fidelidad del modelo, no la calidad de las rutinas.
+    \item El \textbf{reconocedor de máquinas} acierta la máquina correcta en
+    el 38,5\,\% de las fotos (61,4\,\% entre las tres primeras sugerencias) en
+    un escenario de campo simulado de 35 clases. Por esa razón el usuario
+    siempre confirma la máquina y el umbral automático se fijó en 0,8.
+    \item \pendiente{medir ambos modelos en un dispositivo físico (tiempo de
+    inferencia y comportamiento con fotos reales tomadas en un gimnasio).}
+\end{itemize}
+
+\subsection{Pruebas de las reglas de seguridad}
+
+Las reglas de seguridad son la única barrera real frente a un acceso
+malintencionado, porque las credenciales de Firebase están contenidas en la
+aplicación. La Tabla~\ref{tab:prueba-reglas} define los escenarios evaluados
+y el resultado que exigen las reglas del Anexo~\ref{anx:reglas}. Los
+escenarios se ejecutan con el simulador de reglas de la consola de Firebase
+(\emph{Rules Playground}), autenticando como un usuario $A$ y operando sobre
+datos propios o de otro usuario $B$.
+
+\begin{table}[H]
+\centering
+\caption{Escenarios de prueba de las reglas de seguridad}
+\label{tab:prueba-reglas}
+\footnotesize
+\begin{tabularx}{\textwidth}{|L{1.3cm}|Y|C{1.8cm}|C{1.9cm}|}
+\hline
+\rowcolor{encabezado} \textbf{ID} & \textbf{Escenario} & \textbf{Esperado} & \textbf{Obtenido} \\
+\hline
+SEG-01 & Usuario no autenticado lee \archivo{maquinas/\{id\}} & Denegado & \pendcorto \\ \hline
+SEG-02 & $A$ lee \archivo{maquinas/\{id\}} & Permitido & \pendcorto \\ \hline
+SEG-03 & $A$ escribe en \archivo{maquinas/\{id\}} & Denegado & \pendcorto \\ \hline
+SEG-04 & $A$ lee \archivo{usuarios/A/rutinas} & Permitido & \pendcorto \\ \hline
+SEG-05 & $A$ lee \archivo{usuarios/B/rutinas} & Denegado & \pendcorto \\ \hline
+SEG-06 & $A$ crea una rutina con \archivo{diasPorSemana = 8} & Denegado & \pendcorto \\ \hline
+SEG-07 & $A$ crea una rutina con \archivo{usuarioId = B} en su propia
+subcolección & Denegado & \pendcorto \\ \hline
+SEG-08 & $A$ modifica el campo \archivo{email} de su perfil & Denegado & \pendcorto \\ \hline
+SEG-09 & $A$ crea su perfil con \archivo{edad = 10} & Denegado & \pendcorto \\ \hline
+SEG-10 & $A$ registra progreso con \archivo{peso = 0} & Denegado & \pendcorto \\ \hline
+SEG-11 & $A$ registra ingesta con \archivo{calorias = -100} & Denegado & \pendcorto \\ \hline
+SEG-12 & $A$ crea un entrenamiento cuyo \archivo{fecha} difiere del
+identificador del documento & Denegado & \pendcorto \\ \hline
+SEG-13 & $A$ crea un entrenamiento con \archivo{dia = 8} & Denegado & \pendcorto \\ \hline
+SEG-14 & $A$ crea su perfil con \archivo{creadoEn} distinto de la hora del
+servidor & Denegado & \pendcorto \\ \hline
+SEG-15 & $A$ sube un archivo a Storage & Denegado & \pendcorto \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{Pruebas funcionales}
+
+Las pruebas funcionales se realizan con la técnica de caja negra sobre el
+\emph{development build} instalado en un dispositivo Android, siguiendo los
+criterios de aceptación definidos en cada iteración. Se definieron 40 casos de
+prueba que cubren los requerimientos funcionales RF1 a RF6; la matriz completa,
+con los pasos, el resultado esperado y el resultado obtenido, se encuentra en
+el Anexo~\ref{anx:casos}. La Tabla~\ref{tab:resumen-funcionales} resume su
+distribución.
+
+\begin{table}[H]
+\centering
+\caption{Distribución de los casos de prueba funcionales}
+\label{tab:resumen-funcionales}
+\begin{tabular}{|L{6cm}|C{2.5cm}|C{3.4cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Módulo} & \textbf{Casos} & \textbf{Requerimientos} \\
+\hline
+Autenticación, onboarding y perfil & 9 & RF1.1 a RF1.5 \\ \hline
+Guía de máquinas y ejercicios & 6 & RF2.1 a RF2.3 \\ \hline
+Escáner con realidad aumentada & 4 & RF2.4 \\ \hline
+Rutinas y planificación & 7 & RF3.1 a RF3.3 \\ \hline
+Nutrición (alimentos e IMC) & 7 & RF4.1, RF5.1 a RF5.3 \\ \hline
+Progreso, entrenamientos y reportes & 7 & RF4.2, RF6.1, RF6.2 \\
+\hline
+\textbf{Total} & \textbf{40} & \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Dispositivos de prueba.} \pendiente{indicar marca, modelo y versión
+de Android de los dispositivos en que se ejecutaron las pruebas, y si alguno
+tiene Android 8.0 para verificar el RNF1.}
+
+\subsection{Pruebas de usabilidad}
+
+Las pruebas de usabilidad evalúan qué tan fácil resulta completar las tareas
+principales (Nielsen, 1993). Cada participante realiza las seis tareas de la
+Tabla~\ref{tab:tareas-usabilidad} sin ayuda, y se registra si logra
+completarlas. \pendiente{indicar el número de participantes, su perfil
+(principiantes o usuarios de gimnasio), el resultado de cada tarea y las
+observaciones; opcionalmente, aplicar el cuestionario SUS.}
+
+\begin{table}[H]
+\centering
+\caption{Tareas de la prueba de usabilidad}
+\label{tab:tareas-usabilidad}
+\small
+\begin{tabularx}{\textwidth}{|L{1.0cm}|Y|Y|}
+\hline
+\rowcolor{encabezado} \textbf{ID} & \textbf{Tarea} & \textbf{Criterio de éxito} \\
+\hline
+T1 & Registrarse y completar el \emph{onboarding}. & Llega a la pantalla de
+inicio. \\ \hline
+T2 & Encontrar la ficha de la prensa de piernas. & Abre la ficha desde el
+catálogo. \\ \hline
+T3 & Escanear una máquina y abrir su ficha completa. & Abre la ficha desde la
+superposición. \\ \hline
+T4 & Generar una rutina y marcar como completado el día de hoy. & La rutina
+queda activa y el día marcado. \\ \hline
+T5 & Registrar 150~g de arroz en el diario. & El alimento aparece en la lista
+del día. \\ \hline
+T6 & Registrar su peso y ver el gráfico de evolución. & Ve el nuevo punto en
+el gráfico. \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{Pruebas de aceptación por objetivo}
+
+La Tabla~\ref{tab:trazabilidad} relaciona cada objetivo específico con los
+requerimientos que lo implementan y con las pruebas que lo verifican. Esta
+trazabilidad es la base de la evaluación del cumplimiento de objetivos que
+realiza el tribunal (Artículo~64 del Reglamento de Titulación).
+
+\begin{table}[H]
+\centering
+\caption{Trazabilidad entre objetivos, requerimientos y pruebas}
+\label{tab:trazabilidad}
+\small
+\begin{tabularx}{\textwidth}{|L{1.1cm}|Y|L{2.2cm}|L{3.4cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Obj.} & \textbf{Funcionalidad entregada} & \textbf{Req.} &
+\textbf{Pruebas} \\
+\hline
+OE1 & Guía de 35 máquinas con búsqueda, filtros, fichas y escáner con
+realidad aumentada y reconocimiento automático asistido. & RF2.1, RF2.2, RF2.4 &
+CP-10 a CP-13, CP-15 a CP-19, sección~\ref{sec:pruebas-ia} \\
+\hline
+OE2 & Ejercicios con animación, músculo objetivo y dificultad. & RF2.3 &
+CP-14 \\ \hline
+OE3 & \emph{Onboarding} de objetivo, nivel y datos físicos; rutinas
+generadas por un recomendador de TensorFlow Lite con respaldo de reglas. &
+RF1.4, RF3.1 & CP-06 a CP-08, CP-20, CP-21,
+Tabla~\ref{tab:prueba-generador}, secciones~\ref{sec:pruebas-unitarias}
+y~\ref{sec:pruebas-ia} \\ \hline
+OE4 & Planificador de rutinas por día, rutina activa y agregado desde la
+ficha. & RF3.2, RF3.3 & CP-22 a CP-26 \\ \hline
+OE5 & Diario de alimentación con calorías y macronutrientes, metas
+personalizadas; calculadora de IMC con clasificación e historial. & RF4.1, RF5 &
+CP-27 a CP-33, Tablas~\ref{tab:prueba-imc} y~\ref{tab:prueba-otras},
+sección~\ref{sec:pruebas-unitarias} \\ \hline
+OE6 & Registro de peso, estatura e IMC. & RF4.2 & CP-34, CP-35 \\ \hline
+OE7 & Reporte con gráfico, variación y categoría actual; reporte en PDF por
+período; seguimiento de entrenamientos con racha. & RF6 & CP-36 a CP-40,
+Tabla~\ref{tab:prueba-otras}; \pendiente{caso de prueba del PDF} \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{Cumplimiento del alcance y desviaciones}
+
+La Tabla~\ref{tab:desviaciones} contrasta lo planificado en los
+Capítulos~\ref{cap:introduccion} y~\ref{cap:area-aplicacion} con lo que
+efectivamente se entrega. Se incluye para que el alcance del producto se
+evalúe con transparencia.
+
+\begin{table}[H]
+\centering
+\caption{Contraste entre lo planificado y lo implementado}
+\label{tab:desviaciones}
+\small
+\begin{tabularx}{\textwidth}{|L{3.1cm}|L{2.4cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Elemento planificado} & \textbf{Estado} & \textbf{Observación} \\
+\hline
+Rutinas personalizadas con IA mediante TensorFlow Lite & Completo, con
+salvedad & Un modelo entrenado decide la estructura de la rutina en el
+dispositivo y las reglas actúan como respaldo. Se entrenó con perfiles
+sintéticos etiquetados por las reglas, por lo que imita el criterio experto y
+no se validó con resultados de usuarios reales. \\ \hline
+Guía y escaneo de máquinas con realidad aumentada & Completo, con salvedad &
+Superposición de la ficha sobre la cámara y un clasificador de TensorFlow Lite
+entrenado con 399 fotos de catálogo. Su acierto es modesto (38,5\,\% en campo
+simulado), por lo que el usuario siempre confirma la máquina. \\ \hline
+Registro nutricional (solo IMC según el alcance) & Ampliado & Se añadió un
+diario de alimentación con USDA y metas diarias personalizadas con la ecuación
+de Mifflin-St Jeor. \\ \hline
+Progreso y reportes & Completo & Gráfico de peso e IMC, variación,
+categoría, seguimiento de entrenamientos con racha y reporte en PDF por período
+\pendcorto{} (pendiente de probar en un dispositivo). \\ \hline
+Sincronización en tiempo real & Completo & Escuchas \emph{onSnapshot}; no se
+configuró la persistencia de datos sin conexión. \\ \hline
+Android 8.0 o superior & \pendcorto & Verificar en un dispositivo con esa
+versión. \\ \hline
+Dispositivos externos (\emph{smartwatch}) & Fuera de alcance & Excluidos por el
+alcance del proyecto. \\
+\hline
+\end{tabularx}
+\end{table}

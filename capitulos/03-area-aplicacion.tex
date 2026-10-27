@@ -123,7 +123,7 @@ El sistema propuesto está compuesto por los siguientes módulos esenciales:
 \begin{itemize}
     \item \textbf{React Native:} Es un framework multiplataforma, que permite
     desarrollar aplicaciones móviles para dispositivos Android.
-    \item \textbf{JavaScript:} Lenguaje de programación principal para el
+    \item \textbf{TypeScript:} Lenguaje de programación principal para el
     desarrollo de las interfaces y la lógica del lado del cliente.
     \item \textbf{Figma:} Herramienta de diseño utilizada para crear prototipos
     interactivos, pantallas iniciales, facilitando la validación visual del
@@ -142,7 +142,8 @@ El sistema propuesto está compuesto por los siguientes módulos esenciales:
     imágenes, animaciones y videos que acompañan la guía técnica del sistema.
     \item \textbf{TensorFlow Lite:} Biblioteca optimizada para ejecutar modelos
     de inteligencia artificial directamente en el dispositivo móvil, utilizada
-    para generar rutinas personalizadas basadas en parámetros del usuario.
+    para recomendar la estructura de las rutinas a partir de los parámetros del
+    usuario y para reconocer la máquina a partir de una fotografía.
 \end{itemize}
 
 % ---------------------------------------------------------------------
@@ -171,7 +172,7 @@ Las principales actividades a realizar para la preparación del ambiente, son:
 La arquitectura definida para el desarrollo de la aplicación es el de
 cliente-servidor, donde la aplicación móvil actúa como cliente y los servicios
 en la nube proporcionan autenticación, almacenamiento de datos, persistencia
-multimedia y ejecución de algoritmos de IA.
+multimedia, mientras que los modelos de IA se ejecutan en el propio dispositivo.
 
 La arquitectura cliente servidor permite garantizar escalabilidad,
 sincronización en tiempo real y disponibilidad permanente del servicio.
@@ -258,7 +259,7 @@ Se estableció una estructura de ramas para gestionar el desarrollo:
 
 \begin{itemize}
     \item \texttt{main}: versión estable.
-    \item \texttt{development}: versión en progreso.
+    \item \texttt{develop}: versión en progreso.
     \item \texttt{feature/nombre-del-módulo}: para cada nueva funcionalidad.
 \end{itemize}
 

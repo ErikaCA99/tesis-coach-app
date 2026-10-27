@@ -1,125 +1,62 @@
 \chapter{DESARROLLO DEL PROYECTO}
 \label{cap:desarrollo}
 
-% En el documento Word este capítulo solo tenía el título y la primera
-% sección vacía. En la carpeta borradores/capitulos/ hay una propuesta de
-% redacción completa del Capítulo IV (fases de Mobile-D) basada en el código
-% real de coach-app, por si se quiere usar como punto de partida.
+% Este capítulo se divide en un archivo por fase de Mobile-D (carpeta
+% capitulos/cap4/). Las marcas \pendiente{...} en rojo indican datos que solo
+% la autora puede completar (capturas de pantalla, resultados en dispositivos
+% reales, pruebas con usuarios). Para ocultarlas todas antes de la entrega:
+% \renewcommand{\pendiente}[1]{} en config/comandos.tex.
 
-\section{Fase de Exploración}
-\label{sec:des-exploracion}
+En este capítulo se describe el desarrollo del sistema siguiendo las fases de
+la metodología Mobile-D presentadas en la sección~\ref{sec:aa-aplicacion-mobiled}.
+Para cada fase se detallan las actividades realizadas y los artefactos
+obtenidos. La fase de producción se organizó en seis iteraciones, una por
+módulo funcional, y cada iteración se documenta con su planificación, el
+trabajo de diseño e implementación y la liberación con sus criterios de
+aceptación.
 
-\pendiente{Desarrollar el contenido del Capítulo IV.}
+El producto resultante se identifica en este documento como \nombreApp{}, el
+nombre de la aplicación registrado en su configuración de compilación. El
+código fuente se gestiona en un repositorio Git alojado en GitHub, y los
+fragmentos de código que se presentan corresponden a la versión integrada en
+la rama \archivo{develop} y a la rama de trabajo \archivo{feature/routines}.
+Todo lo que se describe como implementado fue verificado sobre el código
+fuente; lo que se encuentra preparado pero aún no operativo se indica
+expresamente.
 
-\section{Fase de Inicialización}
-\label{sec:des-inicializacion}
+La Tabla~\ref{tab:resumen-fases} resume la correspondencia entre las fases de
+Mobile-D, las actividades principales y los artefactos producidos.
 
-\subsection{Estructura de la arquitectura}
-\label{sec:des-arquitectura}
+\begin{table}[H]
+\centering
+\caption{Resumen de las fases de Mobile-D aplicadas al proyecto}
+\label{tab:resumen-fases}
+\begin{tabularx}{\textwidth}{|L{2.6cm}|Y|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Fase} & \textbf{Actividades principales} & \textbf{Artefactos} \\
+\hline
+Exploración & Identificación de interesados y actores, alcance,
+requerimientos, análisis de procesos, selección tecnológica y planificación.
+& Requerimientos funcionales y no funcionales, casos de uso, plan de
+iteraciones. \\ \hline
+Inicialización & Configuración del entorno, repositorio y proyecto Firebase;
+arquitectura, modelo de datos, seguridad y navegación; día de prueba y día de
+salida. & Arquitectura por capas, modelo de datos de Firestore, reglas de
+seguridad, estructura del proyecto. \\ \hline
+Producción & Seis iteraciones: autenticación y \emph{onboarding}, guía de
+máquinas, escáner con realidad aumentada, rutinas, nutrición y progreso. &
+Módulos funcionales integrados por \emph{pull request}. \\ \hline
+Estabilización & Integración, refactorización por capas, validación y
+verificación estática. & Código uniforme y verificado. \\ \hline
+Pruebas del sistema & Pruebas de la lógica de negocio, de seguridad,
+funcionales, de usabilidad y de aceptación por objetivo. & Matriz de casos de
+prueba y resultados. \\
+\hline
+\end{tabularx}
+\end{table}
 
-% Trasladado desde el Capítulo III (Área de aplicación) para cumplir el
-% límite de 6 páginas de ese capítulo.
-
-La estructura de la arquitectura del sistema se encuentra basada en capas:
-
-\paragraph{Capa de Presentación}
-
-Tecnologías: React Native + Expo, JavaScript, componentes UI.
-
-\textit{Responsabilidades:}
-
-\begin{itemize}
-    \item Generar la interfaz visual de la aplicación.
-    \item Gestionar la interacción del usuario.
-    \item Capturar entradas como datos personales, selección de máquinas,
-    rutinas y registro nutricional.
-    \item Comunicar solicitudes al backend y mostrar respuestas.
-\end{itemize}
-
-\textit{Componentes clave:}
-
-\begin{itemize}
-    \item Módulo de registro y autenticación.
-    \item Módulo de guía de máquinas y ejercicios.
-    \item Módulo de rutinas personalizadas.
-    \item Módulo de nutrición.
-    \item Módulo de progreso y reportes.
-\end{itemize}
-
-\paragraph{Capa de Lógica de Negocio}
-
-Esta se encuentra dentro de la app y está conectada a servicios externos.
-
-\textit{Responsabilidades:}
-
-\begin{itemize}
-    \item Manejar reglas del sistema (cálculo de IMC, validaciones).
-    \item Procesar datos antes de enviarlos a Firebase.
-    \item Integrar y ejecutar modelos TensorFlow Lite para personalizar
-    rutinas.
-    \item Gestionar filtros, búsqueda de máquinas y procesamiento de
-    ejercicios.
-\end{itemize}
-
-\textit{Componentes de negocio:}
-
-\begin{itemize}
-    \item Controlador de rutinas (IA).
-    \item Controlador de ejercicios y máquinas.
-    \item Controlador de progreso físico.
-    \item Controlador nutricional.
-\end{itemize}
-
-\paragraph{Capa de Servicios}
-
-Esta capa proporciona servicios esenciales para la operación del sistema:
-
-\textit{Firebase Authentication:}
-
-\begin{itemize}
-    \item Registro de usuarios.
-    \item Inicio de sesión.
-    \item Recuperación de contraseñas.
-    \item Seguridad y manejo de tokens.
-\end{itemize}
-
-\textit{Firebase Firestore:}
-
-\begin{itemize}
-    \item Base de datos NoSQL en tiempo real.
-    \item Almacenamiento de rutinas, registros, progreso y máquinas.
-\end{itemize}
-
-\textit{Firebase Storage:}
-
-\begin{itemize}
-    \item Almacenamiento de imágenes, videos o animaciones educativas.
-    \item Contenido para la guía técnica de máquinas.
-\end{itemize}
-
-\textit{Firebase Cloud Functions (opcional):}
-
-\begin{itemize}
-    \item Validación de datos.
-    \item Preprocesamiento de peticiones.
-    \item Actualizaciones automáticas de rutinas.
-\end{itemize}
-
-Estas funciones se integran a través de peticiones HTTP o SDK en tiempo real.
-
-\paragraph{Capa de Inteligencia Artificial}
-
-Tecnología: TensorFlow Lite.
-
-\textit{Responsabilidades:}
-
-\begin{itemize}
-    \item Ejecutar modelos de recomendación ligera para rutinas.
-    \item Ajustar parámetros según peso, nivel, objetivo y progreso del
-    usuario.
-    \item Proveer resultados inmediatos sin depender del servidor.
-\end{itemize}
-
-Este esquema reduce latencia, permite personalización offline y mejora la
-experiencia del usuario.
-
+\input{capitulos/cap4/exploracion}
+\input{capitulos/cap4/inicializacion}
+\input{capitulos/cap4/produccion}
+\input{capitulos/cap4/estabilizacion}
+\input{capitulos/cap4/pruebas}

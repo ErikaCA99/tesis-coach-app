@@ -1,0 +1,165 @@
+\chapter{CONCLUSIONES Y RECOMENDACIONES}
+\label{cap:conclusiones}
+
+\section{Conclusiones}
+\label{sec:conclusiones}
+
+El presente proyecto de grado desarrolló un sistema para el entrenamiento en
+gimnasios que proporciona una guía estructurada y un seguimiento personalizado
+de los ejercicios, con lo que se cumple el objetivo general planteado. El
+producto es una aplicación Android construida con React Native, Expo y
+TypeScript sobre los servicios de Firebase, organizada en una arquitectura
+cliente--servidor con capas Modelo--Vista--Controlador y desarrollada con la
+metodología Mobile-D en seis iteraciones. Dos de sus componentes, la
+inteligencia artificial y la realidad aumentada, se implementaron con modelos
+de TensorFlow Lite entrenados para este proyecto, pero con un alcance de
+validación acotado, como se detalla a continuación.
+
+Respecto a cada objetivo específico, se concluye lo siguiente:
+
+\begin{enumerate}[label=\textbf{OE\arabic*.}, leftmargin=3.2em]
+    \item \textbf{Guiar sobre el uso correcto de máquinas.} Se construyó un
+    catálogo de 35 tipos de máquinas, con 288 modelos comerciales como
+    variantes, en el que cada ficha incluye descripción, músculos trabajados,
+    guía de uso paso a paso, errores comunes y pautas de prevención de
+    lesiones redactadas como contenido propio. El catálogo se consulta con
+    búsqueda tolerante a tildes y filtros, y se complementa con un escáner que
+    superpone la ficha de la máquina sobre la imagen en vivo de la cámara. Un
+    clasificador de TensorFlow Lite (MobileNetV2 con una capa entrenada),
+    entrenado con las 399 fotografías del catálogo, propone la máquina a
+    partir de una foto; su acierto es modesto (38,5\,\% en un escenario de
+    campo simulado de 35 clases y 61,4\,\% entre las tres primeras
+    sugerencias), por lo que solo se acepta sin preguntar con una confianza de
+    al menos 0,8 y, en los demás casos, el usuario confirma la sugerencia o
+    elige la máquina en una lista.
+    \item \textbf{Instruir en la ejecución correcta de ejercicios.} Cada
+    máquina presenta al menos un ejercicio con su animación de ejecución, su
+    músculo objetivo y su nivel de dificultad, con un total de 95 animaciones
+    obtenidas por la vía oficial de su proveedor.
+    \item \textbf{Diseñar rutinas personalizadas.} Se implementó
+    un generador de rutinas basado en reglas cuya base de conocimiento
+    traduce las pautas de prescripción del ejercicio en reglas de frecuencia,
+    de variables de carga y de división semanal, y que se ajusta con la edad,
+    el IMC y los días disponibles del usuario. Sobre esas reglas se entrenó un
+    modelo de TensorFlow Lite que decide la plantilla semanal y el esquema de
+    carga y se ejecuta en el dispositivo; si su confianza es menor que 0,6 o
+    falla, la aplicación usa las reglas. Como no existen datos de usuarios
+    reales con resultados conocidos, el modelo se entrenó con 60\,000 perfiles
+    sintéticos etiquetados por las propias reglas: reproduce las reglas con un
+    99,8\,\% de exactitud, pero eso mide su fidelidad al criterio experto y no
+    demuestra que sus rutinas sean mejores para los usuarios. Las pruebas
+    sobre las doce combinaciones de objetivo y nivel confirmaron que cada
+    rutina generada respeta las reglas.
+    \item \textbf{Construir herramientas de planificación.} El planificador
+    de rutinas personalizadas permite organizar la semana día por día, ajustar
+    series, repeticiones y descansos, mantener varias rutinas con una activa y
+    agregar ejercicios directamente desde la ficha de una máquina.
+    \item \textbf{Registrar la ingesta de alimentos.} El alcance inicial
+    limitaba este objetivo al conteo calórico mediante una calculadora de IMC;
+    el sistema lo supera. Además de calcular y clasificar el IMC según la OMS,
+    permite buscar alimentos en español sobre la base de USDA FoodData Central,
+    calcular calorías y macronutrientes por porción y compararlos con metas
+    diarias que se personalizan con la ecuación de Mifflin-St Jeor según los
+    datos físicos, los días de entrenamiento y el objetivo del usuario. Son
+    estimaciones referenciales y no sustituyen la indicación de un
+    nutricionista.
+    \item \textbf{Implementar el seguimiento del progreso físico.} El usuario
+    registra su peso y su estatura, el sistema calcula el IMC y el historial
+    se sincroniza en tiempo real. Además, el usuario marca los días de su
+    rutina que completa y el sistema calcula su racha, los días entrenados de
+    la semana y el total de entrenamientos.
+    \item \textbf{Generar reportes de progreso.} El reporte presenta la
+    evolución del peso y del IMC en un gráfico, la variación acumulada y la
+    categoría de IMC actual, calculados al vuelo a partir del historial para
+    reflejar siempre los datos vigentes. Además, el usuario puede generar un
+    reporte en PDF por período (7, 30, 90 días o todo el historial) con su
+    perfil, su peso, sus entrenamientos y su alimentación frente a la meta, y
+    compartirlo desde el sistema. \pendiente{confirmar la generación del PDF
+    en un dispositivo físico.}
+\end{enumerate}
+
+En el plano técnico, se concluye además que:
+
+\begin{itemize}
+    \item La separación en capas resultó determinante para la mantenibilidad:
+    al aislar el acceso a Firebase en los repositorios y servicios, cambios
+    como el paso de colecciones raíz a subcolecciones por usuario, o la
+    incorporación de nuevas fuentes de datos como USDA, se resolvieron sin
+    modificar las pantallas.
+    \item Las reglas de seguridad del servidor, que validan propiedad, tipos y
+    rangos, son indispensables en una arquitectura sin servidor propio, porque
+    las credenciales del cliente son públicas por diseño.
+    \item Concentrar las reglas de negocio en funciones puras (generador de
+    rutinas, IMC, racha de entrenamientos, porciones de alimentos) permitió
+    verificarlas de forma automática y reproducible sin depender de la red ni
+    de la base de datos.
+    \item Aislar los modelos de aprendizaje automático tras un contrato
+    definido (las clases que producen y el vector de entrada) y conservar las
+    reglas como respaldo permitió integrarlos sin afectar al resto del sistema
+    y garantiza que la aplicación siga funcionando si un modelo falla. Además,
+    verificar con pruebas automáticas que el orden de las clases en TypeScript
+    coincida con el del \emph{script} de entrenamiento evita un error silencioso
+    al reentrenar.
+    \item Una métrica alta no basta: el recomendador de rutinas alcanza un
+    99,8\,\% porque imita reglas conocidas, mientras que el reconocedor de
+    máquinas, entrenado con pocas fotografías, acierta menos del 40\,\% en
+    campo simulado. Informar ambas cifras con su contexto fue necesario para
+    no sobrestimar el aporte de la inteligencia artificial.
+\end{itemize}
+
+Como limitaciones del producto actual cabe señalar que las pruebas
+automatizadas cubren la lógica pura (cinco suites, 66 pruebas) pero no la
+interfaz, que la persistencia de datos sin conexión no está configurada, que
+los dos modelos no se han medido en un dispositivo ni con usuarios reales, que
+el reconocedor de máquinas acierta poco con las máquinas menos distintivas y
+que las metas nutricionales son estimaciones referenciales. \pendiente{agregar, cuando se disponga de ellos, los resultados
+de las pruebas en dispositivos reales y con usuarios (sección~\ref{sec:des-pruebas})
+como una conclusión sobre la validación del sistema.}
+
+\section{Recomendaciones}
+\label{sec:recomendaciones}
+
+A partir de la experiencia del desarrollo se recomienda, como trabajo futuro:
+
+\begin{itemize}
+    \item \textbf{Recomendador de rutinas con datos reales.} Registrar, con
+    consentimiento, el perfil de los usuarios, la rutina recibida y su
+    adherencia y progreso, para reentrenar el modelo con resultados reales en
+    lugar de etiquetas sintéticas y medir si sus rutinas superan a las reglas.
+    Las rutinas ya guardan su origen, la versión del modelo y la confianza, lo
+    que facilita este análisis.
+    \item \textbf{Más fotografías para el reconocimiento de máquinas.} Ampliar
+    el conjunto con fotografías propias de las 35 máquinas, tomadas en gimnasios
+    reales y con autorización, con varias por máquina (hoy hay desde una hasta
+    24), y reentrenar el clasificador; después, ajustar el umbral de confianza
+    y medir el modelo en dispositivos. No deben usarse las animaciones de
+    WorkoutX para el entrenamiento, porque sus condiciones de uso lo prohíben
+    sin permiso escrito.
+    \item \textbf{Realidad aumentada con anclaje tridimensional.} Evaluar
+    ARCore para anclar indicaciones sobre la máquina real (puntos de ajuste,
+    trayectoria del movimiento), como evolución de la superposición basada en
+    cámara.
+    \item \textbf{Progresión de la carga.} Ampliar la base de conocimiento del
+    generador con reglas de sobrecarga progresiva que ajusten la rutina según
+    el historial de entrenamientos del usuario.
+    \item \textbf{Metas nutricionales más precisas.} Permitir que el usuario
+    indique su nivel de actividad diaria (hoy se deduce de los días de
+    entrenamiento) y ajuste sus metas, manteniendo la advertencia de que no
+    sustituyen a un nutricionista.
+    \item \textbf{Persistencia sin conexión.} Configurar la caché persistente
+    de Firestore para que la guía de máquinas y la rutina activa estén
+    disponibles sin Internet, algo muy útil en gimnasios con mala cobertura.
+    \item \textbf{Protección de las claves de servicios externos.} Mover las
+    consultas a USDA a una función de servidor (por ejemplo, Cloud Functions)
+    para que su clave no viaje dentro de la aplicación.
+    \item \textbf{Pruebas automatizadas de interfaz y de reglas.} Agregar
+    React Native Testing Library para probar las pantallas, ejecutar la suite
+    de Jest en integración continua y probar las reglas de seguridad con el
+    emulador de Firebase.
+    \item \textbf{Validación con usuarios.} Realizar un estudio de usabilidad
+    con usuarios reales de gimnasio, por ejemplo con el cuestionario SUS, y
+    medir el efecto de la aplicación en la permanencia de los usuarios nuevos.
+    \item \textbf{Publicación.} Antes de publicar la aplicación en Google
+    Play, obtener la autorización del proveedor de las fotografías del
+    catálogo y verificar las condiciones de uso de las animaciones.
+\end{itemize}
