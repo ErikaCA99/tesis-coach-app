@@ -1,0 +1,136 @@
+% =====================================================================
+%  ANEXO C — Casos de prueba funcionales
+% =====================================================================
+\chapter{CASOS DE PRUEBA FUNCIONALES}
+\label{anx:casos}
+
+Los casos de prueba se ejecutan sobre el \emph{development build} instalado
+en un dispositivo Android, con una cuenta de prueba y el catálogo de máquinas
+cargado en Firestore. En la columna \emph{Resultado} se registra si el caso
+pasa o falla.
+
+% TODO (autora): al ejecutar cada caso, reemplazar \cpres por "Pasa" o
+% "Falla (ver observación)".
+\newcommand{\cpres}{\textcolor{black!45}{\scriptsize\shortstack[l]{$\square$ Pasa\\$\square$ Falla}}}
+
+{\footnotesize
+\begin{longtable}{|L{1.15cm}|L{1.0cm}|L{5.3cm}|L{4.9cm}|C{1.35cm}|}
+\caption{Casos de prueba funcionales}
+\label{tab:casos-prueba}\\
+\hline
+\rowcolor{encabezado} \textbf{ID} & \textbf{RF} & \textbf{Pasos} & \textbf{Resultado esperado} &
+\textbf{Resultado} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{encabezado} \textbf{ID} & \textbf{RF} & \textbf{Pasos} & \textbf{Resultado esperado} &
+\textbf{Resultado} \\
+\hline
+\endhead
+\endfoot
+\multicolumn{5}{|l|}{\textbf{Autenticación, onboarding y perfil}}\\ \hline
+CP-01 & 1.1 & Registrarse con nombre, apellido, correo válido y contraseña de
+6 o más caracteres. & Se crea la cuenta y el perfil; se abre el
+\emph{onboarding}. & \cpres \\ \hline
+CP-02 & 1.1 & Registrarse con correo inválido, contraseñas distintas o de
+menos de 6 caracteres. & Se muestra el mensaje de validación; no se crea la
+cuenta. & \cpres \\ \hline
+CP-03 & 1.2 & Iniciar sesión con correo y contraseña correctos, y luego con
+una contraseña incorrecta. & El primero ingresa; el segundo muestra un mensaje
+de error. & \cpres \\ \hline
+CP-04 & 1.2 & Iniciar sesión con Google por primera vez; cerrar sesión y
+volver a ingresar. & El perfil se crea solo la primera vez; no se
+sobrescribe. & \cpres \\ \hline
+CP-05 & 1.3 & Solicitar la recuperación de contraseña desde el inicio de
+sesión. & Llega el correo de restablecimiento. & \cpres \\ \hline
+CP-06 & 1.4 & Ingresar con un usuario sin perfil completo. & Se muestra el
+\emph{onboarding}; las pestañas de la app no están disponibles. & \cpres \\
+\hline
+CP-07 & 1.4 & En datos físicos, ingresar edad 13 o estatura 20~cm. & Se
+muestra el mensaje de rango; no se avanza. & \cpres \\ \hline
+CP-08 & 1.4 & Completar objetivo, nivel y datos físicos y elegir ``Generar
+con IA''. & Se guardan los datos; se abre la generación de rutina. & \cpres \\
+\hline
+CP-09 & 1.5 & Editar el objetivo y el peso en el perfil; cerrar sesión. & Los
+cambios persisten; al cerrar sesión se vuelve a la bienvenida. & \cpres \\
+\hline
+\multicolumn{5}{|l|}{\textbf{Guía de máquinas y ejercicios}}\\ \hline
+CP-10 & 2.1 & Abrir la pestaña Máquinas. & Se muestran las 35 máquinas en
+cuadrícula. & \cpres \\ \hline
+CP-11 & 2.1 & Buscar ``biceps'' y luego ``bíceps''. & Ambas búsquedas
+devuelven los mismos resultados. & \cpres \\ \hline
+CP-12 & 2.1 & Aplicar un filtro de grupo muscular y uno de tipo. & Solo se
+muestran las máquinas que cumplen ambos filtros. & \cpres \\ \hline
+CP-13 & 2.2 & Abrir la ficha de la prensa de piernas. & Se ven descripción,
+músculos, guía de uso, errores, seguridad y variantes. & \cpres \\ \hline
+CP-14 & 2.3 & En la ficha, revisar la sección de ejercicios. & Cada ejercicio
+muestra su animación, músculo objetivo y dificultad. & \cpres \\ \hline
+CP-15 & 2.2 & Revisar la galería de variantes de una ficha. & Se muestran
+hasta ocho modelos comerciales. & \cpres \\ \hline
+\multicolumn{5}{|l|}{\textbf{Escáner con realidad aumentada}}\\ \hline
+CP-16 & 2.4 & Abrir el escáner y negar el permiso de la cámara. & Se muestra
+el aviso del permiso; no se activa la cámara. & \cpres \\ \hline
+CP-17 & 2.4 & Conceder el permiso y capturar una máquina. & Pasa por
+``analizando''; si la confianza es de al menos 0,8 la máquina queda detectada, y
+si no, se abre la lista con la sugerencia preseleccionada para confirmarla. &
+\cpres \\
+\hline
+CP-18 & 2.4 & En la lista, buscar y elegir una máquina. & La ficha resumida
+(nombre, tipo, músculos y ejercicios) se superpone sobre la cámara. & \cpres \\
+\hline
+CP-19 & 2.4 & Abrir el escáner desde una ficha; tocar ``escanear otra''. &
+La máquina aparece directamente; luego se reinicia el escaneo. & \cpres \\
+\hline
+\multicolumn{5}{|l|}{\textbf{Rutinas y planificación}}\\ \hline
+CP-20 & 3.1 & Con objetivo ``ganar masa'' y nivel principiante, generar una
+rutina. & Rutina de 3 días (empuje, tirón, pierna), 4 series de 9
+repeticiones, descanso 90~s. & \cpres \\ \hline
+CP-21 & 3.1 & Con objetivo ``perder peso'' y nivel intermedio, generar una
+rutina. & Rutina de 4 días con un día de cardio, 3 series de 15 repeticiones.
+& \cpres \\ \hline
+CP-22 & 3.2 & Crear una rutina personalizada de dos días con ejercicios. &
+La rutina se guarda y queda activa. & \cpres \\ \hline
+CP-23 & 3.2 & Intentar guardar sin nombre, o con un día sin ejercicios. & No
+se guarda; se muestra el motivo. & \cpres \\ \hline
+CP-24 & 3.3 & Desde una ficha, agregar un ejercicio a un día; repetir la
+acción. & La primera vez se agrega; la segunda se informa el duplicado. &
+\cpres \\ \hline
+CP-25 & 3.3 & Activar otra rutina y eliminar una. & La activa se muestra en el
+inicio; la eliminada desaparece. & \cpres \\ \hline
+CP-26 & 3.3 & Tocar un ejercicio de la rutina asociado a una máquina. & Se abre
+la ficha de la máquina. & \cpres \\ \hline
+\multicolumn{5}{|l|}{\textbf{Nutrición: alimentos e IMC}}\\ \hline
+CP-27 & 4.1 & Calcular el IMC con 70~kg y 175~cm. & IMC 22.9, categoría
+normal. & \cpres \\ \hline
+CP-28 & 4.1 & Calcular con peso 5~kg o estatura 20~cm. & Mensaje de
+validación; no se calcula. & \cpres \\ \hline
+CP-29 & 4.1 & Realizar un cálculo y revisar el historial. & El cálculo queda
+registrado. & \cpres \\ \hline
+CP-30 & 5.1 & Buscar ``pollo'', elegir un resultado e ingresar 150~g. & Se
+listan alimentos; la vista previa y el registro muestran los mismos valores. &
+\cpres \\ \hline
+CP-31 & 5.2 & Tocar un alimento rápido (por ejemplo, ``Huevo''). & Se agrega
+al día con sus calorías y macronutrientes. & \cpres \\ \hline
+CP-32 & 5.2 & Ingresar un alimento manualmente con nombre y calorías. & Se
+agrega al día. & \cpres \\ \hline
+CP-33 & 5.3 & Revisar el resumen del día y eliminar un registro. & Las
+calorías y macros se actualizan; el registro desaparece. & \cpres \\ \hline
+\multicolumn{5}{|l|}{\textbf{Progreso, entrenamientos y reportes}}\\ \hline
+CP-34 & 4.2 & En Progreso, registrar un peso (la estatura aparece
+precargada). & Se crea el registro con su IMC. & \cpres \\ \hline
+CP-35 & 4.2 & Registrar un peso de 0 o mayor de 500~kg. & Mensaje de
+validación; no se guarda. & \cpres \\ \hline
+CP-36 & 6.1 & Revisar el gráfico y alternar entre peso e IMC. & Muestra como
+máximo los ocho últimos registros de la métrica elegida. & \cpres \\ \hline
+CP-37 & 6.1 & Con registros de 80 y 77.5~kg, revisar la variación. & Se muestra
+$-2.5$~kg; la categoría corresponde al último IMC. & \cpres \\ \hline
+CP-38 & 6.2 & Marcar un día de la rutina como completado; marcarlo otra vez;
+desmarcarlo. & Un solo registro por fecha; al desmarcar desaparece. & \cpres \\
+\hline
+CP-39 & 6.2 & Marcar entrenamientos en días consecutivos. & Racha, días de la
+semana (lunes a domingo) y total se actualizan. & \cpres \\ \hline
+CP-40 & 6.2 & Abrir el inicio con una rutina activa. & Muestra la rutina, sus
+ejercicios, días por semana y registros de peso. & \cpres \\
+\hline
+\end{longtable}
+}
