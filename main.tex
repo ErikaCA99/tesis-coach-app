@@ -15,9 +15,12 @@
 \begin{document}
 
 % ---------------- Páginas preliminares ----------------
+\hypersetup{pageanchor=false}
 \input{preliminares/00-caratula}
+\hypersetup{pageanchor=true}
 
 \pagenumbering{roman}
+\input{preliminares/01-dedicatoria}
 \input{preliminares/02-agradecimientos}
 \input{preliminares/03-ficha-resumen}
 
@@ -35,6 +38,7 @@
 \include{capitulos/02-marco-teorico}
 \include{capitulos/03-area-aplicacion}
 \include{capitulos/04-desarrollo}
+\include{capitulos/05-conclusiones}
 
 % ---------------- Bibliografía ----------------
 \include{capitulos/bibliografia}
@@ -42,5 +46,7 @@
 % ---------------- Anexos ----------------
 \appendix
 \include{anexos/anexo-a-comparativas}
+\include{anexos/anexo-b-reglas-seguridad}
+\include{anexos/anexo-c-casos-prueba}
 
 \end{document}
