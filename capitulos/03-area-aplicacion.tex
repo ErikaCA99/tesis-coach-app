@@ -1,361 +1,724 @@
+% =====================================================================
+%  CAPÍTULO III: ÁREA DE APLICACIÓN
+%  Entrenamiento en gimnasios, máquinas y equipos, y grupos musculares.
+%  Citas en formato APA 7 escritas a mano (la bibliografía es manual,
+%  entorno referenciasapa; no hay claves BibTeX).
+% =====================================================================
 \chapter{ÁREA DE APLICACIÓN}
 \label{cap:area-aplicacion}
 
-El presente capítulo describe el enfoque metodológico adoptado para el
-desarrollo del sistema inteligente de entrenamiento en gimnasios con realidad
-aumentada e inteligencia artificial. El propósito es garantizar un proceso de
-construcción ordenado, iterativo y orientado a la calidad, acorde a las
-necesidades específicas del desarrollo móvil. Para ello, se selecciona la
-metodología ágil Mobile-D, diseñada especialmente para proyectos móviles con
-ciclos de producción rápidos, entregas frecuentes y constante
-retroalimentación.
+En este capítulo se presenta información general sobre el entrenamiento en
+gimnasios, sus objetivos y las características de los ejercicios y equipos.
+Se describen los grupos musculares, el ajuste de las máquinas, la técnica
+de ejecución y la organización de rutinas. También se abordan el seguimiento
+físico, el índice de masa corporal y el registro de la alimentación.
 
 % =====================================================================
-\section{Antecedentes}
-\label{sec:aa-antecedentes}
+\section{Entrenamiento en gimnasios}
+\label{sec:entrenamiento-gimnasios}
 
-\subsection{Enfoque metodológico}
+El entrenamiento en gimnasios está compuesto por actividades físicas
+planificadas mediante el uso de máquinas, pesos libres, implementos y el propio
+peso corporal. Su organización depende de los objetivos específicos de cada usuario, su
+experiencia y los recursos disponibles. Para lograrlo de forma efectiva, se
+combinan ejercicios de fuerza, actividades cardiovasculares y rutinas de
+movilidad.
 
-La metodología es el conjunto de procedimientos, técnicas y estrategias que
-orienta la ejecución de un proyecto de investigación o desarrollo tecnológico.
-En el presente trabajo, el enfoque metodológico define la manera en que se
-estructura el proceso de diseñar, desarrollar y evaluar el sistema. El proyecto
-adopta un enfoque cuantitativo-aplicado porque se medirá métricas objetivas del
-sistema inteligente, como también se realizará la creación de una solución
-tecnológica concreta mediante el uso de técnicas de ingeniería de software,
-inteligencia artificial y realidad aumentada. En este caso, se emplean
-fundamentos de biomecánica, visión por computadora, aprendizaje automático y
-diseño de software para desarrollar una herramienta que facilite el uso
-correcto de máquinas, la corrección técnica de ejercicios y la personalización
-del entrenamiento.
+La Organización Mundial de la Salud (OMS, 2020) recomienda que los adultos
+acumulen semanalmente entre 150 y 300 minutos de actividad aeróbica moderada, o
+entre 75 y 150 minutos de actividad vigorosa, además de realizar actividades de
+fortalecimiento muscular al menos dos días por semana. Estas recomendaciones
+constituyen una referencia general de salud y pueden desarrollarse dentro o
+fuera del gimnasio.
 
-% =====================================================================
-\section{Metodología de desarrollo}
-\label{sec:aa-metodologia}
+\subsection{Características del entrenamiento en gimnasios}
 
-La metodología Mobile-D fue seleccionada para guiar el proceso de desarrollo
-del sistema debido a que está específicamente diseñada para proyectos de
-software orientados a dispositivos móviles, caracterizados por ciclos de
-producción rápidos, restricciones de hardware y cambios frecuentes en los
-requerimientos.
+La característica principal del entrenamiento en el gimnasio es que puede
+adaptarse a las capacidades y a los objetivos de cada persona. Para esto se
+seleccionan los ejercicios, la cantidad de peso que se utilizará y los días de
+entrenamiento. Cada uno de estos elementos permite aumentar la dificultad de
+forma gradual a medida que la persona mejora.
 
-Mobile-D es una metodología ágil diseñada para el desarrollo de aplicaciones
-móviles, que requiere ciclos de entrega cortos, validación continua, pruebas en
-dispositivos reales y flexibilidad ante cambios de interfaz o funcionalidad. El
-presente proyecto integra módulos de guía interactiva mediante imágenes,
-animaciones o realidad aumentada, generación de rutinas personalizadas mediante
-inteligencia artificial, herramientas de seguimiento físico y una interfaz
-altamente intuitiva.
-
-Mobile-D permite abordar de forma progresiva y controlada, los elementos
-principales del proyecto:
+Entre las características más importantes se encuentran las siguientes:
 
 \begin{itemize}
-    \item La guía visual sobre el uso correcto de máquinas y la ejecución de
-    ejercicios, que exige pruebas de usabilidad desde las primeras etapas.
-    \item La generación de rutinas personalizadas mediante algoritmos de IA,
-    cuya precisión y utilidad deben ajustarse iterativamente.
-    \item Los módulos de planificación y seguimiento, que requieren
-    refinamientos sucesivos para asegurar claridad, funcionalidad y coherencia
-    en la experiencia del usuario.
-    \item La interfaz móvil, que debe ser evaluada continuamente para
-    garantizar facilidad de uso, accesibilidad y entendimiento para usuarios
-    principiantes.
+    \item \textbf{Adaptación a las capacidades y objetivos del usuario:}
+    Permite organizar los ejercicios de acuerdo con la experiencia, la
+    condición física y el objetivo del usuario.
+    \item \textbf{Regulación de la dificultad:}
+    Permite ajustar el peso, las repeticiones y las series de cada ejercicio.
+    \item \textbf{Progresión del entrenamiento:}
+    Permite aumentar de forma gradual la exigencia de acuerdo con la mejora de
+    las capacidades del usuario.
+    \item \textbf{Descanso entre series:}
+    Permite distribuir los ejercicios y los periodos de recuperación.
+    \item \textbf{Seguimiento del progreso:}
+    Permite registrar el trabajo realizado y comparar los resultados a lo largo
+    del tiempo.
 \end{itemize}
 
-% =====================================================================
-\section{Aplicación de la Metodología Mobile-D}
-\label{sec:aa-aplicacion-mobiled}
+Una medida descriptiva del trabajo externo es el volumen de carga, que se
+calcula sumando el producto de las repeticiones y los kilogramos utilizados
+en cada serie:
 
-La metodología Mobile-D se implementa en el presente proyecto mediante cinco
-fases que permiten estructurar el desarrollo de la aplicación de manera
-incremental, verificable y orientada a la calidad. A continuación, se detalla
-la aplicación específica de cada fase al sistema inteligente de entrenamiento.
+\begin{equation}
+    V_{\mathrm{carga}} = \sum_{s=1}^{S} r_s\,m_s.
+    \label{eq:carga-acumulada}
+\end{equation}
+Aquí, $S$ es el número de series, $r_s$ las repeticiones de la serie $s$ y
+$m_s$ la masa externa en kilogramos. Es una medida descriptiva de volumen,
+no una medición directa del esfuerzo, del trabajo mecánico o del estímulo
+muscular. Las comparaciones requieren ejercicios y condiciones semejantes.
 
-% ---------------------------------------------------------------------
-\subsection{Fase de Exploración}
+\subsection{Objetivos de entrenamiento en gimnasios}
 
-En esta etapa se definen las bases conceptuales, técnicas y organizativas del
-presente proyecto.
+Los objetivos de entrenamiento son los resultados que una persona busca
+alcanzar mediante la práctica de ejercicios físicos. Definirlos ayuda a
+seleccionar las actividades, organizar las sesiones y evaluar el progreso. Una
+persona puede tener varios objetivos, aunque es conveniente identificar cuáles
+son los prioritarios.
 
-\titulillo{Módulos principales del sistema}
-
-El sistema propuesto está compuesto por los siguientes módulos esenciales:
+Entre los principales objetivos se encuentran:
 
 \begin{itemize}
-    \item Registro y autenticación de usuarios.
-    \item Guía detallada del uso correcto de máquinas de gimnasio.
-    \item Ejecución técnica correcta de ejercicios específicos.
-    \item Rutinas personalizadas mediante inteligencia artificial.
-    \item Registro nutricional básico (calorías diarias).
-    \item Seguimiento del progreso físico (peso, IMC, medidas).
-    \item Reportes estadísticos y visualización del avance.
+    \item \textbf{Mejorar la salud y la condición física:}
+    Busca desarrollar capacidades que faciliten las actividades cotidianas y
+    contribuyan al bienestar. La actividad física regular aporta beneficios
+    para la salud cardiovascular, el sueño y la salud mental (OMS, 2024).
+
+    \item \textbf{Aumentar la fuerza muscular:}
+    Consiste en mejorar la capacidad de los músculos para producir fuerza
+    frente a una resistencia, como levantar una mancuerna o desplazar el peso
+    de una máquina. El progreso puede observarse al realizar un mismo ejercicio
+    con mayor resistencia y en condiciones semejantes (Currier et al., 2023).
+
+    \item \textbf{Desarrollar masa muscular:}
+    También denominado hipertrofia muscular, consiste en aumentar el tamaño de
+    los músculos. Aunque la fuerza y el tamaño muscular están relacionados, no
+    representan el mismo resultado. Por ello, una mejora de fuerza no implica
+    necesariamente un aumento proporcional del tamaño muscular (Currier et al.,
+    2023).
+
+    \item \textbf{Mejorar la resistencia muscular:}
+    Busca aumentar la capacidad para repetir un esfuerzo o mantenerlo durante
+    un tiempo determinado. Por ejemplo, realizar más repeticiones de un
+    ejercicio con el mismo peso puede indicar una mejora de esta capacidad
+    (American College of Sports Medicine [ACSM], 2009).
+
+    \item \textbf{Mejorar la capacidad cardiorrespiratoria:}
+    Permite sostener actividades como caminar rápidamente, pedalear o correr.
+    Puede trabajarse mediante ejercicios aeróbicos y combinarse con el
+    entrenamiento de fuerza (Schumann et al., 2022).
+
+    \item \textbf{Contribuir al control de la grasa corporal:}
+    El ejercicio puede formar parte de una estrategia para reducir la grasa
+    corporal. Jayedi et al. (2024) encontraron reducciones del peso, la
+    circunferencia de cintura y la grasa corporal mediante entrenamiento
+    aeróbico en adultos con sobrepeso u obesidad. Estos resultados no
+    garantizan una pérdida de peso idéntica para todas las personas.
+
+    \item \textbf{Mejorar la amplitud de movimiento:}
+    Busca aumentar el recorrido disponible en determinadas articulaciones.
+    Tanto los estiramientos como algunos programas de fuerza pueden contribuir
+    a este objetivo (Afonso et al., 2021).
 \end{itemize}
 
-\titulillo{Requerimientos de sistema}
+\subsection{Niveles de experiencia de un usuario}
 
-\textit{Requerimientos Funcionales}
+En el entrenamiento de fuerza, el nivel de experiencia permite orientar la
+selección de ejercicios y la organización de las cargas. Su valoración debe
+considerar la práctica reciente, la continuidad y la familiaridad con los
+movimientos. Esta clasificación es una referencia para planificar; no es un
+diagnóstico ni garantiza por sí sola la prevención de lesiones o del abandono.
+
+El ACSM (2009) distingue entre personas principiantes, intermedias y
+avanzadas. Como referencia, considera aproximadamente seis meses de
+entrenamiento constante para el nivel intermedio y varios años para el
+avanzado. Estos periodos son orientativos y no deben utilizarse como único
+criterio de clasificación.
 
 \begin{itemize}
-    \item RF1: Registrar y autenticar usuarios mediante correo y contraseña.
-    \item RF2: Mostrar información técnica y visual de cada máquina de gimnasio.
-    \item RF3: Generar rutinas personalizadas mediante IA según edad, peso, nivel
-    y objetivo.
-    \item RF4: Registrar peso, estatura, IMC y progreso físico.
-    \item RF5: Registrar ingesta calórica diaria del usuario.
-    \item RF6: Visualizar reportes y estadísticas del progreso físico.
+    \item \textbf{Nivel principiante:}
+    Corresponde a personas que comienzan a entrenar o que no han mantenido una
+    práctica reciente y constante. En esta etapa, el aprendizaje se centra en
+    conocer los equipos, comprender las instrucciones y realizar los
+    movimientos de manera controlada. La dificultad debe ajustarse a sus
+    capacidades iniciales.
+
+    \item \textbf{Nivel intermedio:}
+    Corresponde a personas que han mantenido una práctica regular y conocen los
+    ejercicios habituales de su programa. Su entrenamiento puede requerir
+    ajustes más específicos en el peso utilizado, las series, las repeticiones
+    y la distribución de las sesiones para continuar progresando.
+
+    \item \textbf{Nivel avanzado:}
+    Corresponde a personas con varios años de entrenamiento constante y
+    experiencia en programas estructurados. Su planificación requiere ajustes
+    relacionados con objetivos específicos, así como un seguimiento de la carga
+    de entrenamiento y la recuperación.
 \end{itemize}
 
-\textit{Requerimientos No Funcionales}
+\subsection{Tipos de entrenamiento}
+
+Los tipos de entrenamiento pueden distinguirse según la capacidad física que se
+busca desarrollar y la forma de organizar los ejercicios. Estas categorías
+pueden complementarse dentro de una misma rutina.
 
 \begin{itemize}
-    \item RNF1: La aplicación debe ejecutarse en Android versión 8.0 o superior.
-    \item RNF2: La interfaz debe ser intuitiva, rápida y adaptable a diferentes
-    pantallas.
-    \item RNF3: La sincronización de datos debe realizarse en tiempo real
-    mediante Firebase.
-\end{itemize}
+    \item \textbf{Entrenamiento de fuerza o contra resistencia:}
+    Consiste en realizar movimientos frente a una resistencia proporcionada por
+    máquinas, mancuernas, barras, bandas elásticas o el propio peso corporal.
+    Puede orientarse al desarrollo de fuerza, masa muscular o resistencia
+    muscular, según la organización del programa (Currier et al., 2023).
 
-\titulillo{Selección de Tecnologías}
+    \item \textbf{Entrenamiento aeróbico:}
+    Comprende actividades sostenidas, como caminar en una cinta, pedalear en
+    una bicicleta estática o utilizar una elíptica. Su dificultad puede
+    regularse mediante la velocidad, la resistencia y la duración. También
+    puede organizarse en intervalos que alternen esfuerzo y recuperación; esto
+    no significa necesariamente que sea de alta intensidad.
 
-\textit{Frontend}
+    \item \textbf{Entrenamiento de flexibilidad y movilidad:}
+    Incluye actividades destinadas a trabajar la amplitud de movimiento. Los
+    estiramientos son una alternativa, pero no la única. Afonso et al. (2021)
+    encontraron que tanto los estiramientos como el entrenamiento de fuerza
+    podían mejorar la amplitud articular en los estudios analizados.
 
-\begin{itemize}
-    \item \textbf{React Native:} Es un framework multiplataforma, que permite
-    desarrollar aplicaciones móviles para dispositivos Android.
-    \item \textbf{TypeScript:} Lenguaje de programación principal para el
-    desarrollo de las interfaces y la lógica del lado del cliente.
-    \item \textbf{Figma:} Herramienta de diseño utilizada para crear prototipos
-    interactivos, pantallas iniciales, facilitando la validación visual del
-    producto.
-\end{itemize}
+    \item \textbf{Entrenamiento de equilibrio y control del movimiento:}
+    Incluye tareas que requieren mantener la estabilidad corporal y controlar
+    los cambios de posición. Puede incorporar distintos apoyos y
+    desplazamientos. La OMS (2024) destaca especialmente su importancia en las
+    personas mayores.
 
-\textit{Backend}
-
-\begin{itemize}
-    \item \textbf{Firebase Authentication:} Servicio que permite gestionar el
-    registro, inicio de sesión y recuperación de credenciales de forma segura.
-    \item \textbf{Firebase Firestore:} Base de datos NoSQL en la nube que
-    proporciona sincronización en tiempo real y escalabilidad para manejar
-    información de usuarios, ejercicios, rutinas y progreso.
-    \item \textbf{Firebase Storage:} Servicio destinado al almacenamiento de
-    imágenes, animaciones y videos que acompañan la guía técnica del sistema.
-    \item \textbf{TensorFlow Lite:} Biblioteca optimizada para ejecutar modelos
-    de inteligencia artificial directamente en el dispositivo móvil, utilizada
-    para recomendar la estructura de las rutinas a partir de los parámetros del
-    usuario y para reconocer la máquina a partir de una fotografía.
-\end{itemize}
-
-% ---------------------------------------------------------------------
-\subsection{Fase de Inicialización}
-
-En esta fase se prepara el entorno de desarrollo, la planificación inicial y la
-definición de la arquitectura del sistema. También se establecen los
-lineamientos de codificación y los mecanismos de control de versiones (Git).
-
-\titulillo{Configuración del entorno}
-
-Las principales actividades a realizar para la preparación del ambiente, son:
-
-\begin{itemize}
-    \item Instalación de Node.js.
-    \item Instalación de Expo CLI.
-    \item Creación de proyecto en Firebase y configuración de los servicios de
-    autenticación, Firestore y Storage.
-    \item Integración de la librería de TensorFlow Lite.
-    \item Creación del repositorio en GitHub y definición de las ramas
-    principales.
-\end{itemize}
-
-\titulillo{Arquitectura del sistema}
-
-La arquitectura definida para el desarrollo de la aplicación es el de
-cliente-servidor, donde la aplicación móvil actúa como cliente y los servicios
-en la nube proporcionan autenticación, almacenamiento de datos, persistencia
-multimedia, mientras que los modelos de IA se ejecutan en el propio dispositivo.
-
-La arquitectura cliente servidor permite garantizar escalabilidad,
-sincronización en tiempo real y disponibilidad permanente del servicio.
-
-La estructura detallada de esta arquitectura, organizada en capas de
-presentación, lógica de negocio, servicios e inteligencia artificial, se
-describe en la sección~\ref{sec:des-arquitectura} del
-Capítulo~\ref{cap:desarrollo}, como parte de la fase de inicialización.
-
-% ---------------------------------------------------------------------
-\subsection{Fase de Producción}
-
-Esta es la etapa central del desarrollo. Dentro de esta etapa se implementan
-los módulos de IA, seguimiento físico y rutinas personalizadas. Esta fase de
-producción se organiza en iteraciones cortas, cada una de las cuales agrega un
-conjunto de funcionalidades al sistema.
-
-\titulillo{\textit{Día de prueba}}
-
-En este día se verifica que toda la plataforma técnica funcione correctamente
-antes de empezar a desarrollar funcionalidades reales.
-
-Se debe realizar las siguientes acciones:
-
-\begin{itemize}
-    \item \textbf{Verificación de la integración con Firebase}
-
-    Se realizarán pruebas básicas con los servicios principales de Firebase
-    para garantizar su correcto funcionamiento:
-    \begin{itemize}
-        \item \textbf{Authentication:} creación de usuarios de prueba,
-        validación de inicio de sesión y manejo de errores.
-        \item \textbf{Firestore:} creación de colecciones temporales, escritura
-        y lectura de documentos, y verificación de permisos básicos.
-        \item \textbf{Storage:} carga y visualización de archivos multimedia
-        para garantizar el acceso correcto al módulo de almacenamiento.
-    \end{itemize}
-    Estas pruebas aseguran que la aplicación pueda gestionar información real
-    durante la fase de producción.
-\end{itemize}
-
-\textbf{Validación del entorno móvil}
-
-Se verifica la correcta compilación del proyecto tanto en un dispositivo físico
-como en un emulador. Además, se comprueba la navegación entre pantallas
-iniciales y la ejecución estable del entorno Expo.
-
-\textbf{Prueba preliminar del modelo TensorFlow Lite}
-
-Se verifica la carga del modelo de inteligencia artificial y su ejecución
-básica en el dispositivo, con el fin de confirmar la compatibilidad entre
-TensorFlow Lite y la plataforma móvil utilizada.
-
-\textbf{Validación del control de versiones}
-
-Se realiza una prueba de uso del repositorio GitHub, asegurando que se pueden
-subir y descargar cambios correctamente, lo cual es indispensable para mantener
-un desarrollo organizado.
-
-\titulillo{\textit{Día de salida}}
-
-En este día se cierra la fase de inicialización, aquí no se realizan pruebas
-sino ajustes finales y organización para dejar el proyecto listo para comenzar
-la fase de producción.
-
-Para esto, se debe realizar:
-
-\textbf{Organización y limpieza del proyecto}
-
-Se reorganiza la estructura interna del proyecto siguiendo la arquitectura
-definida, agrupando componentes, servicios, pantallas y modelos de datos en
-carpetas específicas. Asimismo, se eliminaron archivos temporales o de prueba
-utilizados en fases previas.
-
-\textbf{Configuración de variables y llaves de entorno}
-
-Se definieron archivos seguros para almacenar las credenciales de Firebase y
-otras configuraciones sensibles, evitando que estas sean expuestas en el
-repositorio de código.
-
-\textbf{Creación de ramas base de desarrollo en GitHub}
-
-Se estableció una estructura de ramas para gestionar el desarrollo:
-
-\begin{itemize}
-    \item \texttt{main}: versión estable.
-    \item \texttt{develop}: versión en progreso.
-    \item \texttt{feature/nombre-del-módulo}: para cada nueva funcionalidad.
-\end{itemize}
-
-Esta estructura permite un control ordenado de versiones.
-
-% ---------------------------------------------------------------------
-\subsection{Fase de Estabilización}
-
-Dentro de esta fase se integran y verifican los componentes desarrollados,
-asegurando consistencia, rendimiento y compatibilidad entre módulos. Las
-pruebas de usabilidad y validación funcional se intensifican.
-
-Las actividades a realizarse en esta fase son:
-
-\begin{itemize}
-    \item Refactorizar código para mejorar legibilidad.
-    \item Optimizar carga de imágenes y videos.
-    \item Ajustar tiempos de respuesta del sistema.
-    \item Revisar el diseño visual para mejorar usabilidad.
-    \item Corregir detalles detectados durante las pruebas en dispositivos
-    reales.
-\end{itemize}
-
-% ---------------------------------------------------------------------
-\subsection{Fase de Pruebas del sistema}
-
-Se ejecutan pruebas de aceptación, evaluación del modelo de IA, pruebas en
-dispositivos reales y corrección final de errores. El objetivo es garantizar
-que el sistema sea estable y esté listo para su uso práctico.
-
-Esto mediante las siguientes pruebas:
-
-\begin{itemize}
-    \item \textbf{Pruebas Funcionales:} Las pruebas funcionales son un tipo de
-    verificación que evalúa si el sistema cumple correctamente con los
-    requerimientos establecidos, las pruebas funcionales se basan en técnicas
-    de caja negra, donde el evaluador verifica funciones, escenarios y
-    respuestas del sistema desde la perspectiva del usuario final (IEEE, 1990).
-    \item \textbf{Pruebas de Usabilidad:} Las pruebas de usabilidad se enfocan
-    en analizar qué tan fácil, eficiente y satisfactoria es la interacción de un
-    usuario con la interfaz del sistema. Se fundamenta en principios como
-    facilidad de aprendizaje, eficiencia, reducción de errores y satisfacción
-    del usuario (Nielsen, 1993).
-    \item \textbf{Pruebas de Aceptación:} Las pruebas de aceptación validan que
-    el sistema completo cumpla con los requerimientos acordados, estas pruebas
-    representan la etapa final de validación del producto e incluyen la
-    ejecución de escenarios reales que reflejan el uso cotidiano de la
-    aplicación (Pressman, 2010).
+    \item \textbf{Entrenamiento combinado o concurrente:}
+    Integra actividades aeróbicas y ejercicios de fuerza dentro de un programa,
+    aunque no necesariamente en la misma sesión. Schumann et al. (2022)
+    encontraron que esta combinación no perjudicó, en promedio, las mejoras de
+    fuerza máxima ni el crecimiento muscular frente al entrenamiento de fuerza
+    por separado. Sin embargo, las mejoras de fuerza explosiva, entendida como
+    la capacidad de producir fuerza rápidamente, podían verse reducidas,
+    especialmente al realizar ambas actividades en una misma sesión.
 \end{itemize}
 
 % =====================================================================
-\section{Roles}
-\label{sec:aa-roles}
+\section{Máquinas y equipos de gimnasio}
+\label{sec:maquinas-equipo-gimnasio}
 
-Dentro de la metodología Mobile-D, los roles cumplen la función de organizar
-las responsabilidades durante el desarrollo del proyecto, aun cuando éste sea
-desarrollado por una sola persona.
+Las máquinas y los equipos son un conjunto de herramientas físicas diseñadas
+para facilitar la aplicación de resistencias externas durante la realización de
+ejercicios de manera controlada y segura. Su propósito principal es estimular
+capacidades físicas como la fuerza, la resistencia muscular, la estabilidad
+de las articulaciones y la capacidad cardiovascular. Para ello, permiten
+ajustar la dificultad del ejercicio según las capacidades y la experiencia de
+cada persona. La elección del equipo depende del movimiento que se desea
+realizar, las características físicas y las preferencias del usuario, así como
+los recursos disponibles en el gimnasio.
 
-A continuación, se describen los roles adoptados en el proyecto:
+Haugen et al. (2023) encontraron que tanto las máquinas como los pesos libres
+pueden mejorar la fuerza y aumentar el tamaño de los músculos, proceso conocido
+como hipertrofia muscular. Sin embargo, las mejoras de fuerza suelen ser
+mayores al evaluarlas con el mismo tipo de equipo utilizado durante el
+entrenamiento. Por ejemplo, quienes entrenan con pesos libres tienden a mejorar
+más en pruebas realizadas con esos implementos.
 
-\begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{|L{3.6cm}|Y|L{3cm}|}
-\hline
-\rowcolor{encabezado} \textbf{Rol} & \textbf{Responsabilidades} & \textbf{Responsable} \\
-\hline
-Product Owner & Define alcance, objetivos y prioridades del sistema & Erika
-Chino \\ \hline
-Arquitecto Mobile & Diseña la arquitectura y selecciona las tecnologías & Erika
-Chino \\ \hline
-Desarrollador móvil & Implementa módulos, interfaces y lógica de negocio &
-Erika Chino \\ \hline
-Diseñador UI/UX & Diseña prototipos, navegación y experiencia de usuario &
-Erika Chino \\ \hline
-QA Tester & Realiza pruebas funcionales, de usabilidad y rendimiento & Erika
-Chino \\
-\hline
-\end{tabularx}
-\caption[Roles establecidos por Mobile-D]{Roles establecidos por Mobile-D. \textit{Fuente:} Elaboración propia.}
-\label{tab:roles}
-\end{table}
+\subsection{Características y clasificación}
 
-% =====================================================================
-\section{Técnicas e instrumentos de recolección de información}
-\label{sec:aa-tecnicas}
+Las máquinas y los equipos de gimnasio permiten realizar ejercicios mediante
+diferentes sistemas, como placas de peso, discos, cables y mecanismos de
+frenado. Sus características determinan cómo se realiza cada movimiento y qué
+ajustes puede realizar el usuario.
 
-Para fundamentar el diseño y funcionamiento del sistema se utilizarán las
-siguientes técnicas:
+Las máquinas y los equipos utilizados para realizar ejercicios en el gimnasio
+pueden clasificarse según su funcionamiento y uso principal. Entre ellos se
+encuentran:
 
 \begin{itemize}
-    \item \textbf{Revisión documental:} Investigación de aplicaciones similares,
-    biomecánica, técnica correcta de ejercicios y libros especializados.
-    \item \textbf{Observación directa:} Registro del uso real de máquinas en
-    gimnasios locales.
-    \item \textbf{Entrevistas informales:} Conversaciones con usuarios
-    principiantes para conocer sus dificultades reales en el gimnasio.
-    \item \textbf{Prototipado:} Elaboración de pantallas en Figma para validar
-    la experiencia de usuario antes del desarrollo.
+    \item \textbf{Máquinas de trayectoria guiada:}
+    Estas máquinas cuentan con mecanismos que dirigen el movimiento a lo largo
+    de un recorrido establecido. Generalmente permiten ajustar el asiento, los
+    apoyos y la resistencia. Algunos ejemplos son la prensa de piernas, la
+    extensión de cuádriceps y la máquina de empuje de pecho. Aunque facilitan
+    el seguimiento de una trayectoria, requieren una colocación adecuada y una
+    carga acorde con las capacidades del usuario.
+
+    \item \textbf{Máquinas de poleas:}
+    Estas máquinas transmiten la resistencia mediante cables y poleas. Según su
+    diseño, permiten modificar la altura del cable, el agarre y la posición
+    corporal para realizar distintos ejercicios. Algunos ejemplos son el jalón
+    al pecho, las extensiones de tríceps y los cruces en polea. La libertad de
+    movimiento depende de la configuración de cada equipo.
+
+    \item \textbf{Pesos libres:}
+    Incluyen barras, mancuernas y discos que se desplazan sin una trayectoria
+    mecánica fija. El usuario debe controlar tanto el recorrido del implemento
+    como su posición corporal durante el ejercicio. Estos equipos permiten
+    realizar una amplia variedad de movimientos y ajustar la resistencia
+    mediante diferentes pesos.
+
+    \item \textbf{Equipos cardiovasculares:}
+    Estos equipos están destinados principalmente a actividades como caminar,
+    correr, pedalear o remar. Incluyen cintas de correr, bicicletas estáticas,
+    elípticas y máquinas de remo. Permiten regular variables como la velocidad,
+    la inclinación o la resistencia, según el modelo. Algunos incorporan
+    pantallas que muestran el tiempo, la distancia y estimaciones del gasto
+    energético o la frecuencia cardíaca.
 \end{itemize}
+
+
+La Figura~\ref{fig:cap3-equipos} presenta ejemplos de las cuatro categorías.
+Las fotografías ilustran los equipos; no constituyen una demostración de la
+técnica de ejecución de los ejercicios.
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{\begin{minipage}{0.96\textwidth}
+        \centering
+        \begin{minipage}[b]{0.47\linewidth}
+            \centering
+            \includegraphics[width=\linewidth,height=0.21\textheight,keepaspectratio]{figuras/cap-3/maquina-trayectoria-guiada.jpg}\par
+            \small (a) Trayectoria guiada.
+        \end{minipage}\hfill
+        \begin{minipage}[b]{0.47\linewidth}
+            \centering
+            \rotatebox{270}{\includegraphics[width=0.21\textheight]{figuras/cap-3/maquina-poleas.jpg}}\par
+            \small (b) Máquina de poleas.
+        \end{minipage}
+        \par\medskip
+        \begin{minipage}[b]{0.47\linewidth}
+            \centering
+            \includegraphics[width=\linewidth,height=0.17\textheight,keepaspectratio]{figuras/cap-3/pesos-libres.jpg}\par
+            \small (c) Pesos libres.
+        \end{minipage}\hfill
+        \begin{minipage}[b]{0.47\linewidth}
+            \centering
+            \includegraphics[width=\linewidth,height=0.17\textheight,keepaspectratio]{figuras/cap-3/equipos-cardiovasculares.jpg}\par
+            \small (d) Equipos cardiovasculares.
+        \end{minipage}
+    \end{minipage}}
+    \caption[Ejemplos de máquinas y equipos de gimnasio]{Ejemplos de máquinas y equipos de gimnasio. Fuente: (a) Teddyhtsai (2021), CC0; (b) SAgbley (2021), CC BY-SA 4.0; (c) KeepActive Australia (2023), CC BY-SA 4.0, Photo by: \href{https://KeepActive.com.au}{KeepActive.com.au}; (d) Alarcon (s. f.), U.S. Air Force, dominio público en Estados Unidos. Fotografías sin modificaciones; montaje de elaboración propia.}
+    \label{fig:cap3-equipos}
+\end{figure}
+
+\clearpage
+\subsection{Grupos musculares que se trabajan}
+
+Los ejercicios realizados en el gimnasio involucran músculos que producen el
+movimiento y otros que ayudan a mantener la posición del cuerpo. Por ello,
+aunque un ejercicio se asocie principalmente con el pecho, la espalda o las
+piernas, generalmente participan varios músculos de forma coordinada.
+
+Para describir el entrenamiento, los grupos musculares pueden organizarse
+de forma práctica en tres regiones: tren superior (miembros superiores y tórax), tren inferior (miembros inferiores) y
+zona media o tronco. Esta clasificación ayuda a identificar los grupos musculares que participan
+en los ejercicios realizados con cada máquina o equipo.
+
+También conviene diferenciar entre ejercicios multiarticulares, en los que
+participan varias articulaciones, y monoarticulares, centrados principalmente
+en una. El ACSM (2009) contempla ambos tipos dentro de los programas de fuerza.
+Esta distinción permite describir cada ejercicio con mayor precisión que una
+clasificación basada únicamente en el nombre de la máquina.
+
+\subsubsection{Grupos musculares del tren superior}
+
+Esta región comprende los músculos del pecho, la
+espalda, los hombros y los brazos. Participan en movimientos como empujar,
+tirar, levantar los brazos y sujetar objetos.
+
+\begin{itemize}
+    \item \textbf{Pectorales:}
+    El pectoral mayor participa en movimientos que acercan el brazo al frente
+    del cuerpo. Se trabaja en ejercicios como el press de pecho y las
+    aperturas.
+
+    \item \textbf{Músculos de la espalda:}
+    El dorsal ancho interviene al acercar el brazo al tronco y llevarlo hacia
+    atrás. El trapecio y los romboides participan en el movimiento y control de
+    las escápulas, conocidas como omóplatos. Los jalones y remos involucran
+    varios de estos músculos.
+
+    \item \textbf{Deltoides:}
+    Se encuentran en los hombros y participan en la elevación del brazo en
+    distintas direcciones. Su intervención depende del movimiento realizado.
+
+    \item \textbf{Bíceps y otros flexores del codo:}
+    Ayudan a doblar el codo. Participan en las flexiones de codo y también colaboran en
+    ejercicios de tracción.
+
+    \item \textbf{Tríceps:}
+    Permite extender el codo, como ocurre en las extensiones de tríceps y los
+    ejercicios de empuje.
+
+    \item \textbf{Músculos del antebrazo:}
+    Intervienen en el agarre y el control de la muñeca.
+\end{itemize}
+
+Estas funciones se describen en el capítulo de musculatura del miembro superior
+de Betts et al. (2022).
+Las Figuras~\ref{fig:cap3-hombro-espalda} y~\ref{fig:cap3-brazo} muestran
+la localización de varios de estos músculos. En los rótulos, \textit{pectoralis
+major} corresponde al pectoral mayor; \textit{latissimus dorsi}, al dorsal ancho;
+\textit{deltoid}, al deltoides; \textit{biceps brachii}, al bíceps braquial; y
+\textit{triceps brachii}, al tríceps braquial.
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{\includegraphics[width=0.94\textwidth,height=0.61\textheight,keepaspectratio]{figuras/cap-3/musculos-hombro-espalda.jpg}}
+    \caption[Músculos del pecho, la espalda y el hombro]{Músculos del pecho, la espalda y el hombro. Fuente: reproducida de Betts et al. (2022), Figura 11.23, OpenStax, licencia \href{https://creativecommons.org/licenses/by-nc-sa/4.0/}{CC BY-NC-SA 4.0}. Se conservan los rótulos originales en inglés.}
+    \label{fig:cap3-hombro-espalda}
+\end{figure}
+
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{\includegraphics[width=0.94\textwidth,height=0.65\textheight,keepaspectratio]{figuras/cap-3/musculos-brazo.jpg}}
+    \caption[Músculos del brazo y del antebrazo]{Músculos del brazo y del antebrazo. Fuente: reproducida de Betts et al. (2022), Figura 11.25, OpenStax, licencia \href{https://creativecommons.org/licenses/by-nc-sa/4.0/}{CC BY-NC-SA 4.0}. Se conservan los rótulos originales en inglés.}
+    \label{fig:cap3-brazo}
+\end{figure}
+
+
+
+\clearpage
+\subsubsection{Grupos musculares del tren inferior}
+
+Esta región comprende los músculos de la cadera, los muslos
+y las piernas. Participan en acciones como levantarse, caminar, subir escalones
+y mantener el equilibrio.
+
+\begin{itemize}
+    \item \textbf{Cuádriceps:}
+    Se encuentran en la parte anterior del muslo y permiten extender la rodilla.
+    Se trabajan en ejercicios como las extensiones de rodilla, las sentadillas
+    y la prensa.
+
+    \item \textbf{Isquiotibiales:}
+    Están en la parte posterior del muslo. Participan en la flexión de rodilla
+    y, en su mayoría, en la extensión de cadera. Se trabajan mediante
+    ejercicios como el curl femoral.
+
+    \item \textbf{Glúteos:}
+    El glúteo mayor participa en la extensión de cadera; el glúteo medio y el
+    menor contribuyen a separar el muslo y controlar la posición de la pelvis.
+
+    \item \textbf{Aductores:}
+    Se ubican principalmente en la cara interna del muslo y acercan la pierna
+    hacia la línea central del cuerpo.
+
+    \item \textbf{Pantorrillas:}
+    El gastrocnemio y el sóleo permiten elevar el talón, como al ponerse de
+    puntillas.
+\end{itemize}
+
+Estos grupos y sus funciones se describen en Betts et al. (2022).
+Las Figuras~\ref{fig:cap3-cadera-muslo} y~\ref{fig:cap3-pierna} permiten
+identificar sus posiciones. Algunos rótulos equivalentes son \textit{gluteus
+maximus} (glúteo mayor), \textit{rectus femoris} (recto femoral, parte del
+cuádriceps), \textit{biceps femoris} (bíceps femoral, parte de los
+isquiotibiales), \textit{gastrocnemius} (gastrocnemio) y \textit{soleus} (sóleo).
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{\includegraphics[width=0.94\textwidth,height=0.65\textheight,keepaspectratio]{figuras/cap-3/musculos-cadera-muslo.jpg}}
+    \caption[Músculos de la cadera y del muslo]{Músculos de la cadera y del muslo. Fuente: reproducida de Betts et al. (2022), Figura 11.29, OpenStax, licencia \href{https://creativecommons.org/licenses/by-nc-sa/4.0/}{CC BY-NC-SA 4.0}. Se conservan los rótulos originales en inglés.}
+    \label{fig:cap3-cadera-muslo}
+\end{figure}
+
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{\includegraphics[width=0.94\textwidth,height=0.40\textheight,keepaspectratio]{figuras/cap-3/musculos-pierna.jpg}}
+    \caption[Músculos de la pierna y de la pantorrilla]{Músculos de la pierna y de la pantorrilla. Fuente: reproducida de Betts et al. (2022), Figura 11.32, OpenStax, licencia \href{https://creativecommons.org/licenses/by-nc-sa/4.0/}{CC BY-NC-SA 4.0}. Se conservan los rótulos originales en inglés.}
+    \label{fig:cap3-pierna}
+\end{figure}
+
+
+
+Los ejemplos anteriores identifican grupos relevantes, pero no representan un
+aislamiento absoluto. Una prensa de piernas, por ejemplo, requiere la
+participación coordinada de varios músculos.
+
+\clearpage
+\subsubsection{Músculos de la zona central del cuerpo}
+
+La zona central, frecuentemente denominada \textit{core}, comprende músculos
+que participan en el movimiento y control del tronco. No se limita a los
+abdominales visibles.
+
+\begin{itemize}
+    \item \textbf{Recto abdominal:}
+    Participa en la flexión del tronco, es decir, al aproximar el tórax hacia
+    la pelvis.
+
+    \item \textbf{Oblicuos internos y externos:}
+    Intervienen en la rotación, la inclinación lateral y el control del tronco.
+
+    \item \textbf{Transverso abdominal:}
+    Contribuye a comprimir el contenido abdominal y al control de la pared
+    abdominal.
+
+    \item \textbf{Erectores de la columna y otros músculos posteriores:}
+    Participan en la extensión y el mantenimiento de la posición del tronco.
+\end{itemize}
+
+En algunos ejercicios estos músculos generan movimiento; en otros, trabajan
+para limitar movimientos no deseados. Por ejemplo, durante una plancha se busca
+mantener una posición relativamente estable en lugar de flexionar
+repetidamente el tronco. Las funciones anatómicas se describen en Betts et al.
+(2022).
+
+
+La Figura~\ref{fig:cap3-abdomen} muestra músculos de la pared abdominal.
+Los rótulos \textit{rectus abdominis}, \textit{external oblique} y \textit{transversus
+abdominis} corresponden al recto abdominal, el oblicuo externo y el transverso
+abdominal, respectivamente. La lámina representa parte de la musculatura
+central; no incluye todos los músculos que contribuyen al control del tronco.
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{\includegraphics[width=0.94\textwidth,height=0.65\textheight,keepaspectratio]{figuras/cap-3/musculos-abdomen.jpg}}
+    \caption[Músculos superficiales y profundos de la pared abdominal]{Músculos superficiales y profundos de la pared abdominal. Fuente: reproducida de Betts et al. (2022), Figura 11.16, OpenStax, licencia \href{https://creativecommons.org/licenses/by-nc-sa/4.0/}{CC BY-NC-SA 4.0}. Se conservan los rótulos originales en inglés.}
+    \label{fig:cap3-abdomen}
+\end{figure}
+
+\clearpage
+\subsubsection{Participación de los músculos durante un ejercicio}
+
+Para describir un ejercicio, resulta útil diferenciar tres funciones:
+
+\begin{itemize}
+    \item \textbf{Músculos principales:}
+    Contribuyen de manera importante a producir el movimiento.
+
+    \item \textbf{Músculos colaboradores:}
+    Ayudan a realizarlo.
+
+    \item \textbf{Músculos estabilizadores:}
+    Contribuyen a mantener las posiciones necesarias para ejecutarlo.
+\end{itemize}
+
+Estas funciones dependen de la tarea. Un músculo puede producir movimiento en
+un ejercicio y ayudar a estabilizar una articulación en otro. Por eso, un ejercicio no debe describirse como si trabajara un único
+músculo de manera completamente independiente.
+
+\subsubsection{Ejercicios multiarticulares y monoarticulares}
+
+Otra clasificación se basa en el número de articulaciones que intervienen
+durante el movimiento. Se distinguen los siguientes tipos:
+
+\begin{itemize}
+    \item \textbf{Ejercicios multiarticulares:}
+    Estos ejercicios implican el movimiento de dos o más articulaciones de forma simultánea. Por ejemplo, en
+    una sentadilla participan la cadera, la rodilla y el tobillo; en un press
+    de pecho intervienen el hombro y el codo. La carga utilizada depende del ejercicio y de las capacidades de la persona.
+
+    \item \textbf{Ejercicios monoarticulares:}
+    Estos ejercicios concentran el movimiento principalmente en una articulación, como la
+    extensión de rodilla en máquina o el curl de bíceps con el brazo
+    relativamente fijo.
+\end{itemize}
+
+La palabra \enquote{monoarticular} no significa que participe un solo músculo
+ni que el resto del cuerpo permanezca inactivo.
+
+Rosa et al. (2023), en una revisión sistemática y metaanálisis de siete
+estudios, encontraron resultados similares de crecimiento muscular global entre
+ambas modalidades. También señalaron que ciertos ejercicios monoarticulares
+podrían complementar el desarrollo de regiones específicas de un músculo,
+aunque esta posibilidad requiere mayor investigación. Por tanto, la elección
+depende del propósito del programa y no de una superioridad general de una
+categoría.
+
+\subsection{Ajuste y uso correcto de las máquinas}
+\label{subsec:ajuste-maquinas}
+
+El ajuste de una máquina consiste en adaptar sus elementos regulables a las
+dimensiones antropométricas del usuario y a las demandas biomecánicas del ejercicio previsto. Antes de comenzar se deben
+reconocer el asiento, el respaldo, los apoyos, los agarres y el mecanismo de
+selección de la resistencia. Las instrucciones del fabricante son la referencia
+para cada modelo: dos máquinas destinadas a un mismo ejercicio pueden tener
+mecanismos y recorridos diferentes. Las recomendaciones prácticas sobre el manejo
+del equipo deben distinguirse de los resultados de los estudios que evalúan las adaptaciones al entrenamiento.
+
+\paragraph{Asiento, respaldo y puntos de apoyo.}
+La posición inicial debe permitir alcanzar los agarres o apoyos sin adoptar una postura forzada. Los elementos regulables deben quedar fijados antes de aplicar resistencia. Como ejemplo específico, Mayo Clinic (2025) recomienda que, en la máquina de empuje de pecho descrita en su guía, el asiento sitúe los agarres a la altura de los hombros o ligeramente por debajo. Esta indicación corresponde a ese ejercicio y no constituye una regla aplicable a todas las máquinas. La guía también recomienda un movimiento suave y controlado, sin arquear la espalda para completar el empuje.
+
+\paragraph{Selección de la resistencia y familiarización.}
+La carga inicial debe permitir practicar el recorrido y comprender cómo iniciar y terminar el ejercicio. Si la resistencia obliga a perder los apoyos o impide controlar el retorno, conviene reducirla y revisar el ajuste. Las recomendaciones de Mayo Clinic (s. f.) destacan el aprendizaje de la técnica, el control del peso y la ayuda de un profesional cuando la persona comienza a entrenar. Una máquina guiada facilita una trayectoria, pero no verifica por sí misma la colocación corporal ni garantiza que el peso elegido sea adecuado.
+
+\paragraph{Recorrido y finalización.}
+Se debe identificar la posición de inicio, la amplitud prevista y el modo de devolver la resistencia a su apoyo. El recorrido no debe ampliarse a costa de perder el contacto necesario con el asiento o el respaldo. Tampoco es conveniente modificar los ajustes mientras las piezas soportan una carga. Estas son pautas generales de manejo; los topes, seguros y mecanismos de salida deben utilizarse según las instrucciones del equipo.
+
+\paragraph{Preparación y supervisión.}
+McCrary et al. (2015) encontraron que ciertas modalidades de calentamiento dinámico con cargas elevadas mejoraban el rendimiento de fuerza y potencia del tren superior. Sin embargo, no identificaron estudios sobre la prevención de lesiones en esa región. Por ello, estos resultados no deben presentarse como una garantía de prevención de lesiones. Para aprender la técnica y revisar los ajustes del equipo, Mayo Clinic (s. f.) recomienda solicitar ayuda a un profesional cualificado.
+
+% =====================================================================
+\section{Ejercicios y técnica de ejecución}
+\label{sec:tecnica-ejecucion}
+
+La técnica de ejecución comprende la posición de inicio, las articulaciones que se mueven, la trayectoria y el control de la resistencia. Describe cómo se realiza una tarea y permite comparar repeticiones bajo condiciones semejantes. Su enseñanza requiere explicar el movimiento con referencias comprensibles, en lugar de limitarse a indicar el nombre del ejercicio.
+
+La biomecánica estudia el movimiento y las fuerzas que actúan sobre el cuerpo. Lorenzetti et al. (2018), en un estudio con 42 participantes, observaron que la separación y la orientación de los pies durante la sentadilla modificaban el movimiento y las demandas de la cadera y la rodilla. Estos resultados ayudan a entender la técnica, pero no permiten atribuir automáticamente lesiones a una postura: el estudio evaluó variables biomecánicas, no la incidencia de lesiones a largo plazo.
+
+\subsection{Tipos de ejercicios}
+
+Además de su finalidad física, los ejercicios pueden describirse mediante la siguiente clasificación práctica:
+
+\begin{itemize}
+    \item \textbf{Según las articulaciones que se mueven:} los multiarticulares incluyen movimientos relevantes en varias articulaciones; los monoarticulares concentran el movimiento principalmente en una. Esta distinción no equivale a contar los músculos que participan.
+    \item \textbf{Según el apoyo o lado de trabajo:} los bilaterales utilizan ambos miembros en una misma tarea, mientras que los unilaterales dan protagonismo a uno de ellos. Una sentadilla bilateral y una subida a un escalón ilustran esta diferencia.
+    \item \textbf{Según el movimiento predominante:} pueden distinguirse empujes, tracciones, movimientos dominantes de rodilla, movimientos de cadera y tareas de control del tronco. Esta organización es funcional y no constituye una clasificación anatómica rígida.
+    \item \textbf{Según la acción muscular:} en una acción concéntrica el músculo se acorta mientras produce fuerza; en una excéntrica se alarga mientras resiste la carga; en una isométrica mantiene una longitud aproximadamente constante. En un curl de bíceps, elevar y bajar la mancuerna de forma controlada ejemplifica las dos primeras acciones.
+\end{itemize}
+
+El ACSM (2009) contempla acciones concéntricas, excéntricas e isométricas y ejercicios de una o varias articulaciones dentro de los programas de fuerza. Estas categorías pueden coexistir: un ejercicio puede ser bilateral, multiarticular y contener fases concéntricas y excéntricas.
+
+\subsection{Postura y ejecución correcta}
+
+Una ejecución adecuada permite cumplir el propósito del ejercicio manteniendo el control del cuerpo y de la resistencia. No supone reproducir ángulos idénticos en todas las personas. La posición debe considerar las dimensiones corporales, el equipo, el movimiento previsto y las limitaciones individuales. Los resultados de Lorenzetti et al. (2018) muestran precisamente que modificar la posición de los pies cambia las demandas del ejercicio.
+
+\paragraph{Amplitud de movimiento.}
+Es el recorrido que realiza una articulación durante una repetición. Debe describirse para cada ejercicio y mantenerse suficientemente constante para interpretar el progreso. Alizadeh et al. (2023), en una revisión de 55 estudios, encontraron que el entrenamiento con resistencias externas podía mejorar la amplitud articular. Este hallazgo no implica que deba forzarse cualquier recorrido: una mejora de movilidad y la selección de la amplitud de un ejercicio son cuestiones relacionadas, pero diferentes.
+
+\paragraph{Control de las fases del ejercicio.}
+El desplazamiento de la resistencia y su retorno forman parte de la repetición. En el aprendizaje inicial, es útil reconocer ambas fases y evitar que el impulso sustituya involuntariamente el movimiento previsto. La respiración también debe integrarse en la ejecución, sin convertir la retención prolongada del aire en una instrucción general para principiantes (Mayo Clinic, s. f.).
+
+\paragraph{Observación y retroalimentación.}
+La explicación verbal, la demostración y la observación directa permiten revisar aspectos concretos de la técnica. Coleman et al. (2023) compararon ocho semanas de entrenamiento supervisado y no supervisado en 36 personas entrenadas y encontraron ventajas de la supervisión en algunas adaptaciones musculares. Sus resultados respaldan el valor del acompañamiento en ese contexto, sin demostrar que cualquier corrección postural produzca los mismos efectos.
+
+\subsection{Errores frecuentes durante los ejercicios}
+
+Los errores deben describirse como diferencias respecto al movimiento previsto y no como posturas que inevitablemente causan lesiones. Entre los problemas prácticos que conviene revisar se encuentran:
+
+\begin{itemize}
+    \item \textbf{Carga incompatible con el control disponible:} el peso impide completar el recorrido previsto o provoca cambios involuntarios de posición.
+    \item \textbf{Ajustes inadecuados:} el asiento, el respaldo o los apoyos no permiten adoptar la posición necesaria para el ejercicio.
+    \item \textbf{Pérdida de control en el retorno:} se deja caer la resistencia en lugar de controlar su descenso.
+    \item \textbf{Recorrido inconsistente:} la amplitud se reduce entre sesiones sin registrarlo, dificultando interpretar una aparente mejora de rendimiento.
+    \item \textbf{Uso involuntario del impulso:} el balanceo del cuerpo sustituye parte del movimiento que se pretendía realizar.
+    \item \textbf{Continuar ante dolor:} se ignora una molestia dolorosa para terminar la serie. Mayo Clinic (s. f.) recomienda detener el ejercicio si causa dolor y revisar la actividad o la carga.
+\end{itemize}
+
+La revisión consiste en identificar la dificultad, ajustar la tarea y comprobar nuevamente la ejecución. La fatiga, el desconocimiento del equipo y una instrucción poco clara pueden requerir soluciones diferentes. La sensación de esfuerzo no debe confundirse automáticamente con el dolor ni utilizarse como una medida directa de lesión.
+
+% =====================================================================
+\section{Rutinas de entrenamiento}
+\label{sec:rutinas-entrenamiento}
+
+Una rutina es una organización de ejercicios y sesiones que establece qué actividades se realizan y cómo se distribuye el trabajo. Debe indicar sus objetivos y permitir revisar lo realizado. No se reduce a una lista de máquinas: también comprende la cantidad de ejercicio, los descansos y los criterios de modificación.
+
+Currier et al. (2023) analizaron diferentes combinaciones de carga, series y frecuencia en adultos sanos. Todas las prescripciones evaluadas mejoraron la fuerza y la hipertrofia frente a no entrenar. Las cargas elevadas destacaron para la fuerza máxima y las prescripciones con varias series para el crecimiento muscular. La existencia de distintas alternativas eficaces permite adaptar la organización a las circunstancias de la persona.
+
+\subsection{Series, repeticiones, cargas y descansos}
+
+\begin{itemize}
+    \item \textbf{Repetición:} Es la ejecución de un ciclo del ejercicio. Su registro requiere definir el recorrido y las condiciones de realización.
+    \item \textbf{Serie:} Es un conjunto de repeticiones realizadas antes de una pausa. Si se completan tres grupos de diez repeticiones, se han realizado tres series.
+    \item \textbf{Carga externa:} Es la resistencia aplicada durante el ejercicio. En ejercicios con pesas puede expresarse en kilogramos, aunque esa cifra no describe por completo la dificultad.
+    \item \textbf{Esfuerzo percibido:} Es la valoración de la dificultad que experimenta la persona. Es diferente de la carga externa: un mismo peso puede representar esfuerzos distintos según la persona o la sesión.
+    \item \textbf{Descanso:} Es un intervalo entre series o ejercicios. Su duración influye en la recuperación disponible antes del siguiente esfuerzo.
+\end{itemize}
+
+El volumen puede expresarse como número de series o repeticiones. También puede calcularse un volumen de carga sumando los productos de las repeticiones y los kilogramos utilizados en cada serie. Este indicador sirve para describir el trabajo externo, pero no mide directamente el estímulo muscular ni permite equiparar ejercicios con recorridos y mecanismos diferentes.
+
+Singer et al. (2024) reunieron nueve estudios y encontraron indicios de una pequeña ventaja para la hipertrofia con descansos superiores a 60 segundos respecto a intervalos más cortos, con incertidumbre en las estimaciones. Para fuerza, Grgic et al. (2018) encontraron que los descansos superiores a dos minutos podían favorecer los resultados en personas entrenadas. Estas observaciones no establecen un tiempo obligatorio para todos los ejercicios; la pausa debe permitir realizar el siguiente esfuerzo de acuerdo con el objetivo previsto.
+
+\subsection{Organización de las sesiones de entrenamiento}
+
+Las sesiones pueden organizarse trabajando diferentes regiones corporales en un mismo día o distribuyéndolas entre varios días. En ambos casos, es necesario conocer la cantidad total de trabajo y evitar interpretar el nombre de una división semanal como garantía de eficacia.
+
+Una organización comprensible distingue la preparación del ejercicio, las series de trabajo y los descansos. También establece qué actividades tienen prioridad y cómo se distribuirán en la semana. La OMS (2020) recomienda actividades de fortalecimiento de todos los grandes grupos musculares al menos dos días semanales, además de actividad aeróbica. Esta recomendación de salud pública no constituye una plantilla individual de series o cargas.
+
+La frecuencia expresa cuántas veces se realiza una actividad o se trabaja un grupo muscular en un periodo. Debe distinguirse del número total de días de asistencia al gimnasio: entrenar cuatro días no significa ejercitar cada músculo cuatro veces. El seguimiento de las sesiones permite reconocer esa diferencia y registrar interrupciones o modificaciones.
+
+\subsection{Personalización según objetivos y nivel de experiencia}
+
+Personalizar significa ajustar la selección y la cantidad de ejercicios a los objetivos, la experiencia, el tiempo disponible y los equipos accesibles. También requiere revisar cómo responde la persona al programa. La edad, el peso corporal o el tiempo de inscripción en el gimnasio no bastan por sí solos para determinar la dificultad adecuada.
+
+La progresión puede realizarse aumentando el peso o las repeticiones. Plotkin et al. (2022) compararon ambas estrategias durante ocho semanas en 43 personas con experiencia y observaron adaptaciones musculares con las dos formas de progresión. Por tanto, aumentar la carga externa no es la única manera de modificar la exigencia.
+
+Un criterio práctico es modificar los parámetros después de comprobar que el trabajo previsto puede repetirse con suficiente control. Los cambios deben registrarse para distinguir una progresión planificada de una variación ocasional. Las rutinas también pueden necesitar ajustes por interrupciones, disponibilidad o dificultades de ejecución; personalizar no significa aumentar continuamente la exigencia ni garantizar mejoras al mismo ritmo.
+
+% =====================================================================
+\section{Datos físicos y seguimiento del progreso}
+\label{sec:datos-fisicos}
+
+El seguimiento reúne mediciones corporales y registros del rendimiento para observar su evolución. Cada indicador responde a una pregunta diferente: la masa corporal informa sobre el peso total, mientras que las repeticiones o cargas describen el desempeño en una tarea. No deben combinarse automáticamente en una calificación única de salud.
+
+\subsection{Peso corporal y estatura}
+
+En el uso cotidiano se denomina peso corporal a la masa que registra una báscula, generalmente expresada en kilogramos. La estatura es la distancia vertical entre el suelo y la parte superior de la cabeza al permanecer de pie. Ambas mediciones requieren un procedimiento consistente.
+
+El manual de antropometría de la National Health and Nutrition Examination Survey establece protocolos y controles del equipo para obtener mediciones comparables (National Center for Health Statistics [NCHS], 2021). Entre las condiciones relevantes se encuentran retirar el calzado, utilizar instrumentos apropiados y adoptar una posición definida. Para la estatura se utiliza un estadiómetro, que permite situar una pieza horizontal sobre la cabeza. Los valores deben registrarse con sus unidades y sin intercambiar centímetros y metros.
+
+En el seguimiento de una persona conviene mantener condiciones semejantes entre mediciones y anotar circunstancias que puedan afectar la comparación. Un cambio de báscula, ropa o procedimiento introduce variación adicional. La repetición de una medida dudosa ayuda a detectar errores de registro.
+
+\subsection{Índice de masa corporal y sus limitaciones}
+
+El índice de masa corporal (IMC) relaciona el peso con la estatura y se calcula mediante:
+
+\begin{equation}
+    \mathrm{IMC}=\frac{\text{peso en kilogramos}}{(\text{estatura en metros})^{2}}.
+    \label{eq:imc-area}
+\end{equation}
+
+Los Centers for Disease Control and Prevention (CDC, 2024) utilizan los siguientes intervalos para adultos de 20 años o más:
+
+\begin{itemize}
+    \item \textbf{Bajo peso:} IMC menor que 18,5.
+    \item \textbf{Peso saludable:} IMC desde 18,5 y menor que 25.
+    \item \textbf{Sobrepeso:} IMC desde 25 y menor que 30.
+    \item \textbf{Obesidad:} IMC igual o mayor que 30.
+\end{itemize}
+
+Estos intervalos son categorías de evaluación inicial, no diagnósticos completos. En personas de 2 a 19 años, el CDC utiliza una interpretación relacionada con la edad y el sexo, por lo que no corresponde trasladar directamente los intervalos anteriores.
+
+El IMC no distingue grasa, músculo y hueso ni informa sobre la distribución de la grasa corporal (CDC, 2025). Esto es relevante en personas que entrenan fuerza: un IMC elevado puede estar influido por una mayor masa muscular. Tampoco permite concluir que una persona con un valor dentro del intervalo denominado saludable tenga necesariamente una composición corporal o condición física determinada. Su interpretación debe considerar otros antecedentes y mediciones.
+
+\subsection{Registro de entrenamientos y evolución física}
+
+Un registro útil identifica la fecha, el ejercicio, el equipo, las series, las repeticiones, la carga y los descansos. Puede complementarse con observaciones sobre el esfuerzo y las modificaciones de la sesión. La finalidad es comparar tareas semejantes y reconocer tendencias, en lugar de atribuir significado a una cifra aislada.
+
+Haugen et al. (2023) encontraron que las ganancias de fuerza muestran especificidad respecto a la modalidad entrenada y evaluada. Por ello, mover más kilogramos en una máquina diferente no demuestra necesariamente una mejora equivalente en el ejercicio original. La comparación debe considerar el equipo y las condiciones de ejecución.
+
+La evolución física tampoco se reduce a subir o bajar de peso. Es posible registrar cambios en el desempeño sin variaciones equivalentes de masa corporal. Conviene distinguir entre asistencia, cumplimiento del entrenamiento, rendimiento y mediciones corporales: son dimensiones complementarias, pero ninguna explica por sí sola el estado general de salud.
+
+% =====================================================================
+\section{Registro de la alimentación}
+\label{sec:registro-alimentacion}
+
+El registro alimentario describe los alimentos y bebidas consumidos durante un periodo. Permite revisar cantidades, horarios y estimaciones de energía y nutrientes. Su interpretación depende de la precisión con la que se identifican los productos, sus porciones y su preparación.
+
+Los registros alimentarios pueden contener errores de declaración y de estimación de las cantidades consumidas. Burrows et al. (2019) compararon métodos de evaluación dietética con el método del agua doblemente marcada y encontraron una subestimación frecuente de la ingesta energética declarada. Por ello, un diario alimentario debe interpretarse como una estimación y no como una medición exacta del consumo.
+
+\subsection{Calorías y macronutrientes}
+
+En nutrición, la energía de los alimentos suele expresarse en kilocalorías (kcal), denominadas habitualmente calorías en el etiquetado. Los macronutrientes energéticos son los carbohidratos, las proteínas y las grasas. Como aproximación general, los carbohidratos y las proteínas aportan 4\,kcal por gramo, y las grasas 9\,kcal por gramo. Estos factores no explican exactamente todos los valores de las etiquetas, porque existen componentes y métodos de cálculo específicos (Canadian Food Inspection Agency, 2025).
+
+\begin{itemize}
+    \item \textbf{Carbohidratos:} Estos contribuyen al aporte energético. Su registro debe considerar la cantidad y el alimento del que proceden, sin asumir que todos los productos con carbohidratos tienen la misma composición.
+    \item \textbf{Proteínas:} Son las que aportan aminoácidos utilizados en la formación y renovación de tejidos. Jäger et al. (2017) propusieron un consumo aproximado de 1,4 a 2,0 gramos por kilogramo de peso al día para la mayoría de las personas sanas que realizan ejercicio. Es una referencia de nutrición deportiva y no una indicación universal ni una obligación de utilizar suplementos.
+    \item \textbf{Grasas:} Estas forman parte de los alimentos y aportan energía en mayor cantidad por gramo que los otros dos macronutrientes. Su aporte debe interpretarse dentro del conjunto de la alimentación.
+\end{itemize}
+
+El balance energético relaciona la energía ingerida con la utilizada por el organismo. El National Heart, Lung, and Blood Institute (2022) explica que un exceso mantenido de energía puede contribuir al aumento de peso, aunque intervienen factores biológicos, ambientales y de comportamiento. Un cálculo diario no permite predecir con exactitud la evolución individual.
+
+\subsection{Diario de alimentación}
+
+El diario debe describir qué se consumió y cuánto, incluidas las bebidas y los componentes que puedan omitirse, como aceites o salsas. Registrar la información cerca del momento de consumo es una estrategia práctica para disminuir olvidos, aunque no elimina los errores de declaración descritos por Burrows et al. (2019).
+
+\begin{itemize}
+    \item \textbf{Identificación del alimento:} nombre, marca cuando corresponda y forma de preparación.
+    \item \textbf{Cantidad consumida:} gramos, mililitros o una medida doméstica cuya equivalencia pueda establecerse.
+    \item \textbf{Estado del alimento:} distinguir entre crudo y cocido y entre porción comestible y partes no consumidas.
+    \item \textbf{Preparaciones mixtas:} describir ingredientes y cantidades cuando no exista una referencia adecuada para el plato completo.
+    \item \textbf{Fecha y momento de consumo:} permiten revisar la distribución de lo registrado.
+\end{itemize}
+
+La documentación de Foundation Foods explica cómo calcular nutrientes por porción a partir de valores por 100 gramos de parte comestible (U.S. Department of Agriculture, Agricultural Research Service [USDA ARS], 2024). Si una porción contiene 150 gramos y el alimento aporta 100\,kcal por 100 gramos, su aporte estimado es 150\,kcal. La misma relación se aplica a los nutrientes expresados sobre esa base:
+
+\begin{equation}
+    N_{\text{porción}}=N_{100\,\mathrm{g}}\times\frac{m}{100\,\mathrm{g}},
+    \label{eq:nutrientes-porcion}
+\end{equation}
+donde $m$ es la masa de la porción comestible y $N_{100\,\mathrm{g}}$ representa la cantidad del nutriente por 100 gramos.
+
+Los resultados dependen de la correspondencia entre el alimento de referencia y el consumido. Las diferencias de receta, marca o preparación pueden alterar la estimación. Registrar calorías y macronutrientes no demuestra por sí solo que una dieta cubra todas las necesidades nutricionales.
