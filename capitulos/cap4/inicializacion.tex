@@ -1,135 +1,296 @@
 % =====================================================================
+%  FASE DE INICIALIZACIÓN (versión actualizada). Cambios respecto al original:
+%   - Cloud Functions y App Check en la configuración, la arquitectura y la
+%     estructura del proyecto; la clave de USDA ya no viaja en la aplicación.
+%   - Reglas de seguridad vigentes (rutinas solo mediante función).
+%   - Nueva subsección de consideraciones éticas y de privacidad.
+%   - Flujo de ramas con las solicitudes de integración #5, #6 y #7.
+% =====================================================================
+% =====================================================================
 \section{Fase de Inicialización}
 \label{sec:des-inicializacion}
 
 En esta fase se preparó el entorno técnico, se definió la arquitectura del
-sistema y se diseñó el modelo de datos, de modo que la fase de producción
-pudiera concentrarse en la funcionalidad.
+sistema y se diseñó el modelo de datos.
+
+Durante la fase de Inicialización se establecieron las herramientas para implementar
+la aplicación, gestionar el acceso y la persistencia de datos, e integrar
+los componentes de reconocimiento de máquinas y generación de rutinas.
+
+\subsection{Entorno de trabajo}
+
+\begin{itemize}
+    \item \textbf{React Native:} Framework para crear aplicaciones móviles con React.
+    \item \textbf{TypeScript:} Lenguaje basado en JavaScript que incorpora tipado estático.
+    \item \textbf{Expo:} Plataforma con herramientas para desarrollar, probar y compilar aplicaciones React Native.
+    \item \textbf{Expo Router:} Sistema de navegación que define las rutas a partir de los archivos del proyecto.
+    \item \textbf{Firebase:} Plataforma que ofrece servicios de autenticación, bases de datos, almacenamiento de archivos y funciones en la nube.
+    \item \textbf{TensorFlow Lite:} Biblioteca para ejecutar modelos de aprendizaje automático en dispositivos móviles y embebidos.
+    \item \textbf{Ultralytics YOLO:} Familia de modelos de visión artificial que permite detectar y localizar objetos en imágenes.
+    \item \textbf{ARCore:} Plataforma de realidad aumentada que permite seguir el movimiento del dispositivo y anclar elementos virtuales al entorno físico.
+    \item \textbf{USDA FoodData Central:} Base de datos sobre la composición nutricional de los alimentos.
+    \item \textbf{Git:} Sistema de control de versiones que registra los cambios en los archivos.
+    \item \textbf{GitHub:} Plataforma para alojar repositorios Git y colaborar en su desarrollo.
+\end{itemize}
 
 \subsection{Configuración del entorno de desarrollo}
 
-La Tabla~\ref{tab:versiones} detalla las versiones de las tecnologías
-instaladas, tomadas del archivo \archivo{package.json} del proyecto.
+En esta etapa se configuraron los recursos físicos y técnicos necesarios 
+para preparar el entorno de desarrollo de aplicaciones para Android.
+
+\subsection{Configuración para aplicaciones móviles android}
+
+\begin{itemize}
+    \item \textbf{Tipo de proyecto.} Aplicación móvil para Android desarrollada
+    con React Native y TypeScript, sobre la plataforma Expo.
+
+    \item \textbf{Librerías principales.}
+    \begin{itemize}
+        \item \archivo{expo-router} para organizar la navegación entre pantallas
+        mediante rutas basadas en archivos.
+        \item \archivo{firebase} para gestionar la autenticación, consultar y
+        guardar datos en Cloud Firestore, acceder a Cloud Storage e invocar
+        funciones del servidor.
+        \item \archivo{expo-camera} y \archivo{expo-image} para capturar imágenes
+        con el escáner y mostrar imágenes y GIF del catálogo.
+        \item \archivo{react-native-fast-tflite} para ejecutar en el dispositivo
+        los modelos de clasificación de máquinas y recomendación de rutinas.
+        \item \archivo{react-hook-form} y \archivo{zod} para gestionar los
+        formularios y validar los datos ingresados.
+        \item \archivo{zustand} para gestionar el estado compartido de la
+        aplicación y conservarlo entre sesiones.
+        \item \archivo{react-native-chart-kit} para generar los gráficos del
+        reporte de progreso físico.
+    \end{itemize}
+
+    \item \textbf{Configuraciones técnicas.}
+    \begin{itemize}
+        \item Generación de APK mediante EAS Build para distribución en Android[cite: 2].
+        \item Activación de permisos de cámara.
+        \item Configuración de reglas de seguridad para control de acceso a Cloud Firestore y Cloud Storage[cite: 2, 7].
+        \item Definición de perfiles de compilación (\emph{development}, \emph{preview} y \emph{production}) en \archivo{eas.json} para automatizar el empaquetado en la nube[cite: 3].
+        \item Uso opcional de funciones de servidor para procesar validaciones y tareas en la nube mediante Firebase[cite: 7].
+    \end{itemize}
+\end{itemize}
+
+
+\subsection{Planificación inicial}
+Durante esta etapa se establecerán los requisitos previos técnicos y funcionales de cada
+proceso, teniendo en cuenta las necesidades del usuario y las condiciones de la infraestructura tecnológica.
+
+\subsubsection{Análisis de procesos}
+
+La implementación de cada proceso requiere que se cumplan las condiciones 
+previas que se detallan a continuación:
+
+{\small
+\begin{longtable}{|L{1.3cm}|L{3.3cm}|L{9cm}|}
+\hline
+\rowcolor{encabezado}
+\textbf{Código} & \textbf{Proceso} & \textbf{Pre-requisitos} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{encabezado}
+\textbf{Código} & \textbf{Proceso} & \textbf{Pre-requisitos} \\
+\hline
+\endhead
+
+P01 & Autenticación y control de acceso &
+\begin{itemize}
+    \item Configuración de Firebase Authentication para el acceso con correo
+    electrónico y contraseña o con una cuenta de Google.
+    \item Validación de las credenciales mediante el proveedor seleccionado.
+    \item Creación del documento de perfil en Cloud Firestore durante el primer
+    acceso.
+    \item Verificación del estado de la sesión y del perfil para determinar
+    qué pantallas puede abrir el usuario.
+\end{itemize}
+\\ \hline
+
+P02 & Configuración inicial del perfil &
+\begin{itemize}
+    \item Usuario autenticado mediante el proceso P01.
+    \item Formulario para registrar el objetivo, el nivel de entrenamiento,
+    la edad, la estatura, el peso y los días disponibles.
+    \item Validación de los campos obligatorios y de los valores ingresados.
+    \item Guardado del perfil en Cloud Firestore antes de habilitar el acceso
+    a las pantallas principales.
+\end{itemize}
+\\ \hline
+
+P03 & Consulta de la guía de máquinas &
+\begin{itemize}
+    \item Catálogo de máquinas y ejercicios disponible para consulta.
+    \item Datos descriptivos e imágenes asociados a cada máquina.
+    \item Campo de búsqueda y filtros para localizar máquinas en el catálogo.
+    \item Ficha con instrucciones de uso para la máquina seleccionada.
+\end{itemize}
+\\ \hline
+
+P04 & Escaneo e identificación de máquinas &
+\begin{itemize}
+    \item Dispositivo Android con cámara y permiso de acceso concedido.
+    \item Imagen de la máquina obtenida mediante el escáner.
+    \item Modelo local de TensorFlow Lite disponible para clasificar la imagen.
+    \item Conexión a Internet y acceso al servicio de detección cuando se
+    utiliza el reconocimiento en la nube.
+    \item Ficha disponible en el catálogo y opción de selección manual.
+    \item Dispositivo compatible con ARCore para anclar la ficha al entorno
+    físico cuando se utiliza esa modalidad.
+\end{itemize}
+\\ \hline
+
+P05 & Generación de rutinas &
+\begin{itemize}
+    \item Usuario autenticado con el perfil completado en P02.
+    \item Objetivo, nivel de entrenamiento y días disponibles registrados
+    en el perfil.
+    \item Modelo local de recomendación y catálogo de ejercicios disponibles
+    para conformar la rutina.
+    \item Acceso a la función \archivo{guardarRutina} para validar la rutina
+    en el servidor y guardarla como activa.
+\end{itemize}
+\\ \hline
+
+P06 & Planificación de rutinas &
+\begin{itemize}
+    \item Usuario autenticado con acceso al planificador.
+    \item Selección de días de entrenamiento y ejercicios del catálogo.
+    \item Registro de series, repeticiones y tiempos de descanso por ejercicio.
+    \item Validación de la planificación antes de guardar la rutina
+    personalizada mediante la función \archivo{guardarRutina}.
+\end{itemize}
+\\ \hline
+
+P07 & Registro de alimentos &
+\begin{itemize}
+    \item Usuario autenticado y fecha de registro seleccionada.
+    \item Texto de búsqueda para consultar alimentos mediante la función
+    \archivo{buscarAlimentos}, conectada a USDA FoodData Central.
+    \item Selección de un alimento con información nutricional disponible.
+    \item Cantidad en gramos para calcular las calorías y los macronutrientes
+    de la porción.
+    \item Guardado de la porción en el diario de alimentación del usuario.
+\end{itemize}
+\\ \hline
+
+P08 & Registro corporal &
+\begin{itemize}
+    \item Usuario autenticado con acceso al módulo de progreso físico.
+    \item Peso en kilogramos y estatura en centímetros con valores válidos.
+    \item Cálculo del índice de masa corporal y determinación de la categoría
+    correspondiente.
+    \item Guardado del registro con su fecha para incorporarlo al historial.
+\end{itemize}
+\\ \hline
+
+P09 & Seguimiento de entrenamientos &
+\begin{itemize}
+    \item Usuario autenticado con una rutina activa.
+    \item Selección de una sesión de entrenamiento planificada.
+    \item Confirmación de que la sesión fue completada.
+    \item Registro de la sesión y su fecha para actualizar la racha,
+    el conteo semanal y el total de entrenamientos.
+\end{itemize}
+\\ \hline
+
+P10 & Generación de reportes de progreso &
+\begin{itemize}
+    \item Usuario autenticado con registros corporales almacenados en P08.
+    \item Consulta del historial en orden cronológico.
+    \item Datos disponibles para mostrar la categoría actual y, cuando
+    existen registros comparables, calcular la variación corporal.
+    \item Componente de gráficos para representar la evolución del usuario.
+    \item Componente de generación de PDF para exportar el reporte.
+\end{itemize}
+\\ \hline
+P11 & Acceso a la aplicación &
+\begin{itemize}
+    \item Archivo .apk generado.
+    \item Dispositivo compatible.
+    \item Permisos de instalación de fuentes desconocidas.
+    \item Espacio de almacenamiento suficiente en el dispositivo.
+    \item Servidor \emph{backend} disponible 24/7 (Firebase Cloud).
+\end{itemize}
+\\ \hline
+\caption{Cuadro de análisis de procesos (Elaboración propia)}
+\label{tab:procesos}\\
+\end{longtable}
+}
+
+\subsubsection{Planificación de las fases}
+
+La funcionalidad se distribuyó en seis iteraciones de producción
+(Tabla~\ref{tab:plan-iteraciones}), ordenadas de modo que cada una se apoye en
+las anteriores: primero la identidad del usuario, luego el catálogo, que
+alimenta al escáner y a las rutinas, y finalmente los módulos de seguimiento.
+
+\subsubsection{Planificación de las fases}
+
+El desarrollo se organizó según las fases de Mobile-D. La
+Tabla~\ref{tab:plan-iteraciones} resume las actividades de cada fase y
+la secuencia de las seis iteraciones de producción.
 
 \begin{table}[H]
 \centering
-\caption{Versiones de las tecnologías utilizadas}
-\label{tab:versiones}
 \small
-\begin{tabularx}{\textwidth}{|L{5.2cm}|L{2.4cm}|Y|}
+\renewcommand{\arraystretch}{1.2}
+
+
+\begin{tabularx}{\textwidth}{|L{2.8cm}|C{2.2cm}|Y|}
 \hline
-\rowcolor{encabezado} \textbf{Tecnología} & \textbf{Versión} & \textbf{Función} \\
+\rowcolor{encabezado}
+\textbf{Fase} & \textbf{Iteración} & \textbf{Descripción} \\
 \hline
-Node.js & 22 & Entorno de ejecución de las herramientas \\ \hline
-Expo SDK & 57 & Plataforma de desarrollo y módulos nativos \\ \hline
-React Native / React & 0.86 / 19.2 & \emph{Framework} de interfaz \\ \hline
-TypeScript & 6.0 & Lenguaje con tipado estático (modo estricto) \\ \hline
-Expo Router & 57 & Navegación basada en archivos \\ \hline
-Firebase JS SDK & 12 & Authentication, Firestore y Storage \\ \hline
-NativeWind / Tailwind CSS & 4.2 / 3.4 & Estilos con clases utilitarias \\ \hline
-Zustand & 5 & Estado global persistente \\ \hline
-Zod / React Hook Form & 4 / 7 & Validación de esquemas y formularios \\ \hline
-Axios & 1.20 & Cliente HTTP de wger y USDA \\ \hline
-react-native-chart-kit & 7 & Gráficos del reporte de progreso \\ \hline
-expo-camera / expo-image & 57 & Cámara del escáner; imágenes y GIF con caché \\ \hline
-Google Sign-In (RN) & 16 & Inicio de sesión con Google \\ \hline
-react-native-fast-tflite & 3 & Ejecución de los modelos de TensorFlow Lite
-en el dispositivo \\
+
+\textbf{Exploración} & Iteración 1 &
+Identificación de los interesados y actores del sistema, definición de
+los requerimientos funcionales y no funcionales, y delimitación del alcance. \\
 \hline
+
+\textbf{Inicialización} & Iteración 2 &
+Configuración del entorno de desarrollo para Android, análisis de los
+procesos, planificación de las iteraciones y diseño de la arquitectura,
+el modelo de datos y la interfaz de usuario. \\
+\hline
+
+\textbf{Producción} & Iteración 3 &
+Implementación de la autenticación y el perfil de usuario, la guía de
+máquinas y ejercicios, el escáner para el reconocimiento de máquinas,
+la generación y planificación de rutinas, el diario de alimentación
+y el seguimiento del progreso físico con reportes en PDF. \\
+\hline
+
+\textbf{Estabilización} & Iteración 4 &
+Integración de los módulos, refactorización del código y verificación
+del funcionamiento conjunto de la aplicación. \\
+\hline
+
+\textbf{Finalización} & Iteración 5 &
+Preparación de la documentación final, el manual de usuario, los
+informes de pruebas y la versión de la aplicación para su distribución
+en formato APK. \\
+\hline
+
 \end{tabularx}
-\fuente{Archivo \archivo{package.json} del proyecto.}
+\caption{Cuadro de análisis de planificación de fases}
+\label{tab:plan-iteraciones}
+\fuente{Elaboración propia.}
 \end{table}
 
-Como la aplicación utiliza módulos nativos que no incluye Expo Go (inicio de
-sesión con Google, cámara y TensorFlow Lite), se generó un \emph{development
-build} propio con \archivo{npx expo run:android}, y se configuró el archivo
-\archivo{eas.json} con los perfiles \emph{development}, \emph{preview} y
-\emph{production} para la compilación en la nube.
-
-\subsection{Repositorio y flujo de trabajo}
-
-El código se versionó en un repositorio de GitHub con un flujo de ramas
-inspirado en \emph{Git Flow} (Figura~\ref{fig:ramas}): la rama \archivo{main}
-contiene las versiones estables, \archivo{develop} integra el trabajo en curso
-y cada módulo se desarrolla en una rama \archivo{feature/*} que se incorpora a
-\archivo{develop} mediante una solicitud de integración (\emph{pull request}).
-Los mensajes de \emph{commit} siguen la convención \emph{Conventional
-Commits} (\archivo{feat}, \archivo{fix}, \archivo{refactor}, \archivo{chore},
-\archivo{build}), lo que permite leer el historial por tipo de cambio.
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=0.8cm,
-  commit/.style={circle, draw=black!70, fill=#1, inner sep=2.2pt},
-  rama/.style={font=\scriptsize\ttfamily, anchor=east}]
-  \node[rama] at (-0.3,3) {main};
-  \node[rama] at (-0.3,2) {develop};
-  \node[rama] at (-0.3,1) {feature/auth};
-  \node[rama] at (-0.3,0) {feature/machines};
-  \node[rama] at (-0.3,-1) {feature/ejercicios};
-  \node[rama] at (-0.3,-2) {feature/routines};
-  \draw[thick, black!60] (0,3) -- (13,3);
-  \draw[thick, green!50!black] (0.8,3) -- (0.8,2) -- (13,2);
-  \draw[thick, blue!60] (1.6,2) -- (1.6,1) -- (3.6,1) -- (4,2);
-  \draw[thick, orange!80!black] (4.6,2) -- (4.6,0) -- (7.0,0) -- (7.4,2);
-  \draw[thick, purple!70] (8.0,2) -- (8.0,-1) -- (10.2,-1) -- (10.6,2);
-  \draw[thick, red!60!black, dashed] (11.0,2) -- (11.0,-2) -- (13,-2);
-  \foreach \x in {0,0.8} \node[commit=black!30] at (\x,3) {};
-  \foreach \x in {2.2,2.8,3.4} \node[commit=blue!25] at (\x,1) {};
-  \foreach \x in {5.3,6.0,6.6} \node[commit=orange!30] at (\x,0) {};
-  \foreach \x in {8.7,9.4,10.0} \node[commit=purple!25] at (\x,-1) {};
-  \foreach \x in {11.8,12.5} \node[commit=red!20] at (\x,-2) {};
-  \node[commit=green!40] at (4,2) {};
-  \node[commit=green!40] at (7.4,2) {};
-  \node[commit=green!40] at (10.6,2) {};
-  \node[font=\scriptsize, above] at (4,2.05) {PR \#1};
-  \node[font=\scriptsize, above] at (7.4,2.05) {PR \#3};
-  \node[font=\scriptsize, above] at (10.6,2.05) {PR \#4};
-\end{tikzpicture}
-\caption{Flujo de ramas del repositorio}
-\label{fig:ramas}
-\fuente{Elaboración propia a partir del historial de Git del proyecto. Las
-rutas de los \emph{commits} son esquemáticas; la rama \archivo{feature/routines}
-(línea punteada) está en desarrollo.}
-\end{figure}
-
-\subsection{Configuración de Firebase}
-
-Se creó un proyecto en la consola de Firebase y se registró la aplicación
-Android con su identificador de paquete. En él se habilitaron:
-
-\begin{itemize}
-    \item \textbf{Authentication}, con los proveedores de correo y contraseña
-    y de Google.
-    \item \textbf{Cloud Firestore}, para los datos de usuarios y el catálogo.
-    \item \textbf{Cloud Storage}, para las imágenes y animaciones del catálogo.
-\end{itemize}
-
-Las claves de configuración se almacenan en un archivo \archivo{.env} con el
-prefijo \archivo{EXPO\_PUBLIC\_}, excluido del control de versiones, y se leen
-en un único módulo, \archivo{firebase.ts}, dentro de la carpeta de servicios.
-La sesión de Firebase Authentication se persiste en el dispositivo con
-\archivo{AsyncStorage}, de modo que el usuario no debe iniciar sesión cada vez
-que abre la aplicación. Firestore se inicializa con \emph{long polling}
-forzado, porque el transporte por defecto del SDK web producía reconexiones
-constantes de las escuchas en tiempo real en Android. La clave de la API de
-USDA, de uso gratuito y limitada a 1\,000 solicitudes por hora, también se
-define como variable de entorno; las claves de servicios de terceros que no
-deben quedar dentro del paquete instalable, como la de WorkoutX, se usan
-únicamente en los \emph{scripts} de carga que se ejecutan desde la computadora
-de desarrollo.
-
-\subsection{Arquitectura del sistema}
+\subsection{Diseño de la arquitectura del sistema}
 \label{sec:des-arquitectura}
 
-El sistema sigue una arquitectura cliente--servidor. El cliente es la
-aplicación móvil, organizada internamente en capas según el patrón
-Modelo--Vista--Controlador; el servidor está compuesto por los servicios
-administrados de Firebase y por las APIs públicas de wger y de USDA
-(Figura~\ref{fig:arquitectura}). Las cuatro capas conceptuales planteadas en la
-sección~\ref{sec:aa-aplicacion-mobiled} (presentación, lógica de negocio,
-servicios e inteligencia artificial) se corresponden con las capas del cliente
-como indica la Tabla~\ref{tab:capas-mvc}.
+La arquitectura del proyecto sigue un modelo cliente--servidor. 
+Como se muestra en la Figura~\ref{fig:arquitectura}, la aplicación móvil 
+se comunica directamente con los servicios de Firebase para gestionar 
+la autenticación, la base de datos y el almacenamiento, y consulta 
+la API pública de wger (wger Project, s.~f.) para obtener información sobre ejercicios. 
+Para consultar los datos nutricionales de USDA y reconocer máquinas 
+mediante Ultralytics, la aplicación utiliza las funciones correspondientes 
+de Cloud Functions.
 
 \begin{figure}[H]
 \centering
@@ -146,7 +307,7 @@ como indica la Tabla~\ref{tab:capas-mvc}.
   \node[lay=green!4] (modelo) at (0,1.0) {\textbf{Modelo} --- \archivo{models/}, \archivo{schemas/}\\
     Entidades, esquemas Zod, repositorios (únicos que conocen Firestore)};
   \node[lay=black!4] (serv) at (0,-0.65) {\textbf{Servicios} --- \archivo{services/}\\
-    Firestore, Storage, clientes HTTP de wger y USDA, extensión de IA};
+    Firestore, Storage, llamadas a Cloud Functions, cliente HTTP de wger, modelos de IA y módulo nativo de ARCore};
   \node[draw, dashed, rounded corners, fit=(vista)(serv), inner sep=8pt,
     label={[font=\small\bfseries]above:Cliente: aplicación Android}] (cli) {};
   \draw[flecha] (vista) -- (ctrl);
@@ -156,22 +317,26 @@ como indica la Tabla~\ref{tab:capas-mvc}.
   \node[srv] (auth) at (9.2,4.3) {Firebase\\Authentication};
   \node[srv] (fs) at (9.2,2.65) {Cloud\\Firestore};
   \node[srv] (st) at (9.2,1.0) {Cloud\\Storage};
-  \node[srv, fill=blue!6] (wg) at (9.2,-0.2) {API REST\\de wger y USDA};
-  \node[draw, dashed, rounded corners, fit=(auth)(wg), inner sep=8pt,
+  \node[srv] (cf) at (9.2,-0.2) {Cloud Functions\\+ App Check};
+  \node[srv, fill=blue!6] (wg) at (9.2,-1.5) {APIs externas\\(wger, USDA)};
+  \node[srv, fill=blue!6] (ul) at (9.2,-2.8) {Ultralytics\\(\emph{endpoint} YOLO)};
+  \node[draw, dashed, rounded corners, fit=(auth)(ul), inner sep=8pt,
     label={[font=\small\bfseries]above:Servidor}] (sv) {};
   \draw[flecha, <->] (cli.east |- auth) -- node[above, font=\tiny]{SDK} (auth);
   \draw[flecha, <->] (cli.east |- fs) -- node[above, font=\tiny]{tiempo real} (fs);
   \draw[flecha, <->] (cli.east |- st) -- (st);
-  \draw[flecha, <->] (cli.east |- wg) -- node[above, font=\tiny]{HTTPS} (wg);
+  \draw[flecha, <->] (cli.east |- cf) -- node[above, font=\tiny]{HTTPS} (cf);
+  \draw[flecha, <->] (cf) -- node[right, font=\tiny]{USDA} (wg);
+  \draw[flecha, <->] (cf.east) -- ++(0.5,0) |- node[right, pos=0.2, font=\tiny]{imagen} (ul.east);
+  \draw[flecha, <->] (cli.east |- wg) -- node[above, font=\tiny]{wger} (wg);
 \end{tikzpicture}
 \caption{Arquitectura cliente--servidor y capas del cliente}
 \label{fig:arquitectura}
+\fuente{Elaboración propia.}
 \end{figure}
 
 \begin{table}[H]
 \centering
-\caption{Correspondencia entre las capas conceptuales y las capas del cliente}
-\label{tab:capas-mvc}
 \small
 \begin{tabularx}{\textwidth}{|L{3.4cm}|L{2.6cm}|Y|}
 \hline
@@ -184,300 +349,340 @@ reglas puras de \archivo{utils/} (IMC, generador de rutinas, estadísticas de
 entrenamiento). \\ \hline
 Servicios (Firebase y APIs) & Modelo y Servicios & Repositorios de
 \archivo{models/repositories/}; \archivo{firestoreService},
-\archivo{storageService}, \archivo{wgerService} y \archivo{usdaService}. \\ \hline
+\archivo{storageService}, \archivo{functionsService} (llamadas a las funciones
+en la nube), \archivo{wgerService} y \archivo{usdaService} (que invoca la función
+\archivo{buscarAlimentos}). \\ \hline
 Inteligencia artificial & Controlador y Servicios & Generador de rutinas
 basado en reglas (\archivo{utils/}) y, en \archivo{services/ai/}, el
 recomendador de rutinas y el reconocedor de máquinas, ambos modelos de
-TensorFlow Lite ejecutados en el dispositivo. \\
+TensorFlow Lite ejecutados en el dispositivo, más la consulta opcional al
+detector de la nube mediante \archivo{reconocerMaquina}. \\ \hline
+Realidad aumentada & Vista y módulo nativo & Vista \archivo{CoachAR}
+(\archivo{modules/coach-ar/}, Kotlin) y su interfaz tipada en
+\archivo{services/ar/}; el controlador solo entrega a la vista la caja y la
+ficha de la máquina confirmada. \\
 \hline
 \end{tabularx}
+\caption{Correspondencia entre las capas conceptuales y las capas del cliente}
+\label{tab:capas-mvc}
 \end{table}
 
-Las reglas de dependencia entre capas, que se respetaron en todo el código,
-son las siguientes:
-
-\begin{itemize}
-    \item Las pantallas de \archivo{app/} son solo Vista: nunca importan
-    Firebase ni contienen reglas de negocio; siempre llaman a un controlador.
-    \item Los controladores validan los datos con Zod, aplican las reglas de
-    negocio y coordinan a los repositorios.
-    \item Los repositorios son el único lugar que conoce las rutas reales de
-    Firestore (por ejemplo, \archivo{usuarios/\{uid\}/rutinas}).
-    \item El SDK de Firestore solo se usa en \archivo{firestoreService.ts}, el
-    de Storage solo en \archivo{storageService.ts} y el de Authentication solo
-    en \archivo{AuthController.ts}.
-\end{itemize}
-
-\subsection{Estructura del proyecto}
-
-El Código~\ref{lst:estructura} muestra la organización de carpetas del
-código fuente y su correspondencia con las capas de la arquitectura.
-
-\begin{lstlisting}[language={}, numbers=none, caption={Estructura de carpetas del código fuente}, label={lst:estructura}]
-src/
-  app/                    VISTA: rutas de Expo Router
-    _layout.tsx           rutas protegidas segun sesion y perfil
-    index.tsx             bienvenida
-    (auth)/               login, register
-    (onboarding)/         goal, physical-data, routine
-    (app)/                pestanas de la app autenticada
-      index.tsx           inicio
-      machines/           index, [id] (ficha), scanner
-      routines/           index, generate, custom
-      nutrition.tsx       diario de alimentacion y calculadora de IMC
-      progress/           peso e IMC, entrenamientos y reporte en PDF
-      profile.tsx
-  components/             VISTA: componentes reutilizables por modulo
-  controllers/            CONTROLADOR: Auth, Machines, Routines, Nutrition,
-                          Progress, Workouts, Exercises, WgerExercises,
-                          Reports
-  utils/                  CONTROLADOR: routineGenerator, bmiCalculator,
-                          nutritionGoals, workoutStats, progressReport,
-                          foodTranslator
-  store/                  estado global (Zustand): auth, onboarding
-  hooks/                  suscripciones en tiempo real y logica de pantalla
-  models/
-    entities/             MODELO: tipos del dominio
-    repositories/         MODELO: acceso a datos por coleccion
-  schemas/                MODELO: validacion con Zod
-  services/
-    firebase/             SERVICIOS: Firestore y Storage
-    wger/  usda/          SERVICIOS: clientes HTTP de las APIs externas
-    ai/                   SERVICIOS: modelos de TensorFlow Lite
-                          (routinePlanner, machineRecognition)
-    reports/              SERVICIOS: reporte de progreso en PDF
-  constants/              paleta de colores
-ml/                       entrenamiento de los modelos (Python) y metricas
-\end{lstlisting}
-
-\subsection{Modelo de datos}
+\subsubsection{Modelo de datos NoSQL}
 \label{subsec:modelo-datos}
 
-Cloud Firestore es una base de datos documental, por lo que el modelo se
-diseñó a partir de los patrones de acceso de las pantallas y no de una
-normalización relacional. Se aplicó una regla general: lo que es
-\emph{catálogo} (compartido y de solo lectura) vive en colecciones raíz, y lo
-que pertenece a un usuario vive en subcolecciones bajo su documento
-(Figura~\ref{fig:modelo-datos}).
+El modelo de datos NoSQL define cómo se organiza, almacena y consulta la 
+información en una base de datos no relacional. Cloud Firestore utiliza 
+un modelo documental en el que los datos se agrupan en colecciones. 
+Cada colección contiene documentos, y cada documento almacena la información 
+en campos.
+A continuación el esquema diseñado para la base de datos del sistema.
 
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}[font=\scriptsize]
-  \node[entidad, anchor=north] (eje) at (-6.0,0) {ejercicios/\{id\}
-    \nodepart{second}nombre\\grupoMuscular[ ]\\descripcion\\
-    seriesRecomendadas\\repeticionesRecomendadas};
-  \node[entidad, anchor=north] (usr) at (-0.3,0) {usuarios/\{uid\}
-    \nodepart{second}nombre, apellidos, email\\genero, altura, pesoActual\\
-    edad, diasDisponibles\\nivel, objetivo\\rutinaActivaId\\
-    creadoEn, actualizadoEn};
-  \node[entidad, anchor=north] (maq) at (6.0,0) {maquinas/\{id\}
-    \nodepart{second}nombre, categoria, tipo\\descripcion, orden\\
-    musculosPrincipales[ ]\\musculosSecundarios[ ]\\instrucciones[ ]\\
-    erroresComunes[ ]\\prevencionLesiones[ ]\\imagenPrincipal, gifPrincipal\\
-    variantes[ ], ejercicios[ ]\\ejerciciosGif[ ]};
-  \coordinate (bus) at ($(usr.south |- maq.south)+(0,-0.7)$);
-  \node[entidad, anchor=north] (rut) at ($(bus)+(-6.2,-0.6)$) {rutinas/\{id\}
-    \nodepart{second}nombre, tipo\\objetivo, nivel\\diasPorSemana\\
-    planSemanal[ ]\\origenPlan, versionModelo\\confianzaModelo\\usuarioId, creadoEn};
-  \node[entidad, anchor=north] (reg) at ($(bus)+(-2.1,-0.6)$) {registrosNutricionales/\{id\}
-    \nodepart{second}IMC: weight, height\\bmi, category\\
-    Ingesta: alimento, calorias\\cantidad, proteinas\\carbohidratos, grasas\\
-    fdcId, usuarioId, creadoEn};
-  \node[entidad, anchor=north] (pro) at ($(bus)+(2.0,-0.6)$) {progresoFisico/\{id\}
-    \nodepart{second}peso, altura, imc\\notas\\usuarioId, creadoEn};
-  \node[entidad, anchor=north] (ent) at ($(bus)+(6.0,-0.6)$) {entrenamientos/\{fecha\}
-    \nodepart{second}rutinaId\\dia (1..7)\\fecha (= id)\\usuarioId, creadoEn};
-  \draw[thick] (usr.south) -- (bus);
-  \draw[thick] (rut.north |- bus) -- (ent.north |- bus);
-  \foreach \n in {rut,reg,pro,ent} \draw[thick] (\n.north |- bus) -- (\n.north);
-  \node[font=\scriptsize\itshape, anchor=west] at ($(bus)+(0.1,0.17)$) {subcolecciones privadas};
-  \node[font=\scriptsize\bfseries, above=2pt of maq] {Catálogo (solo lectura)};
-  \node[font=\scriptsize\bfseries, above=2pt of eje] {Catálogo (solo lectura)};
-  \node[font=\scriptsize\bfseries, above=2pt of usr] {Perfil del usuario};
+\begin{tikzpicture}[
+  font=\footnotesize,
+  documento/.style={
+    entidad,
+    text width=0.38\linewidth,
+    align=left,
+    inner sep=5pt,
+    outer sep=0pt
+  },
+  grupo/.style={font=\footnotesize\bfseries},
+  enlace/.style={semithick, draw=black!65}
+]
+
+% Colección de usuarios
+\node[documento] (usr) {\texttt{usuarios/\{uid\}}
+  \nodepart{second}
+  nombre, apellidos, email\\
+  genero, altura, pesoActual, edad\\
+  diasDisponibles, nivel, objetivo\\
+  rutinaActivaId\\
+  creadoEn, actualizadoEn
+};
+\node[grupo, above=3pt of usr] {Perfil del usuario};
+
+% Subcolecciones privadas, organizadas en dos filas
+\coordinate[below=1.1cm of usr] (privadas);
+\node[grupo] at (privadas) {Subcolecciones privadas};
+
+\node[documento, anchor=north east] (rut)
+  at ([xshift=-0.8cm,yshift=-0.6cm]privadas)
+  {\texttt{rutinas/\{id\}}
+    \nodepart{second}
+    nombre, tipo, objetivo, nivel\\
+    diasPorSemana, planSemanal[\,]\\
+    origenPlan, versionModelo\\
+    confianzaModelo, usuarioId, creadoEn
+  };
+
+\node[documento, anchor=north west] (reg)
+  at ([xshift=0.8cm,yshift=-0.6cm]privadas)
+  {\texttt{registrosNutricionales/\{id\}}
+    \nodepart{second}
+    \textbf{IMC:} weight, height, bmi, category\\
+    \textbf{Ingesta:} alimento, calorias, cantidad\\
+    proteinas, carbohidratos, grasas\\
+    fdcId, usuarioId, creadoEn
+  };
+
+\coordinate (segundaFila) at ([yshift=-0.55cm]reg.south);
+\node[documento, anchor=north east] (pro)
+  at (rut.east |- segundaFila)
+  {\texttt{progresoFisico/\{id\}}
+    \nodepart{second}
+    peso, altura, imc, notas\\
+    usuarioId, creadoEn
+  };
+
+\node[documento, anchor=north west] (ent)
+  at (reg.west |- segundaFila)
+  {\texttt{entrenamientos/\{fecha\}}
+    \nodepart{second}
+    rutinaId, dia (1--7)\\
+    fecha (= id), usuarioId, creadoEn
+  };
+
+% Eje central que conecta el perfil con sus cuatro subcolecciones
+\draw[enlace] (usr.south) -- ([yshift=3pt]privadas.north);
+\draw[enlace] ([yshift=-3pt]privadas.south) -- (privadas |- ent.west);
+\draw[enlace] (rut.east) -- (privadas |- rut.east);
+\draw[enlace] (reg.west) -- (privadas |- reg.west);
+\draw[enlace] (pro.east) -- (privadas |- pro.east);
+\draw[enlace] (ent.west) -- (privadas |- ent.west);
+
+% Colecciones raíz compartidas
+\coordinate (catalogos) at ([yshift=-0.75cm]privadas |- ent.south);
+\node[grupo] at (catalogos) {Catálogos de solo lectura};
+
+\node[documento, anchor=north east] (eje)
+  at ([xshift=-0.8cm,yshift=-0.35cm]catalogos)
+  {\texttt{ejercicios/\{id\}}
+    \nodepart{second}
+    nombre, grupoMuscular[\,]\\
+    descripcion\\
+    seriesRecomendadas\\
+    repeticionesRecomendadas
+  };
+
+\node[documento, anchor=north west] (maq)
+  at ([xshift=0.8cm,yshift=-0.35cm]catalogos)
+  {\texttt{maquinas/\{id\}}
+    \nodepart{second}
+    nombre, categoria, tipo, descripcion, orden\\
+    musculosPrincipales[\,], musculosSecundarios[\,]\\
+    instrucciones[\,], erroresComunes[\,]\\
+    prevencionLesiones[\,]\\
+    imagenPrincipal, gifPrincipal\\
+    variantes[\,], ejercicios[\,], ejerciciosGif[\,]
+  };
+
 \end{tikzpicture}
 \caption{Modelo de datos en Cloud Firestore}
 \label{fig:modelo-datos}
+\fuente{Elaboración propia.}
 \end{figure}
 
-Las decisiones de diseño más relevantes fueron:
+\subsubsection{Diseño de seguridad y controles}
+
+El diseño de seguridad de la aplicación busca proteger los datos personales
+y preservar la integridad de la información almacenada. Para ello, se
+establecieron controles de autenticación, acceso a los datos y validación
+de las operaciones que se ejecutan en el servidor.
 
 \begin{itemize}
-    \item \textbf{Subcolecciones por usuario.} Las rutinas, los registros
-    nutricionales, el progreso físico y los entrenamientos cuelgan de
-    \archivo{usuarios/\{uid\}}. El aislamiento entre usuarios queda expresado
-    en la propia ruta, y las reglas de seguridad solo deben comparar ese
-    segmento con el identificador del usuario autenticado. Además, cada
-    documento conserva el campo \archivo{usuarioId} como defensa en
-    profundidad.
-    \item \textbf{El identificador del perfil es el \emph{uid}.} El documento
-    \archivo{usuarios/\{uid\}} usa como clave el identificador de Firebase
-    Authentication, lo que permite autorizar el acceso sin leer el documento
-    previamente.
-    \item \textbf{Un solo documento por día de entrenamiento.} El
-    identificador de cada documento de \archivo{entrenamientos} es la fecha
-    (\archivo{AAAA-MM-DD}). Marcar un día como completado siempre escribe el
-    mismo documento, por lo que nunca se duplica, y desmarcarlo lo elimina.
-    \item \textbf{Una colección para dos usos nutricionales.} Los cálculos de
-    IMC y las ingestas de alimentos comparten la subcolección
-    \archivo{registrosNutricionales}; la regla de seguridad exige que cada
-    documento sea una cosa o la otra.
-    \item \textbf{Marcas de tiempo del servidor.} Los campos
-    \archivo{creadoEn} y \archivo{actualizadoEn} se generan con
-    \archivo{serverTimestamp()} en la capa de servicios; nunca se construye
-    una fecha en el cliente para persistirla.
-    \item \textbf{Plan semanal embebido.} La rutina guarda su
-    \archivo{planSemanal} como un arreglo de días, cada uno con su enfoque y
-    sus ejercicios. Como una rutina siempre se lee completa y su tamaño es
-    pequeño, embeber evita lecturas adicionales. También guarda su
-    procedencia (\archivo{origenPlan}: modelo o reglas, \archivo{versionModelo}
-    y \archivo{confianzaModelo}) para poder auditar las recomendaciones.
-    \item \textbf{Rutas de Storage en lugar de URL.} Las fichas de las
-    máquinas guardan la ruta del archivo en Storage (por ejemplo,
-    \archivo{maquinas/prensa-piernas/principal.webp}); la URL de descarga se
-    resuelve en tiempo de ejecución y se almacena en caché.
+    \item \textbf{Base de datos.} Las reglas de seguridad de Cloud Firestore
+    utilizan request.auth para identificar al usuario cuando se
+    autentica, obtener el uid y la información solicitada.
+    Estas reglas permiten definir quién puede leer, crear, actualizar o
+    eliminar documentos. En la aplicación, se utilizan para:
+    \begin{itemize}
+        \item Restringir el acceso al perfil, las rutinas y los registros
+        de alimentación, progreso físico y entrenamiento al usuario
+        propietario de los datos.
+        \item Permitir que los usuarios autenticados consulten los catálogos
+        de máquinas y ejercicios, y reservar su modificación para
+        operaciones autorizadas.
+        \item Impedir que la aplicación cree rutinas directamente en
+        Firestore. La función \archivo{guardarRutina} verifica la identidad
+        del usuario y valida los datos antes de guardarlos.
+    \end{itemize}
+
+    \item \textbf{Almacenamiento de archivos.} Las reglas de Cloud Storage
+    restringen la lectura de los recursos del catálogo a usuarios
+    autenticados y controlan quién puede modificar los archivos.
+
+    \item \textbf{Funciones del servidor.} Las funciones de búsqueda de
+    alimentos, guardado de rutinas y reconocimiento de máquinas verifican
+    la identidad del usuario. Firebase App Check, integrado con Play
+    Integrity, complementa este control al verificar el origen de las
+    solicitudes. Las claves de los servicios externos se mantienen en
+    el servidor.
 \end{itemize}
 
-\subsection{Reglas de seguridad}
+\subsubsection{Consideraciones éticas y de privacidad}
+\label{sec:etica}
 
-Las reglas de Firestore implementan el requerimiento RNF4. Definen funciones
-auxiliares (\archivo{estaAutenticado()}, \archivo{esDueno(usuarioId)} y
-validadores de campos opcionales) y, para cada subcolección, validan la forma
-de los datos. El Código~\ref{lst:regla-entrenos} muestra la regla de los
-entrenamientos, que exige además que el identificador del documento coincida
-con su fecha; las reglas completas se incluyen en el
-Anexo~\ref{anx:reglas}.
+La aplicación almacena datos personales relacionados con la salud (peso,
+estatura, edad, género y objetivo de entrenamiento) asociados a una cuenta de
+correo electrónico. Asimismo, el sistema no reemplaza la supervisión de entrenadores ni de
+nutricionistas, y las estimaciones de calorías, IMC y metas diarias son
+referenciales. Para entrenar el reconocedor de máquinas se utilizaron imágenes
+de catálogos y fotografías tomadas en distintos gimnasios del departamento
+de Cochabamba.
 
-\begin{lstlisting}[language=FirestoreRules, caption={Regla de seguridad de la subcolección de entrenamientos}, label={lst:regla-entrenos}]
-match /entrenamientos/{entrenamientoId} {
-  function entrenamientoValido() {
-    let datos = request.resource.data;
-    return datos.usuarioId == usuarioId
-      && datos.rutinaId is string && datos.rutinaId.size() > 0
-      && datos.dia is int && datos.dia >= 1 && datos.dia <= 7
-      && datos.fecha is string
-      && datos.fecha == entrenamientoId;
-  }
-  allow read, delete: if esDueno(usuarioId);
-  allow create, update: if esDueno(usuarioId) && entrenamientoValido();
-}
-\end{lstlisting}
+Con el modo de reconocimiento de maquinas en la nube activado, la fotografía que toma el
+escáner sale del teléfono: viaja a la Cloud Function y de ahí al \emph{endpoint}
+de Ultralytics, que la procesa para devolver las detecciones. La aplicación no
+guarda esas fotografías ni las poses de ARCore en Firestore, y la imagen
+temporal del caché se elimina al reemplazarla o al cerrar la vista.
 
-El catálogo (\archivo{maquinas} y \archivo{ejercicios}) se declara con
-\archivo{allow write: if false} y solo es legible por usuarios autenticados.
-Su carga se realiza con el SDK de administración de Firebase, que se
-autentica con una cuenta de servicio y no está sujeto a las reglas de cliente,
-por lo que ningún usuario de la aplicación puede modificarlo. Las reglas de
-Storage siguen el mismo criterio: lectura para usuarios autenticados y
-escritura denegada.
+\subsubsection{Descripción de la interfaz de usuario}
 
-\subsection{Diseño de la navegación}
-
-La navegación se diseñó con cuatro grupos de rutas, habilitados según el
-estado de la sesión y del perfil (Tabla~\ref{tab:rutas-protegidas}). La
-protección se implementa una sola vez en el diseño raíz con
-\archivo{Stack.Protected}: cuando cambia el estado, Expo Router retira al
-usuario de las pantallas que dejaron de estar disponibles y lo lleva a la
-primera disponible, sin que ninguna pantalla deba redirigir manualmente.
-
-\begin{table}[H]
-\centering
-\caption{Grupos de rutas habilitados según el estado}
-\label{tab:rutas-protegidas}
-\begin{tabularx}{\textwidth}{|Y|L{4.3cm}|}
-\hline
-\rowcolor{encabezado} \textbf{Estado} & \textbf{Grupo disponible} \\
-\hline
-Sin sesión & \archivo{index} (bienvenida) y \archivo{(auth)} \\ \hline
-Con sesión, perfil aún cargando & \archivo{(auth)} \\ \hline
-Con sesión, perfil incompleto & \archivo{(onboarding)} \\ \hline
-Con sesión y perfil completo & \archivo{(app)} \\
-\hline
-\end{tabularx}
-\end{table}
-
-Dentro de \archivo{(app)}, la navegación principal es una barra de pestañas
-con cuatro destinos: \emph{Inicio}, \emph{Máquinas}, \emph{Progreso} y
-\emph{Nutrición}. Las rutinas y el perfil son rutas navegables desde el
-inicio, ocultas en la barra para no sobrecargarla (RNF2). La
-Figura~\ref{fig:navegacion} resume el mapa de navegación.
+La presente figura~\ref{fig:navegacion} muestra el recorrido del usuario desde la
+pantalla de bienvenida hasta las secciones principales de la aplicación.
+Después de iniciar sesión, el usuario accede a Inicio si su perfil está
+completo. En caso contrario, primero completa la configuración del perfil.
+La barra de navegación permite acceder a cuatro pestañas: Inicio, Máquinas,
+Progreso y Nutrición. Desde Inicio se accede a las rutinas y al perfil.
+Máquinas reúne el escáner y las fichas de consulta, Progreso presenta el
+historial y los reportes, y Nutrición contiene el diario de alimentación.
 
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}[node distance=0.5cm and 0.6cm, font=\footnotesize,
-  p/.style={caja, text width=2.1cm, minimum height=0.9cm},
-  g/.style={rectangle, draw=black!50, dashed, rounded corners, inner sep=6pt}]
-  \node[p] (bienv) {Bienvenida};
-  \node[p, right=of bienv] (auth) {Login / Registro};
-  \node[p, right=of auth] (obj) {Objetivo y nivel};
-  \node[p, right=of obj] (dat) {Datos físicos};
-  \node[p, right=of dat] (rut) {Elección de rutina};
-  \draw[flecha] (bienv) -- (auth);
-  \draw[flecha] (auth) -- (obj);
-  \draw[flecha] (obj) -- (dat);
-  \draw[flecha] (dat) -- (rut);
-  \node[p, fill=green!8, below=1.4cm of obj] (ini) {Inicio};
-  \node[p, fill=green!8, left=of ini] (maq) {Máquinas};
-  \node[p, fill=green!8, right=of ini] (prog) {Progreso};
-  \node[p, fill=green!8, right=of prog] (nut) {Nutrición};
-  \draw[flecha] (rut.south) |- ++(0,-0.6) -| (ini.north);
-  \node[p, below=0.9cm of maq] (esc) {Escáner y ficha};
-  \node[p, below=0.9cm of ini] (rutinas) {Rutinas y perfil};
-  \draw[flecha] (maq) -- (esc);
-  \draw[flecha] (ini) -- (rutinas);
-  \node[g, fit=(bienv)(auth), label={[font=\scriptsize]above:sin sesión}] {};
-  \node[g, fit=(obj)(rut), label={[font=\scriptsize]above:\texttt{(onboarding)}}] {};
-  \node[g, fit=(maq)(nut)(esc)(rutinas), label={[font=\scriptsize]below:\texttt{(app)}}] {};
+\begin{tikzpicture}[
+    font=\footnotesize,
+    nvCaja/.style={draw=blue!65!black, fill=blue!8, rounded corners=3pt,
+        align=center, inner sep=3pt, minimum height=9mm},
+    nvPaso/.style={nvCaja, fill=green!8, text width=3.0cm, font=\scriptsize,
+        minimum height=14mm},
+    nvPestana/.style={nvCaja, fill=blue!20, text width=2.5cm,
+        font=\footnotesize\bfseries},
+    nvPantalla/.style={nvCaja, fill=white, text width=2.5cm, font=\scriptsize,
+        minimum height=17mm},
+    nvLinea/.style={draw=blue!65!black, semithick},
+    nvFlujo/.style={draw=blue!65!black, semithick, -{Stealth[length=2mm]}},
+    nvAux/.style={draw=blue!65!black, semithick, dashed,
+        -{Stealth[length=2mm]}},
+    nvGrupo/.style={draw=black!45, dashed, rounded corners=5pt, inner sep=6pt}
+]
+
+% ---------- Acceso (sin sesión) ----------
+\node[nvCaja, text width=2.0cm] (bienv) at (-6.9,0)
+    {\textbf{Bienvenida}\\{\scriptsize Botón Empezar}};
+\node[nvCaja, text width=3.9cm] (acceso) at (-3.3,0)
+    {\textbf{Acceso}\\{\scriptsize Inicio de sesión o registro (correo o Google)}};
+\node[nvCaja, fill=yellow!15, text width=4.6cm] (verif) at (2.3,0)
+    {\textbf{Verificación del perfil}\\
+     {\scriptsize Guardas de ruta (\texttt{Stack.Protected})}};
+\draw[nvFlujo] (bienv) -- (acceso);
+\draw[nvFlujo] (acceso) -- (verif);
+
+% ---------- Onboarding (perfil incompleto) ----------
+\node[nvPaso] (ob1) at (-5.4,-3.0)
+    {\textbf{1. Objetivo y nivel}\\Objetivo y nivel de experiencia};
+\node[nvPaso] (ob2) at (-1.8,-3.0)
+    {\textbf{2. Datos físicos}\\Edad, altura, peso y días disponibles};
+\node[nvPaso] (ob3) at (1.8,-3.0)
+    {\textbf{3. Primera rutina}\\Generar con IA, crear personalizada u omitir};
+\draw[nvFlujo] (ob1) -- (ob2);
+\draw[nvFlujo] (ob2) -- (ob3);
+\node[nvGrupo, fit=(ob1)(ob2)(ob3),
+    label={[font=\scriptsize]below:Onboarding (perfil incompleto)}] {};
+\draw[nvFlujo] (verif.south) -- ++(0,-0.65) -|
+    node[pos=0.2, above, font=\scriptsize]{Perfil incompleto} (ob1.north);
+
+% ---------- Aplicación (perfil completo) ----------
+\node[font=\scriptsize\bfseries, anchor=north west] (appTitulo)
+    at (-7.8,-4.95) {Aplicación (perfil completo)};
+\node[nvCaja, fill=gray!12, text width=4.5cm] (perfil) at (-5.3,-6.4)
+    {\textbf{Perfil}\\{\scriptsize Editar objetivo, nivel, género, edad y
+     altura; registrar peso; cerrar sesión}};
+\node[nvCaja, text width=4.4cm] (barra) at (1.5,-6.4)
+    {\textbf{Barra de navegación inferior}\\{\scriptsize Cinco pestañas}};
+\draw[nvFlujo] (ob3.south) -- (ob3.south |- barra.north);
+\draw[nvFlujo] (verif.east) --
+    node[above, font=\scriptsize]{Perfil completo} (7.6,0) |- (barra.east);
+\draw[nvAux] (barra.west) --
+    node[above, font=\tiny, align=center]{avatar del\\encabezado} (perfil.east);
+
+% Pestañas
+\foreach \i/\n/\x in {1/Inicio/-6.6, 2/Rutinas/-3.3, 3/Máquinas/0,
+                      4/Nutrición/3.3, 5/Progreso/6.6}
+    \node[nvPestana] (t\i) at (\x,-8.6) {\n};
+\coordinate (bus) at ($(barra.south)+(0,-0.55)$);
+\draw[nvLinea] (barra.south) -- (bus);
+\draw[nvLinea] (t1.north |- bus) -- (t5.north |- bus);
+\foreach \i in {1,2,3,4,5}
+    \draw[nvFlujo] (t\i.north |- bus) -- (t\i.north);
+
+% Inicio
+\node[nvPantalla, below=5mm of t1] (i1)
+    {\textbf{Inicio}\\Tarjeta del día, racha semanal y atajo Escanear máquina};
+\draw[nvFlujo] (t1) -- (i1);
+
+% Rutinas
+\node[nvPantalla, below=5mm of t2] (r1)
+    {\textbf{Mis rutinas}\\Rutina activa y otras; al tocar un ejercicio abre su ficha};
+\node[nvPantalla, below=4mm of r1] (r2)
+    {\textbf{Nueva rutina}\\Generar con IA (vista previa) o crear personalizada};
+\draw[nvFlujo] (t2) -- (r1);
+\draw[nvFlujo] (r1) -- (r2);
+
+% Máquinas
+\node[nvPantalla, below=5mm of t3] (m1)
+    {\textbf{Catálogo}\\Búsqueda y filtros por categoría y tipo};
+\node[nvPantalla, below=4mm of m1] (m2)
+    {\textbf{Ficha de máquina}\\Instrucciones, errores, prevención, GIF, variantes
+     y Añadir a mi rutina};
+\node[nvPantalla, below=4mm of m2] (m3)
+    {\textbf{Escáner}\\Cámara o ARCore; reconocimiento en la nube o local};
+\draw[nvFlujo] (t3) -- (m1);
+\draw[nvFlujo] (m1) -- (m2);
+\draw[nvFlujo] (m3) -- (m2);
+\draw[nvAux] (m1.east) -- ++(0.25,0) |- (m3.east);
+\draw[nvAux] (m2.west) -- ++(-0.3,0) |- (r1.east);
+
+% Nutrición
+\node[nvPantalla, below=5mm of t4] (n1)
+    {\textbf{Diario}\\Meta calórica, macronutrientes y alimentos del día};
+\node[nvPantalla, below=4mm of n1] (n2)
+    {\textbf{Añadir alimento}\\Buscar (USDA), Rápido o Manual};
+\node[nvPantalla, below=4mm of n2] (n3)
+    {\textbf{Calc. IMC}\\Cálculo y categoría del IMC};
+\draw[nvFlujo] (t4) -- (n1);
+\draw[nvFlujo] (n1) -- (n2);
+\draw[nvAux] (n1.east) -- ++(0.25,0) |- (n3.east);
+
+% Progreso
+\node[nvPantalla, below=5mm of t5] (p1)
+    {\textbf{Cuerpo}\\Registro de peso, IMC y gráfico del historial};
+\node[nvPantalla, below=4mm of p1] (p2)
+    {\textbf{Entrenos}\\Racha, días completados y rutina activa};
+\node[nvPantalla, below=4mm of p2] (p3)
+    {\textbf{Reporte en PDF}\\Peso, IMC, entrenos y alimentación};
+\draw[nvFlujo] (t5) -- (p1);
+\draw[nvFlujo] (p1) -- (p2);
+\draw[nvFlujo] (p2) -- (p3);
+
+% Entrenar (pantalla completa) y leyenda
+\coordinate (base) at ($(m3.south)+(0,-1.0)$);
+\node[nvCaja, fill=orange!12, text width=5.6cm] (ent) at ($(base)+(-4.95,0)$)
+    {\textbf{Entrenar día} (pantalla completa)\\
+     {\scriptsize Series, descansos y registro del entrenamiento}};
+\draw[nvFlujo] (i1.south) -- (i1.south |- ent.north);
+\draw[nvFlujo] (r2.south) -- (r2.south |- ent.north);
+\node[font=\scriptsize, align=left, text width=5.6cm] (leyenda)
+    at ($(base)+(4.4,0)$)
+    {Línea continua: navegación principal.\\
+     Línea discontinua: acción secundaria.};
+
+\node[nvGrupo, inner sep=7pt,
+    fit=(appTitulo)(perfil)(barra)(t1)(t5)(i1)(m3)(n3)(p3)(ent)(leyenda)] {};
+
 \end{tikzpicture}
-\caption{Mapa de navegación de la aplicación}
+\caption{Esquema de navegación de usuario}
 \label{fig:navegacion}
+\fuente{Elaboración propia.}
 \end{figure}
-
-\subsection{Sistema de diseño}
-
-Para dar consistencia visual a la interfaz se definió una paleta de colores
-centralizada en \archivo{global.css}, \archivo{tailwind.config.js} y
-\archivo{constants/palette.ts}, consumida desde las pantallas con clases de
-NativeWind (Tabla~\ref{tab:paleta}). El verde principal se asocia con salud y
-actividad, y los tonos cálidos se reservan para acentos y alertas.
-
-\newcommand{\muestra}[1]{\fcolorbox{black!40}[HTML]{#1}{\rule{0pt}{7pt}\hspace{0.8cm}}}
-\begin{table}[H]
-\centering
-\caption{Paleta de colores de la aplicación}
-\label{tab:paleta}
-\small
-\begin{tabular}{|L{3.2cm}|C{1.4cm}|L{2.2cm}|L{5cm}|}
-\hline
-\rowcolor{encabezado} \textbf{Token} & \textbf{Color} & \textbf{Valor} & \textbf{Uso} \\
-\hline
-\archivo{primary} & \muestra{32A685} & \#32A685 & Botones, pestaña activa \\ \hline
-\archivo{primaryLight} & \muestra{ADD9D1} & \#ADD9D1 & Bordes y superficies \\ \hline
-\archivo{primaryDark} & \muestra{1F8A6A} & \#1F8A6A & Degradados \\ \hline
-\archivo{secondary} & \muestra{F2C0A2} & \#F2C0A2 & Advertencias suaves \\ \hline
-\archivo{accent} & \muestra{F29580} & \#F29580 & Acentos \\ \hline
-\archivo{accentStrong} & \muestra{D95032} & \#D95032 & Errores y alertas \\ \hline
-\archivo{foreground} & \muestra{1F2937} & \#1F2937 & Texto principal \\
-\hline
-\end{tabular}
-\fuente{Archivo \archivo{constants/palette.ts} del proyecto.}
-\end{table}
-
-\subsection{Día de prueba y día de salida}
-
-La fase concluyó con el \emph{día de prueba} de Mobile-D, en el que se
-verificó de extremo a extremo que la cadena de herramientas funcionaba: el
-proyecto compiló sin errores de TypeScript, se generó el \emph{development
-build} para Android, la aplicación se conectó a Firebase (autenticación,
-lectura y escritura en Firestore y lectura de archivos de Storage), se
-definieron las reglas de seguridad y los cambios se integraron en GitHub a
-través de la rama \archivo{develop}. La prueba preliminar de
-TensorFlow Lite prevista en la planificación se limitó entonces a instalar la
-biblioteca y a definir el contrato de entrada del modelo, porque aún no existía
-un modelo entrenado; los dos modelos se entrenaron e integraron después, en las
-iteraciones~3 y~4 (secciones~\ref{subsec:it3} y~\ref{subsec:it4}).
-
-El \emph{día de salida} se dedicó a retirar los archivos y componentes de la
-plantilla de Expo, a ampliar el archivo \archivo{.gitignore} para no versionar
-archivos locales ni credenciales y a organizar el código en las carpetas de la
-Código~\ref{lst:estructura}. Con ello se dio por cerrada la inicialización y se
-pasó a la fase de producción.

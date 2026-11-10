@@ -1,0 +1,57 @@
+\subsection{Estructura de directorios}
+
+El Código~\ref{lst:estructura} muestra la organización de carpetas del
+código fuente y su correspondencia con las capas de la arquitectura.
+
+\begin{lstlisting}[language={}, numbers=none, caption={Estructura de carpetas del código fuente}, label={lst:estructura}]
+coach-app/
+  src/
+    app/                  VISTA: rutas de Expo Router
+      _layout.tsx         rutas protegidas segun sesion y perfil
+      index.tsx           bienvenida
+      (auth)/             login, register
+      (onboarding)/       goal, physical-data, routine
+      (app)/              pestanas de la app autenticada
+        index.tsx         inicio
+        routines/         index, generate, custom, exercise (ficha)
+        machines/         index, [id] (ficha), scanner
+        nutrition.tsx     diario de alimentacion y calculadora de IMC
+        progress/         peso e IMC, entrenos y reporte en PDF
+        profile.tsx       perfil (se abre desde el avatar)
+        train.tsx         entrenamiento guiado (pantalla completa)
+    components/           VISTA: componentes reutilizables por modulo
+    controllers/          CONTROLADOR: Auth, Machines, Nutrition, Progress,
+                          Reports, Routines, WgerExercises, Workouts
+    utils/                CONTROLADOR: reglas puras (bmiCalculator,
+                          nutritionGoals, routineGenerator, workoutStats,
+                          progressReport, foodTranslator, ...)
+    hooks/                logica de pantalla y suscripciones en tiempo real
+    store/                estado global (Zustand): auth, onboarding, toast
+    models/
+      entities/           MODELO: tipos del dominio
+      repositories/       MODELO: acceso a datos por coleccion
+    schemas/              MODELO: validacion con Zod
+    services/
+      firebase/           SERVICIOS: Firestore, Storage, Functions, App Check
+      wger/  usda/        SERVICIOS: wger (HTTP) y USDA (via funcion)
+      exercisedb/         SERVICIOS: demostraciones alternativas
+      ai/                 SERVICIOS: TensorFlow Lite local y deteccion en la
+                          nube (routinePlanner, machineRecognition)
+      ar/                 SERVICIOS: interfaz tipada de la vista CoachAR
+      reports/            SERVICIOS: reporte de progreso en PDF
+    config/  constants/   entorno y Google Sign-In; paleta de colores
+    types/  media/        tipos declarados; GIF de demostracion locales
+    **/__tests__/         pruebas Jest junto al codigo de cada carpeta
+  modules/coach-ar/       modulo nativo de ARCore (Kotlin): vista CoachAR
+  assets/models/          modelos .tflite (rutinas y reconocimiento)
+  android/                proyecto nativo de Android
+  ml/                     entrenamiento de los modelos (Python) y metricas
+    detection/            detector de maquinas YOLO: datos y evaluacion
+    recognition-yolo/     clasificador de maquinas (YOLO11n-cls)
+  functions/              Cloud Functions (Node.js 22): buscarAlimentos,
+                          guardarRutina, reconocerMaquina, cuotas
+  tests/security/         pruebas de las reglas con el emulador de Firebase
+  docs/                   ARCORE.md, auditorias y despliegue del backend
+  firestore.rules, storage.rules, firebase.json   reglas y configuracion
+  .github/workflows/      integracion continua (backend-security.yml)
+\end{lstlisting}

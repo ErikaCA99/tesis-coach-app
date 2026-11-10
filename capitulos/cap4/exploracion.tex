@@ -1,204 +1,220 @@
 % =====================================================================
+%  FASE DE EXPLORACIÓN (versión actualizada). Cambios respecto al original:
+%   - Realidad aumentada: se corrige «el usuario siempre confirma la máquina»
+%     (con confianza >= 0,8 la app acepta la sugerencia) y se acota el término
+%     según Azuma (1997).
+%   - Actores y tecnologías: Cloud Functions y App Check; USDA vía función.
+%   - Fuentes de datos: se añaden ExerciseDB y Gym Visual; «s.f.» -> «s. f.».
+%   - RNF1: mínimo de Android = 7.0 (API 24), valor por defecto de React Native.
+%   - Persistencia sin conexión: capacidad del SDK, no activada en la app.
+%   - Cronograma: solicitudes de integración #5, #6 y #7.
+% =====================================================================
+% =====================================================================
 \section{Fase de Exploración}
 \label{sec:des-exploracion}
 
-El objetivo de esta fase fue establecer qué se iba a construir, para quién y
-con qué tecnologías, y planificar las iteraciones de la fase de producción.
+En esta fase se definen los requerimientos, el alcance y las tecnologías para el desarrollo
+del producto.
 
 \subsection{Establecimiento de los interesados}
 
-La Tabla~\ref{tab:interesados} presenta los grupos de interesados y su
-relación con el producto. Los roles de Mobile-D asumidos por la autora se
-describen en la Tabla~\ref{tab:roles}.
-
-\begin{table}[H]
-\centering
-\caption{Grupos de interesados del proyecto}
-\label{tab:interesados}
-\begin{tabularx}{\textwidth}{|L{3.4cm}|Y|}
-\hline
-\rowcolor{encabezado} \textbf{Interesado} & \textbf{Rol e interés} \\
-\hline
-Desarrolladora (autora) & Responsable del análisis, diseño, implementación,
-pruebas y documentación del sistema. \\ \hline
-Tutor & Supervisión técnica del producto y de la memoria; validación de que el
-sistema responde a los objetivos del perfil. \\ \hline
-Docente de la asignatura & Seguimiento metodológico y verificación del
-cumplimiento del cronograma y del formato. \\ \hline
-Usuarios finales & Personas que entrenan en gimnasio, en los niveles
-principiante, intermedio y avanzado. \\ \hline
-Administrador del catálogo & Rol técnico que carga y actualiza el catálogo de
-máquinas fuera de la aplicación, con el SDK de administración de Firebase. \\
-\hline
-\end{tabularx}
-\end{table}
+Tutor del proyecto(Cliente): Ing. Jimmy Villarroel Novillo.
 
 \subsection{Actores del sistema}
 
-El sistema distingue un actor humano principal y tres actores secundarios que
-son servicios externos (Tabla~\ref{tab:actores}). No existe un rol de
-administrador dentro de la aplicación: el catálogo de máquinas es de solo
-lectura para todos los usuarios.
+El actor principal del sistema es el usuario, quien completa su perfil,
+consulta las instrucciones para el uso correcto de las máquinas del gimnasio y genera 
+rutinas de entrenamiento personalizadas. Además, puede registrar su consumo
+calórico, consultar su índice de masa corporal (IMC) y hacer un seguimiento
+de su progreso físico.
 
-\begin{table}[H]
+\subsection{Roles y Tareas}
+
+Para el desarrollo del sistema se han identificado los siguientes usuarios:
+
+\begin{table}[htbp]
 \centering
-\caption{Actores del sistema}
-\label{tab:actores}
-\begin{tabularx}{\textwidth}{|L{3.4cm}|L{2.2cm}|Y|}
-\hline
-\rowcolor{encabezado} \textbf{Actor} & \textbf{Tipo} & \textbf{Tareas} \\
-\hline
-Usuario & Principal & Registrarse, completar su perfil físico, consultar la
-guía de máquinas, escanear máquinas, obtener y planificar rutinas, registrar
-alimentos, peso e IMC, marcar entrenamientos y consultar su progreso. \\ \hline
-Firebase & Secundario & Autenticar usuarios, persistir sus datos en tiempo real
-y servir las imágenes y animaciones del catálogo. \\ \hline
-API de wger & Secundario & Proveer los ejercicios con que se completan las
-rutinas generadas. \\ \hline
-USDA FoodData Central & Secundario & Proveer los valores nutricionales de los
-alimentos buscados. \\
-\hline
-\end{tabularx}
+\begin{tabular}{|p{0.18\linewidth}|p{0.49\linewidth}|p{0.21\linewidth}|}
+  \hline
+  \textbf{Nombre} & \textbf{Descripción} & \textbf{Stakeholder} \\
+  \hline
+  Usuario Final & 
+  Completa su perfil físico, consulta las instrucciones para el uso correcto
+  máquinas del gimnasio, escanea máquinas, obtiene y planifica sus rutina, registra 
+  su consumo calórico, consulta su índice de masa corporal IMC y revisa su progreso físico. & 
+  Persona que entrena en el gimnasio\\
+  \hline
+  \end{tabular}
+  \caption{Roles y tareas de Coach App (Elaboración propia)}
+  \label{tab:roles-tareas}
 \end{table}
 
-\subsection{Definición del alcance}
-\label{sec:des-alcance}
 
-El alcance del producto se fijó a partir de los objetivos específicos y de las
-limitaciones descritas en la sección~\ref{sec:alcance}. Tres decisiones de
-alcance se tomaron durante el proyecto y condicionaron su resultado:
+\subsection{Requerimientos iniciales} 
 
-\begin{enumerate}
-    \item \textbf{Inteligencia artificial para las rutinas, apoyada en reglas
-    de prescripción.} No se dispone de un conjunto de datos de rutinas
-    etiquetadas por resultados, por lo que un modelo no puede aprender qué
-    rutina funciona mejor. En cambio, las pautas de prescripción del ejercicio
-    están consolidadas en la literatura (Kraemer \& Ratamess, 2004). Por ello
-    se implementó primero un sistema basado en reglas, que produce
-    recomendaciones explicables, y luego se entrenó un modelo de TensorFlow
-    Lite que aprende esas reglas a partir de perfiles sintéticos etiquetados
-    por ellas (sección~\ref{subsec:it4}). El modelo se ejecuta en el
-    dispositivo y, cuando su confianza es baja, la aplicación recurre a las
-    reglas. Es decir, el modelo \emph{imita} el criterio experto; no descubre
-    prescripciones nuevas a partir de resultados de usuarios reales.
-    \item \textbf{Realidad aumentada basada en cámara.} Se implementó la
-    superposición de la ficha de la máquina sobre la imagen en vivo de la
-    cámara y un reconocimiento automático de la máquina con un clasificador de
-    imágenes de TensorFlow Lite, entrenado con las fotografías del propio
-    catálogo (sección~\ref{subsec:it3}). Como el conjunto de entrenamiento es
-    reducido, el reconocimiento solo se propone al usuario cuando su confianza
-    supera un umbral calibrado y el usuario siempre confirma la máquina. No se
-    utiliza ARCore ni anclaje tridimensional.
-    \item \textbf{Registro de alimentación.} El alcance inicial limitaba este
-    objetivo al conteo calórico mediante una calculadora de IMC. Una vez
-    resuelta la calculadora, se amplió a un diario de alimentación con búsqueda
-    de alimentos en USDA FoodData Central, que calcula calorías y
-    macronutrientes por porción. Las metas diarias se personalizan a partir de
-    los datos físicos y el objetivo del usuario mediante la ecuación de
-    Mifflin-St Jeor (Mifflin et~al., 1990); mientras el perfil esté
-    incompleto se usan valores de referencia.
-\end{enumerate}
+En esta etapa se elabora la primera definición de los requerimientos. Los requerimientos 
+funcionales describen las acciones que la aplicación debe permitir al usuario, mientras que
+los no funcionales establecen las condiciones de calidad que debe cumplir.
+Esta definición inicial delimita el alcance del sistema y sirve de base para su diseño y desarrollo.
 
-\subsection{Requerimientos funcionales}
+\subsubsection{Requerimientos funcionales}
 
-Los seis requerimientos funcionales generales definidos en la
-sección~\ref{sec:aa-aplicacion-mobiled} (RF1 a RF6) se descompusieron en
-subrequerimientos verificables durante esta fase
-(Tabla~\ref{tab:rf}). Cada uno se relaciona con el objetivo específico (OE)
-del Capítulo~\ref{cap:introduccion} que implementa.
+Los requerimientos funcionales describen las funciones que la aplicación debe ofrecer al usuario. 
+La siguiente tabla presenta los requerimientos generales y sus respectivos subrequerimientos.
 
-\begin{longtable}{|L{1.2cm}|L{10.2cm}|C{1.6cm}|}
-\caption{Requerimientos funcionales del sistema}
-\label{tab:rf}\\
+\begin{longtable}{|L{2.2cm}|L{10.8cm}|}
 \hline
-\rowcolor{encabezado} \textbf{ID} & \textbf{Descripción} & \textbf{Objetivo} \\
+\rowcolor{encabezado}
+\textbf{\textcolor{black}{CÓDIGO}} &
+\textbf{\textcolor{black}{DESCRIPCIÓN}} \\
 \hline
 \endfirsthead
+
 \hline
-\rowcolor{encabezado} \textbf{ID} & \textbf{Descripción} & \textbf{Objetivo} \\
+\rowcolor{encabezado}
+\textbf{\textcolor{black}{CÓDIGO}} &
+\textbf{\textcolor{black}{DESCRIPCIÓN}} \\
 \hline
 \endhead
+
 \endfoot
-\multicolumn{3}{|l|}{\textbf{RF1. Autenticar usuarios y gestionar el perfil}}\\ \hline
-RF1.1 & Registrar un usuario con nombre, apellido, correo y contraseña. & Base \\ \hline
-RF1.2 & Iniciar sesión con correo y contraseña o con una cuenta de Google. & Base \\ \hline
-RF1.3 & Recuperar la contraseña por correo y cerrar sesión. & Base \\ \hline
-RF1.4 & Completar en el primer ingreso el objetivo, el nivel de experiencia y
-los datos físicos (edad, estatura, peso y días disponibles para entrenar)
-(\emph{onboarding}). & OE3 \\ \hline
-RF1.5 & Consultar y editar los datos del perfil. & Base \\ \hline
-\multicolumn{3}{|l|}{\textbf{RF2. Mostrar información técnica y visual de las máquinas}}\\ \hline
-RF2.1 & Consultar el catálogo con búsqueda por texto (sin distinguir tildes) y
-filtros por grupo muscular y por tipo de equipo. & OE1 \\ \hline
-RF2.2 & Mostrar la ficha de cada máquina: descripción, músculos, guía de uso,
-errores comunes, prevención de lesiones y variantes comerciales. & OE1 \\ \hline
-RF2.3 & Mostrar los ejercicios de cada máquina con su animación, músculo
-objetivo y dificultad. & OE2 \\ \hline
-RF2.4 & Escanear una máquina con la cámara y superponer su ficha sobre la
-imagen en vivo; si no se identifica automáticamente, permitir confirmarla en
-una lista. & OE1 \\ \hline
-\multicolumn{3}{|l|}{\textbf{RF3. Generar y planificar rutinas personalizadas}}\\ \hline
-RF3.1 & Generar una rutina semanal a partir del objetivo y el nivel del
-usuario. & OE3 \\ \hline
-RF3.2 & Crear y eliminar rutinas personalizadas organizadas por días, con
-series, repeticiones y descansos. & OE4 \\ \hline
-RF3.3 & Agregar ejercicios a la rutina desde la ficha de una máquina y marcar
-una rutina como activa. & OE4 \\ \hline
-\multicolumn{3}{|l|}{\textbf{RF4. Registrar peso, estatura, IMC y progreso físico}}\\ \hline
-RF4.1 & Calcular el índice de masa corporal, clasificarlo según la OMS y
-guardar el historial de cálculos. & OE5 \\ \hline
-RF4.2 & Registrar el progreso físico (peso, estatura y notas) con cálculo
-automático del IMC. & OE6 \\ \hline
-\multicolumn{3}{|l|}{\textbf{RF5. Registrar la ingesta calórica diaria}}\\ \hline
-RF5.1 & Buscar alimentos escribiendo en español y registrar la cantidad en
-gramos; el sistema calcula calorías y macronutrientes de la porción. & OE5 \\ \hline
-RF5.2 & Agregar alimentos de uso frecuente con un toque o ingresar un
-alimento manualmente. & OE5 \\ \hline
-RF5.3 & Visualizar el resumen del día (calorías y macronutrientes frente a las
-metas) y eliminar registros. & OE5 \\ \hline
-\multicolumn{3}{|l|}{\textbf{RF6. Visualizar reportes y estadísticas del progreso}}\\ \hline
-RF6.1 & Visualizar la evolución del peso y del IMC en un gráfico, la variación
-acumulada y la categoría de IMC actual. & OE7 \\ \hline
-RF6.2 & Marcar como completado el entrenamiento del día y visualizar la racha,
-los días entrenados de la semana y el total de entrenamientos. & OE7 \\
+
+\caption{Requerimientos funcionales del sistema (elaboración propia)}
+\label{tab:rf}\\
+\endlastfoot
+
+RF1.1 & Permitir el registro de un usuario con nombre, apellido,
+correo electrónico y contraseña. \\
+\hline
+RF1.2 & Permitir el inicio de sesión mediante correo electrónico y
+contraseña o mediante una cuenta de Google. \\
+\hline
+RF1.3 & Permitir la recuperación de la contraseña por correo
+electrónico y el cierre de sesión. \\
+\hline
+RF1.4 & Permitir que el usuario registre, en su primer ingreso, su
+objetivo de entrenamiento, nivel de experiencia, edad, estatura, peso
+y días disponibles para entrenar. \\
+\hline
+RF1.5 & Permitir la consulta y edición de los datos del perfil. \\
+\hline
+
+RF2.1 & Permitir la búsqueda de máquinas por texto, con o sin tildes,
+y el filtrado del catálogo por grupo muscular y tipo de equipo. \\
+\hline
+RF2.2 & Mostrar la ficha de cada máquina con su descripción, los
+músculos trabajados, las instrucciones de uso, los errores comunes,
+las recomendaciones para prevenir lesiones y las variantes comerciales. \\
+\hline
+RF2.3 & Mostrar los ejercicios asociados a cada máquina con su
+animación, músculo objetivo y nivel de dificultad. \\
+\hline
+RF2.4 & Permitir el escaneo de una máquina con la cámara y mostrar
+su ficha sobre la imagen en vivo. Si el sistema no logra identificarla
+automáticamente, permitir que el usuario la seleccione de una lista. \\
+\hline
+
+RF3.1 & Generar una rutina semanal según el objetivo de entrenamiento
+y el nivel de experiencia del usuario. \\
+\hline
+RF3.2 & Permitir la creación y eliminación de rutinas personalizadas
+organizadas por días, con series, repeticiones y tiempos de descanso
+para cada ejercicio. \\
+\hline
+RF3.3 & Permitir que el usuario agregue ejercicios a su rutina desde
+la ficha de una máquina y marque una rutina como activa. \\
+\hline
+
+RF4.1 & Calcular el índice de masa corporal (IMC), clasificar el
+resultado según los criterios de la OMS y guardar el historial de
+cálculos. \\
+\hline
+RF4.2 & Permitir el registro del peso, la estatura y las notas de
+progreso físico, con cálculo automático del IMC. \\
+\hline
+
+RF5.1 & Permitir la búsqueda de alimentos en español y el registro
+de la cantidad consumida en gramos. Calcular las calorías y los
+macronutrientes de la porción registrada. \\
+\hline
+RF5.2 & Permitir que el usuario agregue alimentos de consumo frecuente
+con un toque o registre un alimento manualmente. \\
+\hline
+RF5.3 & Mostrar el consumo diario de calorías y macronutrientes en
+relación con las metas del usuario y permitir la eliminación de
+registros. \\
+\hline
+
+RF6.1 & Mostrar en un gráfico la evolución del peso y del IMC, e
+indicar la variación acumulada y la categoría actual del IMC. \\
+\hline
+RF6.2 & Permitir que el usuario marque como completado el entrenamiento
+del día y consulte su racha, los días entrenados durante la semana y
+el total de entrenamientos completados. \\
 \hline
 \end{longtable}
 
-\subsection{Requerimientos no funcionales}
+\subsubsection{Requerimientos no funcionales}
 
-Los tres requerimientos no funcionales de la
-sección~\ref{sec:aa-aplicacion-mobiled} se mantuvieron y se complementaron con
-tres más, organizados según las características de calidad de la norma
-ISO/IEC~25010 (Tabla~\ref{tab:rnf}).
+Los requerimientos no funcionales establecen las condiciones de calidad
+que debe cumplir la aplicación. La tabla siguiente describe cada requerimiento.
 
-\begin{table}[H]
-\centering
-\caption{Requerimientos no funcionales}
-\label{tab:rnf}
-\begin{tabularx}{\textwidth}{|L{1.2cm}|L{3.1cm}|Y|}
+\begin{longtable}{|L{2.2cm}|L{10.8cm}|}
 \hline
-\rowcolor{encabezado} \textbf{ID} & \textbf{Característica} & \textbf{Descripción} \\
+\rowcolor{encabezado}
+\textbf{\textcolor{black}{CÓDIGO}} &
+\textbf{\textcolor{black}{DESCRIPCIÓN}} \\
 \hline
-RNF1 & Portabilidad & La aplicación se ejecuta en dispositivos Android 8.0 o
-superior. \\ \hline
-RNF2 & Usabilidad & Interfaz en español, intuitiva y adaptable a distintos
-tamaños de pantalla, con navegación por pestañas hacia los módulos
-principales. \\ \hline
-RNF3 & Fiabilidad & Los datos se sincronizan en tiempo real mediante Firebase:
-los cambios en rutinas, registros y entrenamientos se reflejan en pantalla sin
-recargar, con escuchas \emph{onSnapshot}. \\ \hline
-RNF4 & Seguridad & Cada usuario solo puede leer y escribir sus propios datos;
-el catálogo es de solo lectura; las reglas del servidor validan tipos y
-rangos. \\ \hline
-RNF5 & Eficiencia & El catálogo de máquinas se descarga una vez por sesión y
-las URL de imágenes se almacenan en caché. \\ \hline
-RNF6 & Mantenibilidad & Código en TypeScript estricto, organizado en capas
-MVC, sin errores de compilación ni de análisis estático. \\
-\hline
-\end{tabularx}
-\end{table}
+\endfirsthead
 
-\subsection{Casos de uso}
+\hline
+\rowcolor{encabezado}
+\textbf{\textcolor{black}{CÓDIGO}} &
+\textbf{\textcolor{black}{DESCRIPCIÓN}} \\
+\hline
+\endhead
+
+\endfoot
+
+\caption{Requerimientos no funcionales del sistema (elaboración propia)}
+\label{tab:rnf}\\
+\endlastfoot
+
+RNF1 & \textbf{Portabilidad.} La aplicación debe poder instalarse y
+ejecutarse en dispositivos con Android 7.0 (API 24) o superior. \\
+\hline
+
+RNF2 & \textbf{Usabilidad.} La interfaz debe presentarse en español,
+adaptarse a distintos tamaños de pantalla y permitir el acceso a los
+módulos principales mediante pestañas de navegación. \\
+\hline
+
+RNF3 & \textbf{Fiabilidad.} Los cambios guardados en las rutinas, los
+registros y los entrenamientos deben sincronizarse mediante Firebase
+y reflejarse en pantalla sin que el usuario tenga que recargarla
+manualmente. \\
+\hline
+
+RNF4 & \textbf{Seguridad.} Cada usuario debe poder consultar y modificar
+únicamente sus propios datos. El catálogo debe ser de solo lectura
+para los usuarios de la aplicación. Las reglas de Firestore deben
+validar los tipos y rangos de los datos al guardar los cambios. \\
+\hline
+
+RNF5 & \textbf{Eficiencia.} El catálogo de máquinas debe descargarse
+una sola vez por sesión y reutilizarse al volver a consultarlo.
+Las URL de las imágenes deben conservarse en caché para reducir
+las solicitudes repetidas. \\
+\hline
+
+RNF6 & \textbf{Mantenibilidad.} El código debe escribirse en TypeScript
+con el modo estricto habilitado y organizarse según las capas del
+patrón MVC. La comprobación de tipos y el análisis estático deben
+completarse sin errores. \\
+\hline
+\end{longtable}
+
+\subsubsection{Análisis de los requerimientos mediante casos de uso}
 
 La Figura~\ref{fig:casos-uso} presenta el diagrama de casos de uso del
 sistema. El actor principal es el usuario; Firebase y las APIs externas
@@ -245,189 +261,34 @@ participan como actores secundarios.
 \end{tikzpicture}
 \caption{Diagrama de casos de uso del sistema}
 \label{fig:casos-uso}
+\fuente{Elaboración propia.}
 \end{figure}
 
-\subsection{Análisis de procesos}
+\clearpage
+\subsection{Definición del alcance}
+\label{sec:des-alcance}
 
-La Tabla~\ref{tab:procesos} resume los procesos principales del sistema con sus
-entradas y salidas, y los relaciona con los requerimientos que los cubren.
+El alcance del proyecto se determina a través de sus limitaciones:
 
-\begin{table}[H]
-\centering
-\caption{Procesos principales del sistema}
-\label{tab:procesos}
-\small
-\begin{tabularx}{\textwidth}{|L{1.1cm}|L{3.1cm}|Y|Y|L{1.3cm}|}
-\hline
-\rowcolor{encabezado} \textbf{ID} & \textbf{Proceso} & \textbf{Entrada} & \textbf{Salida} & \textbf{RF} \\
-\hline
-P01 & Autenticación & Correo y contraseña, o cuenta de Google & Sesión
-iniciada y perfil creado la primera vez & RF1.1--1.3 \\ \hline
-P02 & \emph{Onboarding} & Objetivo, nivel, edad, estatura, peso y días
-disponibles & Perfil completo que habilita la aplicación & RF1.4 \\ \hline
-P03 & Consulta de la guía & Texto de búsqueda y filtros & Lista de máquinas y
-ficha seleccionada & RF2.1--2.3 \\ \hline
-P04 & Escaneo de máquina & Imagen de la cámara o selección en lista & Ficha
-superpuesta sobre la cámara & RF2.4 \\ \hline
-P05 & Generación de rutina & Objetivo y nivel del perfil & Rutina semanal
-guardada como activa & RF3.1 \\ \hline
-P06 & Planificación & Días, ejercicios, series, repeticiones y descansos &
-Rutina personalizada guardada & RF3.2--3.3 \\ \hline
-P07 & Registro de alimentos & Texto del alimento y gramos & Calorías y
-macronutrientes sumados al día & RF5.1--5.3 \\ \hline
-P08 & Registro corporal & Peso y estatura & IMC, categoría y registro
-histórico & RF4.1--4.2 \\ \hline
-P09 & Seguimiento de entrenamientos & Día de rutina completado hoy & Racha,
-semana y total actualizados & RF6.2 \\ \hline
-P10 & Generación de reportes & Historial de registros & Gráfico, variación y
-categoría actual & RF6.1 \\
-\hline
-\end{tabularx}
-\end{table}
+\subsubsection{Limitaciones}
 
-\subsection{Selección de tecnologías}
+Las limitaciones de la aplicación desarrollada son:
 
-La selección de las tecnologías se apoyó en las comparativas del
-Anexo~\ref{anx:comparativas} (Tablas~\ref{tab:frameworks}
-y~\ref{tab:bases-datos}) y se resume en la Tabla~\ref{tab:tecnologias}. Se
-eligió React Native con Expo por permitir una sola base de código tipada con
-TypeScript, por contar con módulos mantenidos para la cámara y las imágenes
-animadas, y por la experiencia previa de la autora con React. Firebase se
-eligió porque ofrece persistencia sin conexión y escuchas en tiempo real
-integradas en el SDK, almacenamiento de archivos, inicio de sesión con Google
-y un nivel gratuito suficiente, sin necesidad de administrar infraestructura.
+\begin{itemize}
+    \item La aplicación solo puede ser ejecutada en dispositivos con el sistema operativo Android.
 
-\begin{table}[H]
-\centering
-\caption{Tecnologías seleccionadas}
-\label{tab:tecnologias}
-\small
-\begin{tabularx}{\textwidth}{|L{3.2cm}|L{3.6cm}|Y|}
-\hline
-\rowcolor{encabezado} \textbf{Componente} & \textbf{Tecnología} & \textbf{Justificación} \\
-\hline
-Aplicación móvil & React Native y Expo & Una base de código, módulos de
-cámara e imágenes, \emph{development build} para módulos nativos. \\ \hline
-Lenguaje & TypeScript (modo estricto) & Errores de tipos detectados al
-compilar; entidades del dominio tipadas. \\ \hline
-Navegación & Expo Router & Rutas basadas en archivos y protección de grupos de
-pantallas según el estado de la sesión. \\ \hline
-Estado y formularios & Zustand, Zod y React Hook Form & Estado global
-persistente, validación única de esquemas en cliente. \\ \hline
-Estilos & NativeWind (Tailwind CSS) & Paleta centralizada y clases
-utilitarias coherentes. \\ \hline
-Servidor & Firebase Authentication, Firestore y Storage & Sesión, base de
-datos documental en tiempo real y archivos, sin infraestructura propia. \\ \hline
-Cámara y gráficos & \archivo{expo-camera}, \archivo{react-native-chart-kit} &
-Escáner de máquinas y gráfico de progreso. \\ \hline
-Inteligencia artificial & Reglas de prescripción; TensorFlow Lite
-(\archivo{react-native-fast-tflite}) con dos modelos entrenados con
-Keras & Recomendador de rutinas y clasificador de máquinas ejecutados en el
-dispositivo, con reglas como respaldo. \\ \hline
-Datos de ejercicios y alimentos & wger, free-exercise-db, WorkoutX y USDA
-FoodData Central & Contenido abierto o con licencia compatible
-(Tabla~\ref{tab:fuentes-datos}). \\
-\hline
-\end{tabularx}
-\end{table}
+    \item El reconocimiento de máquinas en la nube y la búsqueda de
+    alimentos requieren conexión a internet.
 
-El contenido de la guía de máquinas requiere textos, imágenes y animaciones.
-Se evaluaron las fuentes disponibles considerando su licencia, ya que el
-producto es propiedad intelectual de la universidad
-(Tabla~\ref{tab:fuentes-datos}).
+    \item El escaneo de máquinas requiere acceso a la cámara. El anclaje
+    de la ficha al entorno solo está disponible en dispositivos
+    compatibles con ARCore.
 
-\begin{table}[H]
-\centering
-\caption{Fuentes de datos evaluadas}
-\label{tab:fuentes-datos}
-\small
-\begin{tabularx}{\textwidth}{|L{2.9cm}|Y|L{2.6cm}|Y|}
-\hline
-\rowcolor{encabezado} \textbf{Fuente} & \textbf{Contenido} & \textbf{Licencia} & \textbf{Uso en el
-proyecto} \\
-\hline
-wger (wger Project, s.f.) & API REST con ejercicios, categorías y equipos. &
-Libre (AGPL / CC) & Ejercicios para la generación de rutinas. \\ \hline
-free-exercise-db (Yuhonas, s.f.) & 876 ejercicios con imágenes de posición
-inicial y final. & Dominio público & Imágenes y referencias de ejercicios. \\
-\hline
-WorkoutX (WorkoutX, s.f.) & Ejercicios con animaciones GIF. & Plan gratuito
-con condiciones de uso & 95 animaciones de ejecución, descargadas por la API
-oficial. \\ \hline
-USDA FoodData Central (USDA, s.f.) & Valores nutricionales por 100~g de
-alimentos genéricos. & Dominio público (CC0) & Búsqueda de alimentos del
-diario. \\ \hline
-Contenido propio & Descripciones, guías de uso, errores y prevención de
-lesiones. & Propia & Texto de las fichas, contrastado con guías de
-entrenamiento. \\
-\hline
-\end{tabularx}
-\end{table}
+    \item El reconocimiento automático se limita a los tipos de máquinas
+    incluidos en el entrenamiento de los modelos.
 
-\subsection{Planificación de las iteraciones}
+    \item La generación de rutinas se basa en reglas de prescripción del
+    ejercicio y en los datos del perfil del usuario.
+    
+\end{itemize}
 
-La funcionalidad se distribuyó en seis iteraciones de producción
-(Tabla~\ref{tab:plan-iteraciones}), ordenadas de modo que cada una se apoye en
-las anteriores: primero la identidad del usuario, luego el catálogo, que
-alimenta al escáner y a las rutinas, y finalmente los módulos de seguimiento.
-
-\begin{table}[H]
-\centering
-\caption{Plan de iteraciones de la fase de producción}
-\label{tab:plan-iteraciones}
-\begin{tabularx}{\textwidth}{|C{1.0cm}|Y|L{3.2cm}|C{2.0cm}|}
-\hline
-\rowcolor{encabezado} \textbf{Iter.} & \textbf{Módulo} & \textbf{Requerim.} &
-\textbf{Objetivos} \\
-\hline
-1 & Autenticación, \emph{onboarding} y perfil & RF1 & Base, OE3 \\ \hline
-2 & Guía de máquinas y ejercicios & RF2.1--2.3 & OE1, OE2 \\ \hline
-3 & Escáner de máquinas con realidad aumentada & RF2.4 & OE1 \\ \hline
-4 & Rutinas: generación automática y planificación & RF3 & OE3, OE4 \\ \hline
-5 & Nutrición: diario de alimentación e IMC & RF4.1, RF5 & OE5 \\ \hline
-6 & Progreso físico, entrenamientos y reportes & RF4.2, RF6 & OE6, OE7 \\
-\hline
-\end{tabularx}
-\end{table}
-
-\subsection{Cronograma}
-
-La Figura~\ref{fig:cronograma} muestra el cronograma del proyecto en semanas a
-partir del 10 de agosto de 2026, dentro del período de cinco a ocho meses que
-establece el Reglamento de Titulación. Las fechas de la exploración, la
-inicialización y las dos primeras iteraciones corresponden a los registros del
-repositorio (primer \emph{commit} el 12 de agosto, \emph{pull requests} el 16
-de septiembre, el 29 de septiembre y el 6 de octubre).
-\pendiente{ajustar las semanas de las iteraciones 3 a 6, de la estabilización
-y de las pruebas a las fechas reales de la autora.}
-
-\begin{figure}[H]
-\centering
-\begin{ganttchart}[
-    hgrid, vgrid={*1{draw=black!10}},
-    x unit=0.52cm, y unit chart=0.55cm,
-    title label font=\scriptsize\bfseries,
-    bar label font=\scriptsize,
-    group label font=\scriptsize\bfseries,
-    bar/.append style={fill=green!35, draw=black!60},
-    group/.append style={fill=black!60},
-    bar height=0.5, group peaks height=0.25
-  ]{1}{22}
-  \gantttitle{Semanas}{22} \\
-  \gantttitlelist{1,...,22}{1} \\
-  \ganttbar{Exploración}{1}{2} \\
-  \ganttbar{Inicialización}{3}{6} \\
-  \ganttgroup{Producción}{6}{16} \\
-  \ganttbar{It.1 Autenticación}{6}{7} \\
-  \ganttbar{It.2 Guía de máquinas}{8}{9} \\
-  \ganttbar{It.3 Escáner RA}{10}{11} \\
-  \ganttbar{It.4 Rutinas}{11}{13} \\
-  \ganttbar{It.5 Nutrición}{13}{14} \\
-  \ganttbar{It.6 Progreso}{15}{16} \\
-  \ganttbar{Estabilización}{17}{18} \\
-  \ganttbar{Pruebas del sistema}{19}{20} \\
-  \ganttbar{Memoria y defensa}{1}{22}
-\end{ganttchart}
-\caption{Cronograma del proyecto}
-\label{fig:cronograma}
-\end{figure}

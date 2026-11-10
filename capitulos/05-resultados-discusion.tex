@@ -1,0 +1,240 @@
+% =====================================================================
+%  CAPÍTULO NUEVO: RESULTADOS Y DISCUSIÓN
+%  Insertar en main.tex ENTRE 04-desarrollo y 05-conclusiones (que pasa a
+%  ser el capítulo 6). Reutiliza las tablas ya existentes de produccion.tex
+%  (tab:metricas-reconocimiento, tab:umbral-reconocimiento,
+%  tab:metricas-rutinas); no duplica cifras.
+%  Todas las cifras provienen de ml/results/*.json o del texto vigente de
+%  la memoria. Lo no medido se marca con \pendiente{}.
+% =====================================================================
+\chapter{RESULTADOS Y DISCUSIÓN}
+\label{cap:resultados}
+
+Este capítulo reúne los resultados del proyecto, los contrasta con los
+objetivos específicos y con los antecedentes citados, y declara las amenazas a
+la validez que limitan su interpretación. Las cifras de inteligencia artificial
+proceden de los archivos de resultados del repositorio
+(\archivo{ml/results/}); cuando una medida no se realizó se indica de forma
+explícita.
+
+\section{Resultados por objetivo específico}
+\label{sec:res-objetivos}
+
+La Tabla~\ref{tab:res-objetivos} resume, para cada objetivo específico, lo que
+se construyó, la evidencia disponible y el grado de cumplimiento.
+
+\begin{table}[H]
+\centering
+\caption{Cumplimiento de los objetivos específicos}
+\label{tab:res-objetivos}
+\small
+\begin{tabularx}{\textwidth}{|L{2.9cm}|Y|L{3.5cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Objetivo} & \textbf{Resultado} & \textbf{Cumplimiento} \\
+\hline
+OE1. Guiar sobre el uso correcto de máquinas &
+Catálogo de 35 tipos de máquinas con guía de uso, errores comunes y
+prevención de lesiones; escáner con reconocedor local (acierto top-1 de 38,5\,\%
+en campo simulado, Tabla~\ref{tab:metricas-reconocimiento}), detector en la
+nube con cajas (YOLO26m, mAP50 de 48,5\,\% en validación, Tabla~\ref{tab:metricas-detector-yolo26}) y ficha anclada en el entorno con ARCore. &
+Parcial: guía completa; reconocimiento modesto y sin prueba en gimnasios
+reales; anclaje implementado pero no validado en un teléfono. \\ \hline
+OE2. Instruir en la ejecución correcta &
+95 animaciones de ejecución con músculo objetivo y dificultad, asociadas a las
+máquinas; entrenamiento guiado paso a paso. &
+Parcial: contenido instructivo, sin verificación automática de la postura. \\ \hline
+OE3. Rutinas personalizadas y estructuradas &
+Generador basado en reglas con recomendador de TensorFlow Lite y respaldo por
+reglas (Tabla~\ref{tab:metricas-rutinas}). &
+Cumplido; la calidad de las rutinas para el usuario no se evaluó. \\ \hline
+OE4. Herramientas de planificación &
+Plan semanal por días disponibles y registro de la racha de entrenamiento. &
+Cumplido. \\ \hline
+OE5. Registro de ingesta calórica &
+Búsqueda de alimentos en FoodData Central mediante una Cloud Function con
+cuotas por usuario, cálculo de porciones y del IMC. &
+Cumplido dentro del alcance (conteo calórico, no consejo nutricional). \\ \hline
+OE6. Seguimiento del progreso físico &
+Registro de peso, estatura y edad con cálculo y clasificación del IMC,
+sincronizado con Firestore. & Cumplido. \\ \hline
+OE7. Reportes personalizados &
+Reportes de progreso y metas; reporte en PDF por período. &
+Cumplido: el PDF se generó y se abrió en el dispositivo de prueba (CP-41,
+Figura~\ref{fig:reporte-pdf}). \\
+\hline
+\end{tabularx}
+\fuente{Elaboración propia a partir del capítulo~\ref{cap:desarrollo} y del
+repositorio del proyecto.}
+\end{table}
+
+\section{Resultados de los modelos de inteligencia artificial}
+\label{sec:res-ia}
+
+\subsection{Reconocimiento de máquinas}
+
+Con 399 fotografías de 35 clases, validación cruzada de cinco pliegues y 30
+aumentos por fotografía, el modelo acierta la máquina en el 38,5\,\% de los
+casos en el escenario de campo simulado y en el 61,4\,\% entre sus tres
+primeras sugerencias, frente al 2,9\,\% que lograría el azar
+(Tabla~\ref{tab:metricas-reconocimiento}). Al fijar el umbral de confianza en
+0,8, la aplicación acepta automáticamente solo el 15,8\,\% de las imágenes, con
+una precisión del 85,4\,\% (Tabla~\ref{tab:umbral-reconocimiento}).
+
+El análisis por clase muestra que el rendimiento es muy desigual: de las 33
+clases evaluables, 25 quedan por debajo del 50\,\% de acierto en el campo
+simulado, mientras que la caminadora alcanza el 92,9\,\% y la bicicleta
+estática el 66,7\,\%. Las confusiones se concentran entre máquinas de aspecto
+similar: el 50\,\% de las muestras de validación de la máquina combinada de
+extensión y curl de piernas se clasificó como curl femoral, y el 26,5\,\% de
+las de press de hombro como press de pecho
+(\archivo{matriz\_confusion\_campo} en
+\archivo{recognition\_metrics.json}). Este patrón es coherente con un conjunto
+de entrenamiento pequeño y con imágenes de catálogo, y sugiere que la mejora
+proviene de más fotografías tomadas en gimnasios reales antes que de una
+arquitectura distinta (Sandler et~al., 2018).
+
+\subsection{Detector de máquinas en la nube}
+
+El detector de la nube responde a una limitación distinta a la del clasificador
+local: además de la clase, entrega la caja de la máquina en la imagen, que es lo
+que permite anclar la ficha en el entorno. El proyecto tuvo dos versiones. La
+primera (YOLO11x, entrenada en Colab con un conjunto anotado en Roboflow)
+obtuvo, en una partición de prueba de 43 imágenes, una precisión del 79,8\,\%,
+una exhaustividad del 29,9\,\% y una mAP50 del 39,8\,\%
+(Tabla~\ref{tab:metricas-detector}). La versión final (YOLO26m, entrenada y
+publicada en Ultralytics Platform con un conjunto anotado con polígonos) alcanzó
+en la partición de validación una precisión del 57,7\,\%, una exhaustividad del
+45,0\,\%, una mAP50 del 48,5\,\% y una mAP50--95 del 44,8\,\%
+(Tabla~\ref{tab:metricas-detector-yolo26}).
+
+Frente a la primera versión, sube la exhaustividad (de 29,9\,\% a 45,0\,\%) y la
+mAP50 (de 39,8\,\% a 48,5\,\%), y baja la precisión (de 79,8\,\% a 57,7\,\%): el
+detector final encuentra más máquinas, pero también señala algunas que no son
+o se equivoca de clase con más frecuencia. La comparación es indicativa y no
+concluyente. Los conjuntos de datos y las particiones son distintos (prueba
+frente a validación) y la validación también sirve para elegir el punto de
+control, lo que favorece a la versión final. Además, la pérdida de
+clasificación en validación es unas diez veces la de entrenamiento, una señal
+habitual de sobreajuste. Lo que sí permiten afirmar estos resultados es que el
+procedimiento completo (anotación, entrenamiento, publicación del servicio y
+consumo desde la aplicación) está construido y es repetible.
+
+Tampoco son comparables con las del clasificador local, que se evaluó con
+validación cruzada sobre fotografías de catálogo de 35 clases y que siempre
+devuelve una máquina, mientras que el detector puede no encontrar ninguna. Con
+la evidencia disponible no puede afirmarse que el detector supere al
+clasificador local; esa comparación exige evaluar ambos con las mismas
+fotografías de un gimnasio real (sección~\ref{sec:amenazas}). La literatura
+sobre detectores de la familia YOLO reporta sus resultados sobre conjuntos de
+referencia de gran tamaño, como COCO (Terven et~al., 2023); el proyecto parte de
+un conjunto propio mucho más pequeño, y el rendimiento limitado que se observa
+es el que cabe esperar en ese régimen.
+
+\subsection{Recomendador de rutinas}
+
+El recomendador reproduce las reglas con una exactitud del 99,8\,\% en datos
+sintéticos y del 97,1\,\% en una cuadrícula exhaustiva de 28\,512 perfiles
+(Tabla~\ref{tab:metricas-rutinas}). Dado que las etiquetas se generaron con las
+mismas reglas, estas cifras miden la fidelidad del modelo y no demuestran que
+sus rutinas sean mejores que las del generador por reglas, cuya base de
+conocimiento se apoya en la literatura de prescripción del entrenamiento de
+fuerza (Kraemer \& Ratamess, 2004). La ventaja práctica del modelo es
+arquitectónica: demuestra la integración de inferencia local en el
+dispositivo con respaldo por reglas.
+
+\section{Discusión}
+\label{sec:discusion}
+
+\subsection{Frente al problema de adherencia}
+
+La introducción parte del abandono temprano en los gimnasios. La evidencia
+revisada indica que menos del 40\,\% de los socios mantiene un ejercicio regular
+a largo plazo (Gjestvang et~al., 2021), por lo que las barreras de orientación,
+estructura y seguimiento que abordan los objetivos específicos son pertinentes.
+Sin embargo, este proyecto no midió si la aplicación mejora la adherencia: la
+hipótesis queda sin contrastar y requiere un estudio con usuarios reales,
+consentimiento informado y un periodo de seguimiento (sección~\ref{sec:recomendaciones}).
+
+\subsection{Frente a la visión artificial para la ejecución de ejercicios}
+
+Silva Amado (2024) propone un sistema de visión artificial que estima la pose
+con MediaPipe, calcula ángulos articulares y los compara con umbrales para
+identificar la ejecución de ejercicios, y lo evalúa de forma cualitativa. Los
+enfoques son complementarios: aquel verifica \emph{cómo} se ejecuta un
+movimiento; el presente trabajo reconoce \emph{con qué máquina} se entrena,
+genera la rutina y registra el progreso, y aporta métricas cuantitativas
+reproducibles. En consecuencia, la instrucción de la ejecución correcta (OE2)
+se resuelve aquí con contenido guiado y no con verificación automática de la
+postura, que se identifica como línea de trabajo futuro.
+
+\subsection{Sobre la realidad aumentada}
+
+El escáner combina lo real y lo virtual en todos los dispositivos, lo que
+cumple la primera característica de la realidad aumentada descrita por Azuma
+(1997). En los teléfonos compatibles, el módulo \archivo{CoachAR} añade el
+registro en tres dimensiones: una vez reconocida la máquina, la ficha se fija a
+un punto del entorno mediante un ancla de ARCore y se mantiene allí mientras la
+persona camina o gira el teléfono (sección~\ref{subsec:it3}). Ese es un avance
+frente a la versión anterior, que solo superponía la ficha en pantalla. Con todo,
+la afirmación debe acotarse en tres sentidos. Primero, se comprobó su funcionamiento junto con el modelo de reconocimiento
+en un dispositivo físico; esta prueba funcional no permite generalizar el
+resultado a otros equipos ni cuantificar la precisión del anclaje.
+Segundo, el ancla se fija a un punto de una superficie estimado a partir de la
+caja del detector y no a la geometría de la máquina; no corrige errores de
+profundidad ni sigue a la máquina si se desplaza. Tercero, el reconocimiento
+sigue ocurriendo por captura y no de forma continua, así que la interacción en
+tiempo real es parcial. Además, ARCore solo funciona en teléfonos certificados;
+por eso la cámara convencional se mantiene como alternativa. Hasta contar con
+mediciones (error de colocación, pérdidas de seguimiento, modelos de teléfono
+probados), no hay evidencia de que la realidad aumentada mejore la experiencia
+ni la adherencia; la revisión sistemática de Vinolo Gil et~al. (2021), en un
+contexto distinto (fisioterapia), concluye que su eficacia es potencial pero no
+concluyente.
+
+\section{Amenazas a la validez y limitaciones}
+\label{sec:amenazas}
+
+\begin{itemize}
+    \item \textbf{Validez de constructo del reconocedor.} Las 399 fotografías
+    provienen de catálogos y no de gimnasios; el escenario de campo simulado
+    aproxima, pero no reemplaza, las condiciones reales de luz, encuadre y
+    oclusión.
+    \item \textbf{Validez del detector.} Las métricas de la versión final
+    (YOLO26m) se calcularon sobre la partición de validación, que también sirve
+    para elegir el punto de control, y no sobre una partición de prueba
+    independiente; la pérdida de validación, muy superior a la de entrenamiento,
+    sugiere sobreajuste. 
+    La primera versión se evaluó en solo 43 imágenes y 65 cajas, de las cuales 24 pertenecían a una sola clase; varias
+    imágenes parecían series de la misma máquina desde ángulos cercanos. Ninguna
+    versión se midió en un teléfono: no se conoce la latencia del \emph{endpoint},
+    que escala a cero y puede tardar casi un minuto en responder tras un período
+    inactivo (Ultralytics, s.~f.-b). El dispositivo de prueba es uno solo
+    (Tabla~\ref{tab:dispositivo-prueba}), de gama media, y no se probaron otros
+    equipos. El umbral de confianza de 0,8 se calibró
+    para el modelo local y no se recalibró para el detector.
+    \item \textbf{Validación de la realidad aumentada.} Se comprobó el funcionamiento
+    integrado de ARCore y el modelo de reconocimiento en un dispositivo físico.
+    No se realizaron mediciones del error de colocación ni de la latencia. Además, la detección de superficies depende de los rasgos visuales
+    de la escena, por lo que suelos uniformes y espejos de un gimnasio podrían
+    dificultarla (Google for Developers, s.~f.-b).
+    \item \textbf{Dependencia de un servicio externo y su licencia.} El modo en
+    la nube depende de la disponibilidad de Ultralytics Platform. La biblioteca
+    Ultralytics se distribuye con licencia AGPL-3.0 o empresarial (Ultralytics,
+    s.~f.-c), por lo que, si el producto se publica más allá del ámbito
+    académico, habrá que revisar qué licencia corresponde.
+    \item \textbf{Circularidad del recomendador.} Los datos sintéticos están
+    etiquetados por las reglas que el modelo imita; la métrica no evalúa la
+    utilidad para el usuario.
+    \item \textbf{Ausencia de evaluación con usuarios.} No se midieron
+    usabilidad, satisfacción ni adherencia. 
+    \item \textbf{Cobertura de pruebas.} Las pruebas automatizadas cubren la
+    lógica pura, la interpretación de la respuesta del reconocimiento, la
+    geometría de la vista de ARCore y las reglas de seguridad; no cubren la
+    interfaz ni se midieron la latencia y la exactitud de los modelos en un
+    dispositivo físico.
+    \item \textbf{Plataforma y conectividad.} El sistema funciona en Android y
+    requiere conexión a internet; la persistencia sin conexión no está
+    configurada.
+    \item \textbf{Alcance nutricional.} El registro de alimentos se limita al
+    conteo calórico y no sustituye la supervisión de un nutricionista.
+\end{itemize}

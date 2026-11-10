@@ -1,11 +1,14 @@
 % =====================================================================
-%  ANEXO B — Reglas de seguridad de Firebase
+%  ANEXO B — Reglas de seguridad de Firebase (versión mejorada, 27 oct 2026)
+%  Se reproducen las reglas vigentes del repositorio y se resumen las
+%  funciones del servidor que complementan la protección de los datos.
 % =====================================================================
 \chapter{REGLAS DE SEGURIDAD DE FIREBASE}
 \label{anx:reglas}
 
-Este anexo reproduce los archivos de reglas de seguridad del proyecto, tal
-como se publican en la consola de Firebase.
+Este anexo reproduce los archivos de reglas de seguridad vigentes en el
+repositorio del proyecto al 27 de octubre de 2026 y resume las funciones del
+servidor que complementan la protección de los datos.
 
 \section{Reglas de Cloud Firestore}
 
@@ -14,3 +17,35 @@ como se publican en la consola de Firebase.
 \section{Reglas de Cloud Storage}
 
 \lstinputlisting[language=FirestoreRules, basicstyle=\ttfamily\tiny, caption={Archivo \texttt{storage.rules}}, label={lst:storage-rules}]{anexos/codigo/storage.rules}
+
+\section{Funciones del servidor}
+
+La Tabla~\ref{tab:funciones-servidor} resume las dos funciones \emph{callable}
+de Cloud Functions que acompañan a las reglas. Ambas se despliegan en la región
+\texttt{us-central1} con un máximo de cinco instancias, exigen la verificación
+de App Check y rechazan a los usuarios anónimos. Las cuotas se registran en
+documentos de la colección \texttt{\_cuotas}, identificados por un código
+\emph{hash} y de lectura y escritura reservadas al servidor.
+
+\begin{table}[H]
+\centering
+\caption{Funciones del servidor y controles aplicados}
+\label{tab:funciones-servidor}
+\small
+\begin{tabularx}{\textwidth}{|L{2.8cm}|Y|L{4.2cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Función} & \textbf{Propósito} & \textbf{Cuotas} \\
+\hline
+\archivo{buscarAlimentos} & Intermediaria entre la aplicación y USDA FoodData
+Central; la clave de la API se guarda como secreto del servidor y se valida la
+consulta y la respuesta. & 15 por minuto y 120 por hora por usuario; 800 por
+hora en total \\ \hline
+\archivo{guardarRutina} & Única vía para crear o actualizar documentos de
+\texttt{usuarios/\{uid\}/rutinas}; valida el plan completo, toma el propietario de
+la identidad autenticada y conserva las fechas del servidor. & 20 por minuto y
+200 por hora por usuario \\
+\hline
+\end{tabularx}
+\fuente{Archivos \archivo{functions/src/index.mjs} y
+\archivo{functions/src/quota.mjs} del repositorio.}
+\end{table}

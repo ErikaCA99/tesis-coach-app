@@ -1,14 +1,24 @@
+% =====================================================================
+%  CAPÍTULO 1 (versión actualizada). Cambios respecto al original:
+%   - Evidencia de adherencia corregida (Gjestvang et al., 2020/2021).
+%   - Citas narrativas en Antecedentes; BodBot y Leap Fitness Group con
+%     autor y año coherentes con la bibliografía.
+%   - Alcance alineado con el producto final (diario de alimentación, RA
+%     acotada, reconocimiento como sugerencia, sin verificación de postura).
+%   - Justificación en tiempo pasado y sin afirmaciones no sustentadas.
+%   Los objetivos NO se modificaron (están aprobados en el perfil).
+% =====================================================================
 \chapter{INTRODUCCIÓN}
 \label{cap:introduccion}
 
 En la actualidad, la práctica del ejercicio físico en gimnasios ha cobrado gran
-relevancia como parte de un estilo de vida saludable. Sin embargo, diversos
-estudios han evidenciado que una gran parte de los usuarios abandonan sus
-rutinas en los primeros meses, principalmente por la falta de orientación,
-motivación y seguimiento personalizado (Gjestvang, 2020). Esta problemática
-afecta especialmente a los principiantes, quienes enfrentan barreras como el
-desconocimiento del uso correcto de las máquinas, el alto coste de entrenadores
-personales y la ausencia de planificación estructurada.
+relevancia como parte de un estilo de vida saludable. Sin embargo, la evidencia
+indica que menos del 40\,\% de los socios de gimnasios logra mantener un
+ejercicio regular a largo plazo (Gjestvang et~al., 2021), lo que convierte la
+adherencia en un problema relevante. Esta problemática puede afectar
+especialmente a los principiantes, quienes pueden enfrentar barreras como el
+desconocimiento del uso correcto de las máquinas, el alto costo de los
+entrenadores personales y la ausencia de planificación estructurada.
 
 En respuesta a esta necesidad, se han desarrollado diversas soluciones
 tecnológicas que buscan mejorar la experiencia del usuario en el gimnasio, como
@@ -17,60 +27,64 @@ información para rutinas y dietas (Fernández, 2018). No obstante, muchas de
 estas herramientas carecen de personalización profunda y seguimiento
 inteligente.
 
-Este proyecto propone el desarrollo de una aplicación móvil basada en realidad
-aumentada e inteligencia artificial, orientada a guiar a los usuarios en el uso
-correcto de máquinas de ejercicio, planificar rutinas personalizadas y realizar
-un seguimiento del progreso físico. La solución busca democratizar el acceso a
-la orientación profesional, reducir el abandono temprano y fomentar la
-constancia en el entrenamiento físico, utilizando tecnologías modernas como
-React Native, Firebase y TensorFlow Lite.
+Este proyecto propone el desarrollo de una aplicación móvil para Android que
+integra inteligencia artificial y realidad aumentada, entendida como la
+superposición de información digital sobre la imagen en vivo de la cámara que,
+en los teléfonos compatibles con ARCore, se ancla además a un punto del entorno
+(sección~\ref{sec:des-alcance}). La aplicación se orienta a guiar a
+los usuarios en el uso correcto de máquinas de ejercicio, planificar rutinas
+personalizadas y realizar un seguimiento del progreso físico. La solución busca
+ampliar el acceso a una orientación básica y estructurada, sin sustituir al
+profesional, y fomentar la constancia en el entrenamiento físico, utilizando
+tecnologías modernas como React Native, Firebase, TensorFlow Lite, ARCore y
+modelos de detección de la familia YOLO.
 
 Con esto, se pretende contribuir no solo al bienestar individual, sino también
 a la optimización de recursos en gimnasios, ofreciendo una herramienta
-accesible, interactiva y eficaz para la autogestión del entrenamiento.
+accesible, interactiva y orientada a la autogestión del entrenamiento.
 
 % =====================================================================
 \section{Antecedentes}
 \label{sec:antecedentes}
 
-(Yépez, 2017) en su proyecto de grado cuyo objetivo principal es la creación de
-un gimnasio que combine asesoramiento presencial y virtual, orientado a la nueva
-disciplina llamada Street Workout, que consiste en utilizar el propio peso
-corporal para ejercitarse.
+Yépez (2017) presentó un proyecto de grado cuyo objetivo principal es la
+creación de un gimnasio que combine asesoramiento presencial y virtual,
+orientado a la disciplina llamada Street Workout, que consiste en utilizar el
+propio peso corporal para ejercitarse.
 
-(Gjestvang, 2020) se realizó un estudio longitudinal en Noruega con el objetivo
-de identificar las principales barreras en la iniciación y adherencia al
-ejercicio en gimnasios. El proyecto evidenció que entre el 40\,\% y el 65\,\% de
-los nuevos usuarios abandonan la asistencia regular en los primeros meses,
-principalmente por la falta de motivación, orientación adecuada y seguimiento
-personalizado. Estos resultados destacan la importancia de diseñar
-herramientas tecnológicas que fortalezcan la adherencia a programas de
+Gjestvang et~al. (2020) realizaron un estudio longitudinal de un año, con
+nuevos socios de centros de fitness en Noruega, para identificar los motivos y
+las barreras en la iniciación y la adherencia al ejercicio en gimnasios.
+Investigaciones del mismo grupo señalan que menos del 40\,\% de los socios
+mantiene un ejercicio regular a largo plazo, aunque pocos cancelan su
+membresía (13,4\,\% a los 12 meses) (Gjestvang et~al., 2021). Estos datos
+describen un problema de adherencia más que de abandono formal, y justifican
+explorar herramientas tecnológicas que apoyen la constancia en programas de
 ejercicio estructurados.
 
-(Cruz, 2024) desarrolló un proyecto de grado desarrollado en la Universidad
-Mayor de San Simón, una aplicación móvil para gimnasios que utiliza escaneo de
-código QR con realidad aumentada para mejorar la experiencia de los usuarios y
-la gestión de entrenamientos, que permite a los usuarios obtener instrucciones
-detalladas en tiempo real sobre los ejercicios.
+Cruz (2024) desarrolló, como proyecto de grado en la Universidad Mayor de San
+Simón, una aplicación móvil para gimnasios que utiliza escaneo de código QR con
+realidad aumentada para mejorar la experiencia de los usuarios y la gestión de
+entrenamientos, y que permite obtener instrucciones detalladas en tiempo real
+sobre los ejercicios.
 
-(Fernandez, 2018) en su proyecto de grado desarrolló un sistema de información
+Fernández (2018), en su proyecto de grado, desarrolló un sistema de información
 cuyo objetivo principal es brindar apoyo a los usuarios o clientes de los
-gimnasios, proporcionándoles rutinas de ejercicios y dietas, para que sirva de
-guía sobre cómo usar las máquinas y como administrar sus alimentos para obtener
-el objetivo deseado.
+gimnasios, proporcionándoles rutinas de ejercicios y dietas, como guía sobre
+cómo usar las máquinas y administrar sus alimentos para alcanzar el objetivo
+deseado.
 
-(BodBot IA Entrenador Personal, 2016) es una plataforma de fitness avanzada
-creada por Edward Laux, Jason Storm y Sergio Prado, que ofrece entrenamientos de
-IA personalizados según los objetivos, equipos, capacidades físicas y
-dificultad del usuario, esta plataforma proporciona una guía paso a paso para
-cada ejercicio, contiene personalización de peso corporal y registro de
-alimentación diario.
+BodBot, creada por Laux et~al. (2016), es una plataforma de fitness que ofrece
+entrenamientos con inteligencia artificial personalizados según los objetivos,
+equipos, capacidades físicas y dificultad del usuario; proporciona una guía paso
+a paso para cada ejercicio, personalización por peso corporal y registro diario
+de alimentación.
 
-(Ejercicios en el Gimnasio, 2021) desarrollada por Leap Fitness Group, es una
-plataforma fitness para principiantes y asiduos al gimnasio, que funciona como
-un entrenador personalizado, creando rutinas, mostrando la postura correcta para
-realizar ejercicios esto por medio de instrucciones visuales y literales
-explícitas, siguiendo el progreso con estadísticas y gráficos claros.
+Ejercicios en el Gimnasio, desarrollada por Leap Fitness Group (2021), es una
+aplicación para principiantes y asiduos al gimnasio que funciona como un
+entrenador personalizado: crea rutinas, muestra la postura correcta de los
+ejercicios mediante instrucciones visuales y escritas, y registra el progreso
+con estadísticas y gráficos.
 
 % =====================================================================
 \section{Análisis del problema}
@@ -78,33 +92,37 @@ explícitas, siguiendo el progreso con estadísticas y gráficos claros.
 
 \subsection{Descripción del problema}
 
-Este proyecto surge para resolver las principales barreras que los usuarios de
-gimnasios enfrentan, particularmente la falta de orientación adecuada y la falta
-de estructura en sus entrenamientos. (Gjestvang, 2020) Estudios demuestran que
-entre el 40\,\% y el 65\,\% de los nuevos usuarios abandonan el gimnasio en los
-primeros meses, principalmente por la falta de guía y seguimiento
-personalizado. Los principales problemas identificados incluyen:
+Este proyecto surge para atender barreras que los usuarios de gimnasios pueden
+enfrentar, particularmente la falta de orientación sobre el uso de las máquinas
+y la falta de estructura en sus entrenamientos. La evidencia disponible
+describe una adherencia baja a largo plazo: menos del 40\,\% de los socios
+mantiene un ejercicio regular (Gjestvang et~al., 2021). Los problemas que el
+proyecto se propone atender son:
 
 \begin{itemize}
     \item \textbf{Falta de conocimiento sobre el uso adecuado de las máquinas y
-    la postura correcta:} Esto lleva a errores que pueden causar lesiones y
-    dificultar el progreso hacia los objetivos físicos.
+    la postura correcta:} Esto puede llevar a errores que causen lesiones y
+    dificulten el progreso hacia los objetivos físicos.
     \item \textbf{Costo elevado de los entrenadores personales:} Muchas personas
     no pueden acceder a una guía profesional debido al costo asociado, lo cual
-    deja a la mayoría sin un apoyo adecuado.
+    puede dejar a muchos usuarios sin un apoyo adecuado.
     \item \textbf{Falta de seguimiento del progreso:} La falta de un sistema para
-    registrar y analizar el progreso personal desmotiva a los usuarios, ya que
-    no tienen una forma clara de visualizar sus avances.
+    registrar y analizar el progreso personal puede desmotivar a los usuarios,
+    ya que no tienen una forma clara de visualizar sus avances.
     \item \textbf{Carencia de planificación estructurada del entrenamiento:} Sin
-    una rutina clara y bien planificada, muchos usuarios se sienten perdidos y no
-    logran aprovechar el tiempo de entrenamiento, lo cual fomenta la
-    desmotivación y el abandono.
+    una rutina clara y bien planificada, muchos usuarios pueden sentirse
+    perdidos y no aprovechar el tiempo de entrenamiento, lo cual puede fomentar
+    la desmotivación.
 \end{itemize}
+
+Estas barreras se plantean como hipótesis de trabajo de la autora; el efecto de
+la aplicación sobre la adherencia no fue evaluado en este proyecto
+(sección~\ref{sec:amenazas}).
 
 \subsection{Definición del problema}
 
-¿Cómo desarrollar una aplicación para gimnasios que ofrezca seguimiento rutinas
-de ejercicio personalizadas con Inteligencia artificial?
+¿Cómo desarrollar una aplicación para gimnasios que ofrezca seguimiento y
+rutinas de ejercicio personalizadas con inteligencia artificial?
 
 % =====================================================================
 \section{Objetivos}
@@ -149,8 +167,19 @@ ejercicios.
     \item Guía sobre el uso correcto de máquinas de gimnasio.
     \item Registrar el progreso físico (peso, estatura, edad, masa corporal).
     \item Creación de rutinas personalizadas según los objetivos del usuario.
-    \item El registro de alimentación se limitará solo al conteo calórico, es
-    decir una calculadora de IMC.
+    \item El registro de alimentación comprende un diario con conteo calórico y
+    de macronutrientes por porción, apoyado en USDA FoodData Central (U.S. Department of Agriculture,
+    Agricultural Research Service [USDA ARS], s.~f.), y una
+    calculadora de IMC; no constituye asesoría nutricional.
+    \item La realidad aumentada superpone la ficha de la máquina sobre la
+    imagen de la cámara y, en los teléfonos compatibles con ARCore, la ancla a
+    un punto del entorno; el ancla no sigue a la máquina si esta se mueve y el
+    reconocimiento ocurre por captura, no de forma continua.
+    \item El reconocimiento de la máquina por imagen es una sugerencia: solo se
+    acepta automáticamente con una confianza de al menos 0,8 y, en los demás
+    casos, el usuario la confirma.
+    \item El sistema no verifica automáticamente la postura del usuario durante
+    la ejecución de los ejercicios.
     \item El sistema no reemplaza la supervisión profesional de entrenadores o
     nutricionistas.
     \item No se contempla la integración con dispositivos externos (smartwatch,
@@ -158,7 +187,9 @@ ejercicios.
     \item El sistema funcionará con conexión a internet.
     \item La aplicación será para dispositivos móviles Android.
     \item El sistema estará disponible únicamente en idioma español.
-    \item La aplicación requerirá permisos de acceso a la cámara y almacenamiento del dispositivo para el registro de progresos y la visualización de ejercicios.
+    \item La aplicación requerirá permisos de acceso a la cámara y almacenamiento
+    del dispositivo para el registro de progresos y la visualización de
+    ejercicios.
 \end{itemize}
 
 % =====================================================================
@@ -168,47 +199,51 @@ ejercicios.
 \subsection{Justificación técnica}
 
 El proyecto es técnicamente viable gracias a la combinación de tecnologías
-modernas y flexibles. Se empleará React Native con Expo para garantizar una
-experiencia fluida en dispositivos Android, permitiendo un desarrollo
-multiplataforma con una sola base de código.
+modernas y flexibles. Se empleó React Native con Expo y TypeScript para
+desarrollar una aplicación Android con una sola base de código, que permite
+una futura extensión a otras plataformas.
 
-La base de datos y autenticación estarán gestionadas por Firebase, lo que
-asegura escalabilidad, sincronización en tiempo real y seguridad en el manejo de
-datos de usuarios.
+La autenticación, la base de datos y el almacenamiento se gestionaron con
+Firebase, lo que aporta escalabilidad, sincronización en tiempo real y reglas de
+seguridad por usuario. Las consultas a servicios externos se canalizan mediante
+Cloud Functions protegidas con App Check, de modo que las claves de las
+interfaces externas no se incluyen en la aplicación.
 
-El componente de inteligencia artificial se implementará para generar rutinas
-personalizadas, basándose en parámetros como peso, altura, edad, nivel de
-experiencia y objetivos físicos. Este módulo podrá entrenarse mediante modelos
-preexistentes o redes neuronales ligeras optimizadas para dispositivos móviles.
+El componente de inteligencia artificial comprende dos modelos de TensorFlow
+Lite que se ejecutan en el dispositivo: un recomendador de rutinas, que aprende
+las reglas de prescripción del entrenamiento, y un clasificador de máquinas por
+imagen. Ambos cuentan con respaldo por reglas o confirmación del usuario cuando
+su confianza es baja. Como alternativa opcional, un detector de la familia
+YOLO publicado en Ultralytics Platform reconoce la máquina y devuelve su
+posición en la imagen; con esa posición, un módulo propio basado en ARCore fija
+la información de la máquina en el entorno real.
 
-Además, se integrará un sistema de visualización interactiva con imágenes o
-animaciones que muestran la postura correcta en cada ejercicio, lo cual aumenta
-la comprensión y reduce el riesgo de lesiones.
+Además, se integró una guía visual con imágenes y animaciones de ejecución que
+muestran cómo realizar cada ejercicio, lo cual favorece la comprensión de la
+técnica.
 
-En conjunto, estas tecnologías garantizan un sistema robusto, escalable y con
-potencial de expansión futura.
+En conjunto, estas tecnologías permiten un sistema funcional y con potencial de
+expansión futura.
 
 \subsection{Justificación económica}
 
 La aplicación representa una alternativa de bajo costo frente a los servicios
 tradicionales de entrenamiento personalizado. Al automatizar la generación de
-rutinas mediante inteligencia artificial, se reducen los costos asociados a la
-contratación de entrenadores físicos, permitiendo que los usuarios obtengan
-orientación profesional sin incurrir en gastos adicionales.
+rutinas, ofrece orientación básica y estructurada sin los costos de contratar
+un entrenador, aunque no sustituye la supervisión profesional.
 
-Para los gimnasios, la herramienta puede convertirse en un complemento
-estratégico que optimice el tiempo de los entrenadores y mejore la retención de
-clientes, al ofrecerles una plataforma moderna de autogestión del
-entrenamiento. Asimismo, el desarrollo de esta aplicación se apoya en
-tecnologías de código abierto (React Native, Firebase, TensorFlow Lite, etc.),
-lo que disminuye considerablemente los costos de desarrollo y mantenimiento del
-sistema.
+Para los gimnasios, la herramienta puede convertirse en un complemento que
+optimice el tiempo de los entrenadores y facilite la autogestión del
+entrenamiento de los usuarios. Asimismo, el desarrollo se apoya en tecnologías
+de código abierto (React Native, Expo, TensorFlow Lite) y en servicios en la
+nube cuyo costo depende del uso (Firebase, Ultralytics Platform), lo que reduce los costos iniciales
+de desarrollo y mantenimiento.
 
 \subsection{Justificación social}
 
-Este proyecto busca eliminar las barreras que limitan la práctica constante del
-ejercicio físico, ofreciendo orientación y motivación a través de la tecnología.
-Está dirigido principalmente a usuarios principiantes o personas que no tienen
-acceso a un entrenador personal. Contribuye a la promoción de un estilo de vida
-saludable, fomenta la constancia y previene lesiones al enseñar el uso correcto
-de las máquinas.
+Este proyecto busca reducir las barreras que limitan la práctica constante del
+ejercicio físico, ofreciendo orientación y seguimiento a través de la
+tecnología. Está dirigido principalmente a usuarios principiantes o personas
+que no tienen acceso a un entrenador personal. Contribuye a la promoción de un
+estilo de vida saludable, apoya la constancia y ayuda a reducir el riesgo de
+lesiones al explicar el uso correcto de las máquinas.

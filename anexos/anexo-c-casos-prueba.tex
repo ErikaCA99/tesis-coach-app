@@ -1,3 +1,5 @@
+% MEJORADO (27 oct 2026): encabezado del escáner, CP-30 (función buscarAlimentos) y CP-41 (PDF).
+% ACTUALIZADO (3 nov 2026): CP-42 a CP-44 (reconocimiento en la nube y ARCore).
 % =====================================================================
 %  ANEXO C — Casos de prueba funcionales
 % =====================================================================
@@ -5,7 +7,8 @@
 \label{anx:casos}
 
 Los casos de prueba se ejecutan sobre el \emph{development build} instalado
-en un dispositivo Android, con una cuenta de prueba y el catálogo de máquinas
+en el dispositivo de prueba (Infinix HOT 50 Pro+,
+Tabla~\ref{tab:dispositivo-prueba}), con una cuenta de prueba y el catálogo de máquinas
 cargado en Firestore. En la columna \emph{Resultado} se registra si el caso
 pasa o falla.
 
@@ -67,7 +70,7 @@ CP-14 & 2.3 & En la ficha, revisar la sección de ejercicios. & Cada ejercicio
 muestra su animación, músculo objetivo y dificultad. & \cpres \\ \hline
 CP-15 & 2.2 & Revisar la galería de variantes de una ficha. & Se muestran
 hasta ocho modelos comerciales. & \cpres \\ \hline
-\multicolumn{5}{|l|}{\textbf{Escáner con realidad aumentada}}\\ \hline
+\multicolumn{5}{|l|}{\textbf{Escáner con superposición de información}}\\ \hline
 CP-16 & 2.4 & Abrir el escáner y negar el permiso de la cámara. & Se muestra
 el aviso del permiso; no se activa la cámara. & \cpres \\ \hline
 CP-17 & 2.4 & Conceder el permiso y capturar una máquina. & Pasa por
@@ -107,7 +110,8 @@ validación; no se calcula. & \cpres \\ \hline
 CP-29 & 4.1 & Realizar un cálculo y revisar el historial. & El cálculo queda
 registrado. & \cpres \\ \hline
 CP-30 & 5.1 & Buscar ``pollo'', elegir un resultado e ingresar 150~g. & Se
-listan alimentos; la vista previa y el registro muestran los mismos valores. &
+listan alimentos (consulta mediante la función \texttt{buscarAlimentos}); la
+vista previa y el registro muestran los mismos valores. &
 \cpres \\ \hline
 CP-31 & 5.2 & Tocar un alimento rápido (por ejemplo, ``Huevo''). & Se agrega
 al día con sus calorías y macronutrientes. & \cpres \\ \hline
@@ -130,7 +134,28 @@ desmarcarlo. & Un solo registro por fecha; al desmarcar desaparece. & \cpres \\
 CP-39 & 6.2 & Marcar entrenamientos en días consecutivos. & Racha, días de la
 semana (lunes a domingo) y total se actualizan. & \cpres \\ \hline
 CP-40 & 6.2 & Abrir el inicio con una rutina activa. & Muestra la rutina, sus
-ejercicios, días por semana y registros de peso. & \cpres \\
+ejercicios, días por semana y registros de peso. & \cpres \\ \hline
+CP-41 & 6.1 & Generar el reporte en PDF para 7 días, 30 días, 90 días y todo
+el historial, y compartirlo. & Se genera un PDF con perfil, peso, entrenamientos
+y alimentación frente a la meta; se abre el menú para compartirlo. & Pasa \\
+\hline
+\multicolumn{5}{|l|}{\textbf{Reconocimiento en la nube y realidad aumentada (ARCore)}}\\ \hline
+CP-42 & 2.4 & Con el reconocimiento en la nube activo, capturar una máquina con
+conexión; repetir sin conexión y con una imagen que no sea una máquina. & Con
+conexión se proponen hasta tres candidatas con su caja; sin conexión se usa el
+modelo local sin cerrar el escáner; si no se reconoce ninguna máquina del
+catálogo se abre la selección manual. & \cpres \\ \hline
+CP-43 & 2.4 & En un teléfono compatible con ARCore, mover lentamente el teléfono,
+capturar una máquina y confirmar una candidata; caminar de lado y girar el
+teléfono mientras la imagen se analiza. & La etiqueta con el nombre y la
+instrucción queda junto al punto colocado, usa la dirección original de la
+captura y se oculta al salir del encuadre. & \cpres \\ \hline
+CP-44 & 2.4 & Probar una escena sin superficie detectable, ``Recolocar
+información'', ``Escanear otra'', volver atrás, pasar a segundo plano, poca luz,
+cámara denegada y un teléfono sin ARCore. & Sin superficie se pide tocar una
+junto a la máquina; no reaparecen fichas ni respuestas de capturas anteriores;
+sin ARCore o sin cámara se ofrece la cámara convencional o el catálogo. &
+\cpres \\
 \hline
 \end{longtable}
 }

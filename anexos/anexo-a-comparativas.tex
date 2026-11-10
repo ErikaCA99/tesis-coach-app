@@ -78,6 +78,16 @@ intervención de los usuarios. &
 \end{longtable}
 }
 
+\conclusion{De acuerdo al análisis comparativo presentado en la
+Tabla~\ref{tab:metodologias-tradicionales}, se concluye que la principal
+diferencia entre las metodologías tradicionales radica en su tolerancia al
+cambio y la gestión de riesgo. Mientras que el modelo cascada prioriza una
+estructura secuencial y rígida, los modelos espiral, incremental y prototipado
+introducen cambios iterativos que permiten la validación progresiva del
+usuario. Por lo tanto, estas metodologías son más aptas para proyectos con
+requerimientos claros, estables que no cambiaran con el tiempo.}
+
+
 {\small
 \begin{longtable}{|L{2.4cm}|L{7.05cm}|L{5.2cm}|}
 \hline
@@ -125,7 +135,7 @@ constante e integración continua (Beck \& Andres, 2005). &
 \textbf{Mobile-D} & Es una metodología ágil para el desarrollo de aplicaciones
 móviles para equipos pequeños, está centrada en ciclos de desarrollo rápidos y
 entrega continua. Combina prácticas ágiles con procesos orientados al hardware
-y ciclos muy cortos de entrega (Abrahamsson, y otros, 2004). &
+y ciclos muy cortos de entrega (Abrahamsson et~al., 2004). &
 \begin{tablista}
   \item Diseñada para desarrollo móvil.
   \item Iteraciones rápidas.
@@ -137,7 +147,7 @@ y ciclos muy cortos de entrega (Abrahamsson, y otros, 2004). &
 automóviles Toyota. Consiste en dividir las tareas en porciones mínimas y
 organizarlas en un tablero de trabajo dividido en tareas pendientes, en curso y
 finalizadas. De esta forma se crea un flujo de trabajo muy visual basado en
-tareas prioritarias e incrementando el valor del producto (Santander, 2020). &
+tareas prioritarias e incrementando el valor del producto (Santander Open Academy, 2020). &
 \begin{tablista}
   \item Visualización del trabajo.
   \item Límite de trabajo en curso.
@@ -146,9 +156,15 @@ tareas prioritarias e incrementando el valor del producto (Santander, 2020). &
   \item Fácil implementación en equipos individuales.
   \item Gestión visual del trabajo.
 \end{tablista} \\ \hline
-\caption[Comparación de metodologías ágiles móviles]{Comparación de metodologías ágiles móviles. \textit{Fuente:} Elaboración propia a partir de (Schwaber \& Sutherland, 2020); (Beck \& Andres, 2005); (Santander, 2020); (Abrahamsson, y otros, 2004).}\label{tab:metodologias-agiles}\\
+\caption[Comparación de metodologías ágiles móviles]{Comparación de metodologías ágiles móviles. \textit{Fuente:} Elaboración propia a partir de Abrahamsson et~al. (2004), Beck y Andres (2005), Santander Open Academy (2020) y Schwaber y Sutherland (2020).}\label{tab:metodologias-agiles}\\
 \end{longtable}
 }
+
+\conclusion{De acuerdo con la Tabla~\ref{tab:metodologias-agiles}, todas las metodologías ágiles comparten principios
+como la flexibilidad y la entrega continua, sin embargo, la metodología
+Mobile-D es la más adecuada para proyectos móviles por su rapidez, sus
+iteraciones cortas y su adaptación a las particularidades del hardware.}
+
 
 {\small
 \begin{longtable}{|L{3.6cm}|L{5.75cm}|L{5.3cm}|}
@@ -170,8 +186,8 @@ tareas prioritarias e incrementando el valor del producto (Santander, 2020). &
 \textbf{Entorno de desarrollo} & Android Studio & Xcode \\ \hline
 \textbf{Arquitectura del sistema} & Basada en kernel Linux + HAL + Runtime ART
 & Basada en kernel XNU + frameworks de alto nivel \\ \hline
-\textbf{Presencia en el mercado boliviano} & 90.74\,\% (Global, 2025) &
-8.7\,\% (Global, 2025) \\ \hline
+\textbf{Presencia en el mercado boliviano} & 90.74\,\% (StatCounter Global Stats, 2025) &
+8.7\,\% (StatCounter Global Stats, 2025) \\ \hline
 \textbf{Diseño} & Diseños flexibles, personalizado, colorido, adaptable a
 muchas marcas y dispositivos. & Diseño minimalista, elegante, limpio y
 extremadamente consistente. \\ \hline
@@ -180,7 +196,7 @@ launchers personalizados, permite utilizar paquetes de temas, ajustar el panel
 de configuración rápida y modificar el comportamiento de aplicaciones
 predeterminadas (Gironés, 2012). & Su personalización es limitada, prioriza la
 simplicidad, estabilidad y coherencia visual, lo que reduce riesgos de
-incompatibilidad (Apple, 2023). \\ \hline
+incompatibilidad (Apple Inc., 2023). \\ \hline
 \textbf{Fragmentación} & Samsung, Huawei, Xiaomi, Motorola, Sony. & Exclusivo
 para dispositivos Apple (iPhone, iPad). \\ \hline
 \textbf{Distribución de Apps} & Play Store y permite instalación manual
@@ -189,6 +205,12 @@ para dispositivos Apple (iPhone, iPad). \\ \hline
 \caption[Comparación de Android vs iOS]{Comparación de Android vs iOS. \textit{Fuente:} Elaboración propia.}\label{tab:android-ios}\\
 \end{longtable}
 }
+
+\conclusion{De acuerdo con la Tabla~\ref{tab:android-ios}, Android destaca por su capacidad de adaptabilidad, y
+su compatibilidad con distintos lenguajes de programación, lo que lo hace más
+versátil; su flexibilidad y escalabilidad lo hacen la plataforma idónea para el
+desarrollo de una aplicación móvil.}
+
 
 {\small
 \begin{longtable}{|L{2.2cm}|L{5.55cm}|L{3.8cm}|L{2.7cm}|}
@@ -218,7 +240,7 @@ interacciona el usuario) (Deloitte, 2019). &
 Alto rendimiento. Reutilización de código. Amplia compatibilidad. \\
 \hline
 Flutter & Es un framework de código abierto de Google basado en Dart con motor
-de render propio (Flutter, s.f.). &
+de render propio (Flutter, s.~f.). &
 \begin{tablista}
   \item Widgets personalizables.
   \item Animaciones.
@@ -229,8 +251,7 @@ UI consistente. Excelente rendimiento gráfico. \\
 Ionic & Ionic es un framework híbrido basado en tecnologías web (HTML, CSS,
 JavaScript) que funciona mediante WebView. Permite construir aplicaciones con
 enfoques multiplataforma usando Angular, React o Vue. Es especialmente útil
-para aplicaciones orientadas a contenidos web o prototipado rápido (Ionic
-Documentation, 2023). &
+para aplicaciones orientadas a contenidos web o prototipado rápido (Ionic, 2023). &
 \begin{tablista}
   \item Multi-framework.
   \item Amplia colección de componentes UI.
@@ -261,9 +282,16 @@ modernas (Android Developers, 2024). &
   \item Animaciones avanzadas.
 \end{tablista} &
 Rendimiento máximo. Control total del sistema. \\ \hline
-\caption[Comparación de frameworks de desarrollo Mobile]{Comparación de frameworks de desarrollo Mobile. \textit{Fuente:} Elaboración propia basada en (Deloitte, 2019); (Flutter, s.f.); (Android Developers, 2024); (Microsoft, 2022).}\label{tab:frameworks}\\
+\caption[Comparación de frameworks de desarrollo Mobile]{Comparación de frameworks de desarrollo Mobile. \textit{Fuente:} Elaboración propia a partir de Android Developers (2024), Deloitte (2019), Flutter (s.~f.) y Microsoft (2022).}\label{tab:frameworks}\\
 \end{longtable}
 }
+
+\conclusion{De acuerdo con la Tabla~\ref{tab:frameworks}, React Native destaca frente a los demás frameworks
+debido a su equilibrio entre rendimiento y desarrollo multiplataforma, su
+capacidad de generar componentes nativos le da mayor fluidez a diferencia de
+Ionic y Flutter. Así también, permite desarrollar aplicaciones de forma
+eficiente y se adapta al entorno de Android.}
+
 
 {\small
 \begin{longtable}{|L{2.1cm}|L{5.45cm}|L{3.5cm}|L{3.2cm}|}
@@ -316,7 +344,7 @@ en la mayoría de las computadoras, es de código abierto (SQLite Consortium,
 MongoDB Atlas & Es un servicio de base de datos multicloud, simplifica la
 implementación y gestión de bases de datos. Permite manejar grandes volúmenes
 de datos, consultas avanzadas y procesamiento en la nube con altos niveles de
-seguridad y escalabilidad (MongoDB, 2024) (Huang, 2020). &
+seguridad y escalabilidad (Huang, 2020; MongoDB, Inc., 2024). &
 \begin{tablista}
   \item Ligero.
   \item Transaccional.
@@ -333,8 +361,7 @@ MySQL & MySQL es un sistema de gestión de bases de datos relacional (RDBMS) de
 código abierto ampliamente utilizado en aplicaciones web y móviles.
 Originalmente desarrollado por MySQL AB y actualmente mantenido por Oracle
 Corporation, MySQL se ha consolidado como una solución flexible, rápida y
-confiable para gestionar datos estructurados (DuBois, 2013); (Corporation,
-2024). &
+confiable para gestionar datos estructurados (DuBois, 2013; Oracle Corporation, 2024). &
 \begin{tablista}
   \item Lenguaje SQL para definición y manipulación de datos.
   \item Soporte para múltiples motores de almacenamiento.
@@ -363,7 +390,9 @@ tipos de datos personalizados. &
   \item Rendimiento estable.
   \item Perfecto para aplicaciones móviles.
 \end{tablista} \\ \hline
-\caption[Comparación de bases de datos para aplicaciones móviles]{Comparación de bases de datos para aplicaciones móviles. \textit{Fuente:} Elaboración basada en (Corporation, 2024); (Huang, 2020); (MongoDB, 2024).}\label{tab:bases-datos}\\
+\caption[Comparación de bases de datos para aplicaciones móviles]{Comparación de bases de datos para aplicaciones móviles. \textit{Fuente:} Elaboración propia a partir de Huang (2020), MongoDB, Inc. (2024) y Oracle Corporation (2024).}\label{tab:bases-datos}\\
 \end{longtable}
 }
 
+\conclusion{De acuerdo con la Tabla~\ref{tab:bases-datos}, Firebase Firestore es la mejor alternativa, por su
+arquitectura NoSQL, reduce la complejidad del Backend y es escalable.}

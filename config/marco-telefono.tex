@@ -1,0 +1,86 @@
+% =====================================================================
+%  CAPTURAS CON MARCO DE TELÉFONO
+%  Cargar DESPUÉS de config/comandos.tex (redefine \captura, \imagencaptura
+%  y \capturados para que todas las capturas salgan dentro de un teléfono).
+%  Para desactivar el marco sin tocar nada más:
+%      \renewcommand{\marcotelefono}[1]{#1}
+% =====================================================================
+% Marco de teléfono alrededor de una captura de pantalla.
+%   \marcotelefono{\includegraphics[...]{...}}
+% Dibuja un borde oscuro redondeado, cámara frontal y botones laterales.
+% Para volver a capturas sin marco: \renewcommand{\marcotelefono}[1]{#1}
+\newcommand{\marcotelefono}[1]{%
+  \begin{tikzpicture}[baseline=(bajo)]
+    \node[inner sep=0pt] (img) {#1};
+    \coordinate (bajo) at ([yshift=-9pt]img.south);
+    % Botones laterales (detrás del cuerpo)
+    \fill[black!70, rounded corners=0.6pt]
+      ([shift={(3.5pt,-1pt)}]$(img.north east)!0.62!(img.south east)$) rectangle ++(1.6pt,-26pt);
+    \fill[black!70, rounded corners=0.6pt]
+      ([shift={(3.5pt,-1pt)}]$(img.north east)!0.30!(img.south east)$) rectangle ++(1.6pt,-12pt);
+    % Marco: anillo entre el contorno exterior y la pantalla (oculta las esquinas)
+    \path[fill=black!85, even odd rule]
+      [rounded corners=13pt]
+        ([shift={(-4pt,-9pt)}]img.south west) rectangle ([shift={(4pt,9pt)}]img.north east)
+      [rounded corners=8pt]
+        (img.south west) rectangle (img.north east);
+    % Altavoz y cámara frontal
+    \fill[black!55, rounded corners=1pt]
+      ([shift={(-9pt,3.2pt)}]img.north) rectangle ++(18pt,2pt);
+    \fill[black!45] ([shift={(15pt,4.2pt)}]img.north) circle (1.6pt);
+    % Barra inferior de inicio
+    \fill[black!55, rounded corners=1pt]
+      ([shift={(-10pt,-6.2pt)}]img.south) rectangle ++(20pt,2pt);
+  \end{tikzpicture}}
+
+\newcommand{\incluircaptura}[2]{%
+  \IfFileExists{figuras/capturas/#1.png}{%
+    \marcotelefono{\includegraphics[height=#2]{figuras/capturas/#1.png}}}{%
+  \IfFileExists{figuras/capturas/#1.jpg}{%
+    \marcotelefono{\includegraphics[height=#2]{figuras/capturas/#1.jpg}}}{%
+    \fbox{\parbox[c][0.30\textheight][c]{0.32\textwidth}{\centering\small
+      Captura de pantalla\\[4pt]\texttt{\scriptsize figuras/capturas/}\\\texttt{\scriptsize\detokenize{#1}.png}}}}}}
+
+\renewcommand{\captura}[3]{%
+  \begin{figure}[H]
+    \centering
+    \incluircaptura{#1}{0.42\textheight}
+    \caption{#2}
+    \label{#3}
+    \fuente{Elaboración propia.}
+  \end{figure}}
+
+\renewcommand{\imagencaptura}[1]{\incluircaptura{#1}{0.36\textheight}}
+\renewcommand{\capturados}[6]{%
+  \begin{figure}[H]
+    \centering
+    \begin{minipage}[t]{0.47\textwidth}\centering
+      \imagencaptura{#1}\\[4pt]{\small (a) #2}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.47\textwidth}\centering
+      \imagencaptura{#3}\\[4pt]{\small (b) #4}
+    \end{minipage}
+    \caption{#5}
+    \label{#6}
+    \fuente{Elaboración propia.}
+  \end{figure}}
+
+
+% Tres capturas lado a lado
+%   \capturatres{arch1}{sub1}{arch2}{sub2}{arch3}{sub3}{Leyenda}{etiqueta}
+\newcommand{\capturatres}[8]{%
+  \begin{figure}[H]
+    \centering
+    \begin{minipage}[t]{0.31\textwidth}\centering
+      \incluircaptura{#1}{0.30\textheight}\\[4pt]{\small (a) #2}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.31\textwidth}\centering
+      \incluircaptura{#3}{0.30\textheight}\\[4pt]{\small (b) #4}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.31\textwidth}\centering
+      \incluircaptura{#5}{0.30\textheight}\\[4pt]{\small (c) #6}
+    \end{minipage}
+    \caption{#7}
+    \label{#8}
+    \fuente{Elaboración propia.}
+  \end{figure}}

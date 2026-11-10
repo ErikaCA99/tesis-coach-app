@@ -1,0 +1,204 @@
+% =====================================================================
+%  Diccionario de datos de Cloud Firestore (coach-app)
+%  Pegar en capitulos/cap4/inicializacion.tex, justo despues de la lista de
+%  decisiones de diseno del modelo de datos y antes de
+%  \subsubsection{Reglas de seguridad}  (o usar \input{capitulos/cap4/diccionario-datos}).
+%  Requiere: tabularx, longtable no necesario; columnas L{}, C{}, Y y \archivo, \fuente.
+% =====================================================================
+\subsubsection{Diccionario de datos}
+\label{subsec:diccionario-datos}
+
+La Figura~\ref{fig:modelo-datos} muestra la estructura general de las
+colecciones. A continuación se detalla cada una: el nombre del campo, su tipo,
+si es obligatorio y la restricción que valida el servidor. Las restricciones
+provienen de las reglas de seguridad de Firestore
+(\archivo{firestore.rules}), que rechazan cualquier campo no declarado, y de
+las entidades de \archivo{models/entities/}. Los campos \archivo{creadoEn} y
+\archivo{actualizadoEn} son de tipo \emph{timestamp} y los genera siempre el
+servidor.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{|L{3.0cm}|L{1.8cm}|C{1.1cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Campo} & \textbf{Tipo} & \textbf{Oblig.} & \textbf{Descripción y restricción} \\
+\hline
+\archivo{nombre} & string & Sí & Nombre del usuario, de 1 a 100 caracteres. \\ \hline
+\archivo{apellidos} & string & No & Hasta 100 caracteres. \\ \hline
+\archivo{email} & string & Sí & Debe coincidir con el correo del token de autenticación; no se puede modificar. \\ \hline
+\archivo{genero} & string & No & \archivo{masculino} o \archivo{femenino}; entrada del modelo de rutinas. \\ \hline
+\archivo{altura} & number & No & Estatura en cm, entre 50 y 300. \\ \hline
+\archivo{pesoActual} & number & No & Peso en kg, entre 10 y 500. \\ \hline
+\archivo{edad} & int & No & Años, entre 14 y 90; entrada del modelo de rutinas. \\ \hline
+\archivo{diasDisponibles} & int & No & Días de entrenamiento por semana, entre 2 y 6. \\ \hline
+\archivo{nivel} & string & No & \archivo{principiante}, \archivo{intermedio} o \archivo{avanzado}. \\ \hline
+\archivo{objetivo} & string & No & \archivo{perder\_peso}, \archivo{ganar\_masa}, \archivo{mantenimiento} o \archivo{resistencia}. \\ \hline
+\archivo{rutinaActivaId} & string o null & No & Identificador de una rutina existente en la subcolección \archivo{rutinas}. \\ \hline
+\archivo{creadoEn} & timestamp & Sí & Fecha de creación del perfil. \\ \hline
+\archivo{actualizadoEn} & timestamp & Sí & Fecha de la última modificación. \\
+\hline
+\end{tabularx}
+\caption{Documento \texttt{usuarios/\{uid\}} (el identificador es el \emph{uid} de Firebase Authentication)}
+\label{tab:dd-usuarios}
+\fuente{Elaboración propia, con base en \archivo{firestore.rules} y \archivo{models/entities/User.ts}.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{|L{3.0cm}|L{1.9cm}|C{1.2cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Campo} & \textbf{Tipo} & \textbf{Oblig.} & \textbf{Descripción y restricción} \\
+\hline
+\archivo{nombre} & string & Sí & Nombre de la rutina. \\ \hline
+\archivo{tipo} & string & Sí & \archivo{ia} (generada por el sistema) o \archivo{personalizada}. \\ \hline
+\archivo{objetivo} & string & No & Objetivo con el que se generó la rutina. \\ \hline
+\archivo{nivel} & string & No & Nivel de experiencia con el que se generó. \\ \hline
+\archivo{diasPorSemana} & int & Sí & Cantidad de días del plan, entre 1 y 7. \\ \hline
+\archivo{planSemanal} & array & Sí & Lista de días de entrenamiento (Tabla~\ref{tab:dd-plan}). \\ \hline
+\archivo{usuarioId} & string & Sí & Propietario; debe coincidir con el \emph{uid} de la ruta. \\ \hline
+\archivo{origenPlan} & string & No & \archivo{modelo} o \archivo{heuristica}; solo en rutinas de tipo \archivo{ia}. \\ \hline
+\archivo{versionModelo} & string & No & Versión del modelo que generó el plan (trazabilidad). \\ \hline
+\archivo{confianzaModelo} & number & No & Confianza del modelo, entre 0 y 1. \\ \hline
+\archivo{creadoEn} & timestamp & Sí & Fecha de creación. \\
+\hline
+\end{tabularx}
+\caption{Documento \texttt{usuarios/\{uid\}/rutinas/\{id\}}}
+\label{tab:dd-rutinas}
+\fuente{Elaboración propia, con base en \archivo{models/entities/Routine.ts}. Solo la función \archivo{guardarRutina} crea y modifica estos documentos.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{|L{3.4cm}|L{2.2cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Campo} & \textbf{Tipo} & \textbf{Descripción} \\
+\hline
+\archivo{dia} & int & Día del plan, de 1 a 7. \\ \hline
+\archivo{enfoque} & string & Grupos musculares del día (por ejemplo, <<Pecho, hombros y brazos>>). \\ \hline
+\archivo{ejercicios} & array & Ejercicios del día, con los campos siguientes. \\ \hline
+\hspace{0.4cm}\archivo{maquinaId} & number & Identificador del ejercicio en wger. \\ \hline
+\hspace{0.4cm}\archivo{maquinaCatalogoId} & string & Identificador en \archivo{maquinas/\{id\}}, si se agregó desde su ficha (opcional). \\ \hline
+\hspace{0.4cm}\archivo{nombre} & string & Nombre del ejercicio. \\ \hline
+\hspace{0.4cm}\archivo{imagenUrl} & string o null & Imagen de referencia. \\ \hline
+\hspace{0.4cm}\archivo{series} & int & Número de series. \\ \hline
+\hspace{0.4cm}\archivo{repeticiones} & int & Repeticiones por serie. \\ \hline
+\hspace{0.4cm}\archivo{descansoSegundos} & int & Descanso entre series, en segundos. \\
+\hline
+\end{tabularx}
+\caption{Estructura del arreglo \texttt{planSemanal} dentro de una rutina}
+\label{tab:dd-plan}
+\fuente{Elaboración propia, con base en \archivo{models/entities/Routine.ts}.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{|L{3.0cm}|L{1.7cm}|L{1.9cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Campo} & \textbf{Tipo} & \textbf{Documento} & \textbf{Descripción y restricción} \\
+\hline
+\archivo{usuarioId} & string & Ambos & Propietario; igual al \emph{uid} de la ruta. \\ \hline
+\archivo{weight} & number & IMC & Peso en kg, entre 10 y 500. \\ \hline
+\archivo{height} & number & IMC & Estatura en cm, entre 50 y 300. \\ \hline
+\archivo{bmi} & number & IMC & Índice de masa corporal, entre 1 y 100. \\ \hline
+\archivo{category} & string & IMC & \archivo{BAJO}, \archivo{NORMALIDAD}, \archivo{SOBREPESO} u \archivo{OBESIDAD}. \\ \hline
+\archivo{alimento} & string & Ingesta & Nombre del alimento, de 1 a 200 caracteres. \\ \hline
+\archivo{calorias} & number & Ingesta & Energía en kcal, entre 0 y 10\,000. \\ \hline
+\archivo{cantidad} & string & Ingesta & Porción registrada (por ejemplo, <<150 g>>); opcional, hasta 100 caracteres. \\ \hline
+\archivo{proteinas}, \archivo{carbohidratos}, \archivo{grasas} & number & Ingesta & Macronutrientes en gramos, entre 0 y 1\,000; opcionales. \\ \hline
+\archivo{fdcId} & int & Ingesta & Identificador del alimento en USDA FoodData Central; opcional. \\ \hline
+\archivo{creadoEn}, \archivo{actualizadoEn} & timestamp & Ambos & Fechas generadas por el servidor. \\
+\hline
+\end{tabularx}
+\caption{Documento \texttt{usuarios/\{uid\}/registrosNutricionales/\{id\}}}
+\label{tab:dd-nutricion}
+\fuente{Elaboración propia, con base en \archivo{firestore.rules} y \archivo{models/entities/NutritionRecord.ts}. Cada documento es una medición de IMC o una ingesta, nunca ambas.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{|L{3.0cm}|L{1.9cm}|C{1.2cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Campo} & \textbf{Tipo} & \textbf{Oblig.} & \textbf{Descripción y restricción} \\
+\hline
+\archivo{usuarioId} & string & Sí & Propietario; igual al \emph{uid} de la ruta. \\ \hline
+\archivo{peso} & number & Sí & Peso corporal en kg, entre 10 y 500. \\ \hline
+\archivo{altura} & number & No & Estatura en cm, entre 50 y 300. \\ \hline
+\archivo{imc} & number & No & Índice de masa corporal calculado en el cliente. \\ \hline
+\archivo{notas} & string & No & Observaciones, hasta 500 caracteres. \\ \hline
+\archivo{creadoEn}, \archivo{actualizadoEn} & timestamp & Sí & Fechas generadas por el servidor. \\
+\hline
+\end{tabularx}
+\caption{Documento \texttt{usuarios/\{uid\}/progresoFisico/\{id\}}}
+\label{tab:dd-progreso}
+\fuente{Elaboración propia, con base en \archivo{models/entities/PhysicalProgress.ts}.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{|L{3.0cm}|L{1.9cm}|C{1.2cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Campo} & \textbf{Tipo} & \textbf{Oblig.} & \textbf{Descripción y restricción} \\
+\hline
+\archivo{usuarioId} & string & Sí & Propietario; igual al \emph{uid} de la ruta. \\ \hline
+\archivo{rutinaId} & string & Sí & Rutina a la que pertenece el día; debe existir. \\ \hline
+\archivo{dia} & int & Sí & Día del plan completado, entre 1 y 7. \\ \hline
+\archivo{fecha} & string & Sí & Fecha de calendario \archivo{AAAA-MM-DD}; es igual al identificador del documento. \\ \hline
+\archivo{creadoEn}, \archivo{actualizadoEn} & timestamp & Sí & Fechas generadas por el servidor. \\
+\hline
+\end{tabularx}
+\caption{Documento \texttt{usuarios/\{uid\}/entrenamientos/\{AAAA-MM-DD\}}}
+\label{tab:dd-entrenamientos}
+\fuente{Elaboración propia, con base en \archivo{models/entities/Workout.ts}.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{|L{4.3cm}|L{2.3cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Campo} & \textbf{Tipo} & \textbf{Descripción} \\
+\hline
+\archivo{nombre}, \archivo{categoria} & string & Nombre de la máquina y su categoría. \\ \hline
+\archivo{tipo} & string & \archivo{maquina}, \archivo{polea}, \archivo{banco-rack} o \archivo{cardio}. \\ \hline
+\archivo{orden} & number & Posición en el listado del catálogo. \\ \hline
+\archivo{descripcion} & string & Descripción general de la máquina. \\ \hline
+\archivo{musculosPrincipales}, \archivo{musculosSecundarios} & array de string & Músculos que trabaja la máquina. \\ \hline
+\archivo{instrucciones} & array de string & Pasos de uso correcto. \\ \hline
+\archivo{erroresComunes} & array de string & Errores frecuentes de postura o ejecución. \\ \hline
+\archivo{prevencionLesiones} & array de string & Recomendaciones para evitar lesiones. \\ \hline
+\archivo{imagenPrincipal}, \archivo{gifPrincipal} & string & Rutas de Cloud Storage de la imagen y del GIF principal. \\ \hline
+\archivo{variantes} & array & Productos reales de la galería: \archivo{nombre}, \archivo{handle} e \archivo{imagen}. \\ \hline
+\archivo{ejercicios} & array & Ejercicios asociados: \archivo{nombre}, \archivo{wgerId}, \archivo{freeExerciseDbId} e \archivo{imagenes}. \\ \hline
+\archivo{ejerciciosGif} & array & Ejercicios con GIF: \archivo{workoutxId}, \archivo{nombre}, \archivo{dificultad}, \archivo{musculoObjetivo}, \archivo{gifPath} e \archivo{imagenPoses}. \\ \hline
+\archivo{wgerIds}, \archivo{workoutxIds} & arrays & Identificadores de las fuentes externas. \\
+\hline
+\end{tabularx}
+\caption{Documento \texttt{maquinas/\{id\}} del catálogo (el identificador es la clase que predice el detector)}
+\label{tab:dd-maquinas}
+\fuente{Elaboración propia, con base en \archivo{models/entities/Machine.ts}. El catálogo lo carga un \emph{script} con el SDK Admin; la aplicación solo lo lee.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{|L{4.4cm}|L{2.7cm}|L{2.7cm}|Y|}
+\hline
+\rowcolor{encabezado} \textbf{Colección} & \textbf{Lectura} & \textbf{Escritura} & \textbf{Observación} \\
+\hline
+\archivo{usuarios/\{uid\}} & Solo el propietario & Solo el propietario & El correo no se puede cambiar. \\ \hline
+\archivo{rutinas} & Solo el propietario & Solo el servidor & Función \archivo{guardarRutina}. \\ \hline
+\archivo{registrosNutricionales}, \archivo{progresoFisico}, \archivo{entrenamientos} & Solo el propietario & Solo el propietario & Los campos se validan en las reglas. \\ \hline
+\archivo{maquinas}, \archivo{ejercicios}, \archivo{ejerciciosWger} & Usuario autenticado & Solo el servidor & Los listados se limitan a 500 documentos. \\ \hline
+\archivo{\_cuotas} & Nadie (cliente) & Solo el servidor & Límites de uso de las funciones; guarda identificadores con \emph{hash}. \\
+\hline
+\end{tabularx}
+\caption{Permisos de acceso por colección}
+\label{tab:dd-permisos}
+\fuente{Elaboración propia, con base en \archivo{firestore.rules}.}
+\end{table}

@@ -1,0 +1,138 @@
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    font=\footnotesize,
+    nvCaja/.style={draw=blue!65!black, fill=blue!8, rounded corners=3pt,
+        align=center, inner sep=3pt, minimum height=9mm},
+    nvPaso/.style={nvCaja, fill=green!8, text width=3.0cm, font=\scriptsize,
+        minimum height=14mm},
+    nvPestana/.style={nvCaja, fill=blue!20, text width=2.5cm,
+        font=\footnotesize\bfseries},
+    nvPantalla/.style={nvCaja, fill=white, text width=2.5cm, font=\scriptsize,
+        minimum height=17mm},
+    nvLinea/.style={draw=blue!65!black, semithick},
+    nvFlujo/.style={draw=blue!65!black, semithick, -{Stealth[length=2mm]}},
+    nvAux/.style={draw=blue!65!black, semithick, dashed,
+        -{Stealth[length=2mm]}},
+    nvGrupo/.style={draw=black!45, dashed, rounded corners=5pt, inner sep=6pt}
+]
+
+% ---------- Acceso (sin sesión) ----------
+\node[nvCaja, text width=2.0cm] (bienv) at (-6.9,0)
+    {\textbf{Bienvenida}\\{\scriptsize Botón Empezar}};
+\node[nvCaja, text width=3.9cm] (acceso) at (-3.3,0)
+    {\textbf{Acceso}\\{\scriptsize Inicio de sesión o registro (correo o Google)}};
+\node[nvCaja, fill=yellow!15, text width=4.6cm] (verif) at (2.3,0)
+    {\textbf{Verificación del perfil}\\
+     {\scriptsize Guardas de ruta (\texttt{Stack.Protected})}};
+\draw[nvFlujo] (bienv) -- (acceso);
+\draw[nvFlujo] (acceso) -- (verif);
+
+% ---------- Onboarding (perfil incompleto) ----------
+\node[nvPaso] (ob1) at (-5.4,-3.0)
+    {\textbf{1. Objetivo y nivel}\\Objetivo y nivel de experiencia};
+\node[nvPaso] (ob2) at (-1.8,-3.0)
+    {\textbf{2. Datos físicos}\\Edad, altura, peso y días disponibles};
+\node[nvPaso] (ob3) at (1.8,-3.0)
+    {\textbf{3. Primera rutina}\\Generar con IA, crear personalizada u omitir};
+\draw[nvFlujo] (ob1) -- (ob2);
+\draw[nvFlujo] (ob2) -- (ob3);
+\node[nvGrupo, fit=(ob1)(ob2)(ob3),
+    label={[font=\scriptsize]below:Onboarding (perfil incompleto)}] {};
+\draw[nvFlujo] (verif.south) -- ++(0,-0.65) -|
+    node[pos=0.2, above, font=\scriptsize]{Perfil incompleto} (ob1.north);
+
+% ---------- Aplicación (perfil completo) ----------
+\node[font=\scriptsize\bfseries, anchor=north west] (appTitulo)
+    at (-7.8,-4.95) {Aplicación (perfil completo)};
+\node[nvCaja, fill=gray!12, text width=4.5cm] (perfil) at (-5.3,-6.4)
+    {\textbf{Perfil}\\{\scriptsize Editar objetivo, nivel, género, edad y
+     altura; registrar peso; cerrar sesión}};
+\node[nvCaja, text width=4.4cm] (barra) at (1.5,-6.4)
+    {\textbf{Barra de navegación inferior}\\{\scriptsize Cinco pestañas}};
+\draw[nvFlujo] (ob3.south) -- (ob3.south |- barra.north);
+\draw[nvFlujo] (verif.east) --
+    node[above, font=\scriptsize]{Perfil completo} (7.6,0) |- (barra.east);
+\draw[nvAux] (barra.west) --
+    node[above, font=\tiny, align=center]{avatar del\\encabezado} (perfil.east);
+
+% Pestañas
+\foreach \i/\n/\x in {1/Inicio/-6.6, 2/Rutinas/-3.3, 3/Máquinas/0,
+                      4/Nutrición/3.3, 5/Progreso/6.6}
+    \node[nvPestana] (t\i) at (\x,-8.6) {\n};
+\coordinate (bus) at ($(barra.south)+(0,-0.55)$);
+\draw[nvLinea] (barra.south) -- (bus);
+\draw[nvLinea] (t1.north |- bus) -- (t5.north |- bus);
+\foreach \i in {1,2,3,4,5}
+    \draw[nvFlujo] (t\i.north |- bus) -- (t\i.north);
+
+% Inicio
+\node[nvPantalla, below=5mm of t1] (i1)
+    {\textbf{Inicio}\\Tarjeta del día, racha semanal y atajo Escanear máquina};
+\draw[nvFlujo] (t1) -- (i1);
+
+% Rutinas
+\node[nvPantalla, below=5mm of t2] (r1)
+    {\textbf{Mis rutinas}\\Rutina activa y otras; al tocar un ejercicio abre su ficha};
+\node[nvPantalla, below=4mm of r1] (r2)
+    {\textbf{Nueva rutina}\\Generar con IA (vista previa) o crear personalizada};
+\draw[nvFlujo] (t2) -- (r1);
+\draw[nvFlujo] (r1) -- (r2);
+
+% Máquinas
+\node[nvPantalla, below=5mm of t3] (m1)
+    {\textbf{Catálogo}\\Búsqueda y filtros por categoría y tipo};
+\node[nvPantalla, below=4mm of m1] (m2)
+    {\textbf{Ficha de máquina}\\Instrucciones, errores, prevención, GIF, variantes
+     y Añadir a mi rutina};
+\node[nvPantalla, below=4mm of m2] (m3)
+    {\textbf{Escáner}\\Cámara o ARCore; reconocimiento en la nube o local};
+\draw[nvFlujo] (t3) -- (m1);
+\draw[nvFlujo] (m1) -- (m2);
+\draw[nvFlujo] (m3) -- (m2);
+\draw[nvAux] (m1.east) -- ++(0.25,0) |- (m3.east);
+\draw[nvAux] (m2.west) -- ++(-0.3,0) |- (r1.east);
+
+% Nutrición
+\node[nvPantalla, below=5mm of t4] (n1)
+    {\textbf{Diario}\\Meta calórica, macronutrientes y alimentos del día};
+\node[nvPantalla, below=4mm of n1] (n2)
+    {\textbf{Añadir alimento}\\Buscar (USDA), Rápido o Manual};
+\node[nvPantalla, below=4mm of n2] (n3)
+    {\textbf{Calc. IMC}\\Cálculo y categoría del IMC};
+\draw[nvFlujo] (t4) -- (n1);
+\draw[nvFlujo] (n1) -- (n2);
+\draw[nvAux] (n1.east) -- ++(0.25,0) |- (n3.east);
+
+% Progreso
+\node[nvPantalla, below=5mm of t5] (p1)
+    {\textbf{Cuerpo}\\Registro de peso, IMC y gráfico del historial};
+\node[nvPantalla, below=4mm of p1] (p2)
+    {\textbf{Entrenos}\\Racha, días completados y rutina activa};
+\node[nvPantalla, below=4mm of p2] (p3)
+    {\textbf{Reporte en PDF}\\Peso, IMC, entrenos y alimentación};
+\draw[nvFlujo] (t5) -- (p1);
+\draw[nvFlujo] (p1) -- (p2);
+\draw[nvFlujo] (p2) -- (p3);
+
+% Entrenar (pantalla completa) y leyenda
+\coordinate (base) at ($(m3.south)+(0,-1.0)$);
+\node[nvCaja, fill=orange!12, text width=5.6cm] (ent) at ($(base)+(-4.95,0)$)
+    {\textbf{Entrenar día} (pantalla completa)\\
+     {\scriptsize Series, descansos y registro del entrenamiento}};
+\draw[nvFlujo] (i1.south) -- (i1.south |- ent.north);
+\draw[nvFlujo] (r2.south) -- (r2.south |- ent.north);
+\node[font=\scriptsize, align=left, text width=5.6cm] (leyenda)
+    at ($(base)+(4.4,0)$)
+    {Línea continua: navegación principal.\\
+     Línea discontinua: acción secundaria.};
+
+\node[nvGrupo, inner sep=7pt,
+    fit=(appTitulo)(perfil)(barra)(t1)(t5)(i1)(m3)(n3)(p3)(ent)(leyenda)] {};
+
+\end{tikzpicture}
+\caption{Esquema de navegación de la aplicación móvil}
+\label{fig:navegacion}
+\fuente{Elaboración propia, con base en la estructura de rutas de
+\archivo{src/app/}.}
+\end{figure}

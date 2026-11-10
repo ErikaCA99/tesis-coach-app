@@ -1,3 +1,8 @@
+% =====================================================================
+%  FICHA RESUMEN (versión mejorada) — debe caber en UNA sola página.
+%  Cambios respecto al original: describe los seis capítulos vigentes,
+%  incluye los resultados verificados (ml/results) y las limitaciones.
+% =====================================================================
 \clearpage
 \thispagestyle{plain}
 
@@ -5,7 +10,7 @@
     {\Large \bfseries FICHA RESUMEN}
 \end{center}
 
-\vspace{0.3cm}
+\vspace{0.2cm}
 
 \begin{tabular}{@{}ll}
 \textbf{Grado:} & Licenciatura en Ingeniería de Sistemas \\
@@ -18,21 +23,45 @@ Gimnasios con Realidad Aumentada e Inteligencia Artificial} \\
 \textbf{Tutor:} & \tutorTesis \\
 \end{tabular}
 
-\vspace{0.4cm}
+\vspace{0.3cm}
+\small
 
-En el primer capítulo se realizó una investigación sobre los antecedentes y se
-analizó la problemática relacionada con el abandono temprano de los usuarios de
-gimnasios, atribuida principalmente a la falta de orientación, motivación y
-seguimiento personalizado. A partir de ello, se propone el diseño de un sistema
-inteligente capaz de guiar al usuario en uso correcto de máquinas, personalizar
-rutinas de entrenamiento y registrar su progreso físico.
+En el primer capítulo se analiza el abandono temprano de los usuarios de
+gimnasios, asociado a la falta de orientación, motivación y seguimiento
+personalizado, y se formulan el problema, los objetivos y el alcance de un
+sistema de entrenamiento para Android.
 
-En el segundo capítulo se desarrolla el marco teórico que sustenta la solución
-tecnológica. Se revisan distintas metodologías de desarrollo de software,
-comparando enfoques tradicionales y ágiles, y se justifica la selección de
-Mobile-D como la metodología más adecuada para este proyecto.
+En el segundo capítulo se desarrolla el marco teórico: metodologías de
+desarrollo de software tradicionales y ágiles (se justifica Mobile-D),
+programación móvil, realidad aumentada, inteligencia artificial, fundamentos
+del entrenamiento físico y tecnologías de desarrollo.
 
-En el tercer capítulo se detalla el área de aplicación y se describe la
-adopción de la metodología Mobile-D en el desarrollo del sistema, especificando
-su aplicación práctica en fases de exploración, inicialización, producción,
-estabilización y pruebas.
+En el tercer capítulo se describe el área de aplicación, la adopción de la
+metodología Mobile-D (exploración, inicialización, producción, estabilización
+y pruebas), los roles y las técnicas de recolección de información.
+
+En el cuarto capítulo se documenta el desarrollo de la aplicación CoachApp con
+React Native, Expo y TypeScript sobre Firebase (autenticación, base de datos,
+almacenamiento, Cloud Functions y App Check), con arquitectura
+cliente--servidor en capas Modelo--Vista--Controlador. El sistema incluye un
+catálogo de 35 tipos de máquinas, un generador de rutinas basado en reglas con
+un recomendador de TensorFlow Lite, un reconocedor de máquinas por imagen
+(MobileNetV2) y un detector YOLO26m publicado en Ultralytics Platform, un
+escáner que ancla la ficha de la máquina en el entorno con ARCore (o la superpone
+sobre la cámara en teléfonos sin soporte), el registro de peso, IMC y
+alimentación, y reportes de progreso.
+
+En el quinto capítulo se presentan y discuten los resultados: el reconocedor
+acierta la máquina en el 38,5\,\% de las fotos (61,4\,\% entre las tres primeras
+sugerencias) en un escenario de campo simulado, por lo que el usuario siempre
+confirma el resultado; el recomendador reproduce las reglas con una exactitud
+del 99,8\,\% sobre datos sintéticos, lo que mide su fidelidad y no la calidad de
+las rutinas. El detector YOLO26m alcanza una mAP50 de 48,5\,\% en validación. Se
+declaran las limitaciones: el anclaje con ARCore no se ha validado en un
+teléfono físico y no sigue a la máquina si esta se mueve, y la validación con
+usuarios y con fotografías de gimnasios reales queda pendiente.
+
+En el sexto capítulo se presentan las conclusiones por objetivo y las
+recomendaciones para trabajos futuros. El sistema no reemplaza la supervisión
+de entrenadores ni de nutricionistas.
+\normalsize

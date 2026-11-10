@@ -1,59 +1,17 @@
 \chapter{DESARROLLO DEL PROYECTO}
 \label{cap:desarrollo}
 
-% Este capítulo se divide en un archivo por fase de Mobile-D (carpeta
-% capitulos/cap4/). Las marcas \pendiente{...} en rojo indican datos que solo
+% Los archivos del capítulo se encuentran en capitulos/cap4/.
+% Las marcas \pendiente{...} en rojo indican datos que solo
 % la autora puede completar (capturas de pantalla, resultados en dispositivos
 % reales, pruebas con usuarios). Para ocultarlas todas antes de la entrega:
 % \renewcommand{\pendiente}[1]{} en config/comandos.tex.
 
-En este capítulo se describe el desarrollo del sistema siguiendo las fases de
-la metodología Mobile-D presentadas en la sección~\ref{sec:aa-aplicacion-mobiled}.
-Para cada fase se detallan las actividades realizadas y los artefactos
-obtenidos. La fase de producción se organizó en seis iteraciones, una por
-módulo funcional, y cada iteración se documenta con su planificación, el
-trabajo de diseño e implementación y la liberación con sus criterios de
-aceptación.
-
-El producto resultante se identifica en este documento como \nombreApp{}, el
-nombre de la aplicación registrado en su configuración de compilación. El
-código fuente se gestiona en un repositorio Git alojado en GitHub, y los
-fragmentos de código que se presentan corresponden a la versión integrada en
-la rama \archivo{develop} y a la rama de trabajo \archivo{feature/routines}.
-Todo lo que se describe como implementado fue verificado sobre el código
-fuente; lo que se encuentra preparado pero aún no operativo se indica
-expresamente.
-
-La Tabla~\ref{tab:resumen-fases} resume la correspondencia entre las fases de
-Mobile-D, las actividades principales y los artefactos producidos.
-
-\begin{table}[H]
-\centering
-\caption{Resumen de las fases de Mobile-D aplicadas al proyecto}
-\label{tab:resumen-fases}
-\begin{tabularx}{\textwidth}{|L{2.6cm}|Y|Y|}
-\hline
-\rowcolor{encabezado} \textbf{Fase} & \textbf{Actividades principales} & \textbf{Artefactos} \\
-\hline
-Exploración & Identificación de interesados y actores, alcance,
-requerimientos, análisis de procesos, selección tecnológica y planificación.
-& Requerimientos funcionales y no funcionales, casos de uso, plan de
-iteraciones. \\ \hline
-Inicialización & Configuración del entorno, repositorio y proyecto Firebase;
-arquitectura, modelo de datos, seguridad y navegación; día de prueba y día de
-salida. & Arquitectura por capas, modelo de datos de Firestore, reglas de
-seguridad, estructura del proyecto. \\ \hline
-Producción & Seis iteraciones: autenticación y \emph{onboarding}, guía de
-máquinas, escáner con realidad aumentada, rutinas, nutrición y progreso. &
-Módulos funcionales integrados por \emph{pull request}. \\ \hline
-Estabilización & Integración, refactorización por capas, validación y
-verificación estática. & Código uniforme y verificado. \\ \hline
-Pruebas del sistema & Pruebas de la lógica de negocio, de seguridad,
-funcionales, de usabilidad y de aceptación por objetivo. & Matriz de casos de
-prueba y resultados. \\
-\hline
-\end{tabularx}
-\end{table}
+En este capítulo se describe el desarrollo del sistema según las fases de
+la metodología Mobile-D. Se detallan las actividades de cada fase, los
+artefactos obtenidos y la aplicación de los fundamentos del marco referencial.
+El desarrollo del sistema busca cumplir los objetivos del proyecto y dar
+respuesta a la problemática planteada.
 
 \input{capitulos/cap4/exploracion}
 \input{capitulos/cap4/inicializacion}

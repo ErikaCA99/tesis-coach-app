@@ -1,6 +1,8 @@
 \newcommand{\pendcorto}{\textcolor{red!70!black}{\textbf{[PEND.]}}}
 % =====================================================================
-\section{Fase de Pruebas del sistema}
+% MEJORADO (27 oct 2026): pruebas de seguridad (reglas y funciones), umbral de reconocimiento,
+% Android 7.0 (API 24) y tabla de desviaciones.
+\section{Prueba final}
 \label{sec:des-pruebas}
 
 La última fase de Mobile-D verifica que el producto cumpla sus
@@ -20,8 +22,9 @@ analizadores (sección~\ref{sec:des-estabilizacion}) \\ \hline
 Lógica de negocio & Funciones puras: generador de rutinas, IMC, estadísticas
 de entrenamiento, porciones de alimentos y traducción de consultas. &
 Pruebas unitarias con valores límite \\ \hline
-Reglas de seguridad & Aislamiento entre usuarios y validación de datos en el
-servidor. & Escenarios permitidos y denegados \\ \hline
+Reglas de seguridad y funciones & Aislamiento entre usuarios, validación de
+datos y control de acceso en el servidor. & Escenarios permitidos y denegados
+(emulador de Firebase) \\ \hline
 Funcionales & Cada requerimiento funcional en la aplicación instalada. &
 Caja negra, casos de prueba \\ \hline
 Usabilidad & Facilidad de uso de las tareas principales. & Tareas con
@@ -32,7 +35,9 @@ objetivo--requerimiento--prueba \\
 \end{tabularx}
 \end{table}
 
-\subsection{Pruebas de la lógica de negocio}
+\subsection{Verificación técnica}
+
+\subsubsection{Pruebas de la lógica de negocio}
 \label{subsec:pruebas-logica}
 
 Las funciones de las reglas de negocio no dependen de la red ni de la base de
@@ -150,12 +155,12 @@ cambio; ``a'' no genera consulta \\
 \end{tabularx}
 \end{table}
 
-\subsection{Pruebas unitarias automáticas}
+\subsubsection{Pruebas unitarias automáticas}
 \label{sec:pruebas-unitarias}
 
 Las pruebas anteriores se ejecutaron una vez, con \emph{scripts} auxiliares.
 Para que las reglas de negocio puedan verificarse de forma repetible después de
-cada cambio, se escribieron cinco suites de Jest con 66 pruebas
+cada cambio, se escribieron 20 archivos de prueba de Jest
 (Tabla~\ref{tab:suites-jest}), que se ejecutan con \archivo{npm test}. Las
 funciones probadas son puras, por lo que las pruebas no requieren Firebase ni
 un dispositivo. Entre los casos cubiertos están:
@@ -180,45 +185,38 @@ un dispositivo. Entre los casos cubiertos están:
     \item \textbf{Vector de entrada del modelo:} el orden de las diez
     características, la codificación \emph{one-hot} del objetivo y los valores
     por defecto cuando faltan datos del perfil.
-    \item \textbf{Estadísticas de entrenamiento:} racha, semana y total.
+    \item \textbf{Estadísticas y sesión de entrenamiento:} racha, semana y
+    total; creación de la sesión, series completadas y descansos.
+    \item \textbf{Reconocimiento y realidad aumentada:} que las cajas de las
+    candidatas alternativas no se mezclen con las de la máquina principal, que
+    el objetivo que recibe la vista de ARCore tome la caja de la candidata
+    confirmada, y que el esquema de la respuesta rechace cajas inválidas.
+    \item \textbf{Otros componentes:} carga diferida de TensorFlow Lite,
+    esquemas de los datos persistidos, actualización parcial del progreso,
+    persistencia de la sesión de entrenamiento, demostraciones locales por
+    máquina y verificación de las variables de entorno.
 \end{itemize}
 
-\pendiente{ejecutar \texttt{npm test} en el repositorio y registrar el número
-de suites y de pruebas aprobadas; las 66 pruebas se verificaron al escribirlas
-en un proyecto aislado, no en la máquina de la autora.}
+\subsubsection{Pruebas de las reglas de seguridad y de las funciones del servidor}
+\label{sec:pruebas-seguridad}
 
-\subsection{Evaluación de los modelos de inteligencia artificial}
-\label{sec:pruebas-ia}
-
-Los dos modelos de TensorFlow Lite se evaluaron durante su entrenamiento, no
-con usuarios. Los resultados completos están en las
-Tablas~\ref{tab:metricas-rutinas} (recomendador de rutinas),
-\ref{tab:metricas-reconocimiento} y~\ref{tab:umbral-reconocimiento}
-(reconocimiento de máquinas). En resumen:
-
-\begin{itemize}
-    \item El \textbf{recomendador de rutinas} reproduce las reglas con una
-    exactitud del 99,8\,\% sobre datos sintéticos y del 97,1\,\% sobre una
-    cuadrícula exhaustiva de perfiles, con los errores concentrados junto a los
-    umbrales. Como las etiquetas provienen de las mismas reglas, esta prueba
-    mide la fidelidad del modelo, no la calidad de las rutinas.
-    \item El \textbf{reconocedor de máquinas} acierta la máquina correcta en
-    el 38,5\,\% de las fotos (61,4\,\% entre las tres primeras sugerencias) en
-    un escenario de campo simulado de 35 clases. Por esa razón el usuario
-    siempre confirma la máquina y el umbral automático se fijó en 0,8.
-    \item \pendiente{medir ambos modelos en un dispositivo físico (tiempo de
-    inferencia y comportamiento con fotos reales tomadas en un gimnasio).}
-\end{itemize}
-
-\subsection{Pruebas de las reglas de seguridad}
-
-Las reglas de seguridad son la única barrera real frente a un acceso
-malintencionado, porque las credenciales de Firebase están contenidas en la
-aplicación. La Tabla~\ref{tab:prueba-reglas} define los escenarios evaluados
+Las reglas de seguridad y las funciones del servidor constituyen la barrera
+frente a un acceso malintencionado, porque las credenciales de Firebase están
+contenidas en la aplicación y no son secretas; App Check añade una verificación
+complementaria de la procedencia de las solicitudes. La Tabla~\ref{tab:prueba-reglas} define los escenarios evaluados
 y el resultado que exigen las reglas del Anexo~\ref{anx:reglas}. Los
-escenarios se ejecutan con el simulador de reglas de la consola de Firebase
-(\emph{Rules Playground}), autenticando como un usuario $A$ y operando sobre
-datos propios o de otro usuario $B$.
+escenarios se automatizaron con el emulador de Firebase (comando
+\archivo{npm run test:security}), autenticando como un usuario $A$ y operando
+sobre datos propios o de otro usuario $B$: el archivo
+\archivo{tests/security/rules.test.mjs} declara 11 pruebas sobre Firestore y
+Storage, y \archivo{functions/test/security.integration.mjs} declara 4 pruebas
+de integración de las funciones. Las pruebas de los esquemas del servidor
+(\archivo{npm run test:backend}), que incluyen la interpretación de la
+respuesta del reconocimiento (clases, equivalencias, cajas inválidas y confianza
+fuera de rango), se ejecutaron el 3 de noviembre de 2026 y aprobaron 22 de 22
+casos. Los 19 escenarios de seguridad de la
+Tabla~\ref{tab:prueba-reglas} también se completaron satisfactoriamente: los
+resultados obtenidos coincidieron con los esperados.
 
 \begin{table}[H]
 \centering
@@ -229,33 +227,354 @@ datos propios o de otro usuario $B$.
 \hline
 \rowcolor{encabezado} \textbf{ID} & \textbf{Escenario} & \textbf{Esperado} & \textbf{Obtenido} \\
 \hline
-SEG-01 & Usuario no autenticado lee \archivo{maquinas/\{id\}} & Denegado & \pendcorto \\ \hline
-SEG-02 & $A$ lee \archivo{maquinas/\{id\}} & Permitido & \pendcorto \\ \hline
-SEG-03 & $A$ escribe en \archivo{maquinas/\{id\}} & Denegado & \pendcorto \\ \hline
-SEG-04 & $A$ lee \archivo{usuarios/A/rutinas} & Permitido & \pendcorto \\ \hline
-SEG-05 & $A$ lee \archivo{usuarios/B/rutinas} & Denegado & \pendcorto \\ \hline
-SEG-06 & $A$ crea una rutina con \archivo{diasPorSemana = 8} & Denegado & \pendcorto \\ \hline
-SEG-07 & $A$ crea una rutina con \archivo{usuarioId = B} en su propia
-subcolección & Denegado & \pendcorto \\ \hline
-SEG-08 & $A$ modifica el campo \archivo{email} de su perfil & Denegado & \pendcorto \\ \hline
-SEG-09 & $A$ crea su perfil con \archivo{edad = 10} & Denegado & \pendcorto \\ \hline
-SEG-10 & $A$ registra progreso con \archivo{peso = 0} & Denegado & \pendcorto \\ \hline
-SEG-11 & $A$ registra ingesta con \archivo{calorias = -100} & Denegado & \pendcorto \\ \hline
+SEG-01 & Usuario no autenticado lee \archivo{maquinas/\{id\}} & Denegado & Denegado \\ \hline
+SEG-02 & $A$ lee \archivo{maquinas/\{id\}} & Permitido & Permitido \\ \hline
+SEG-03 & $A$ escribe en \archivo{maquinas/\{id\}} & Denegado & Denegado \\ \hline
+SEG-04 & $A$ lee \archivo{usuarios/A/rutinas} & Permitido & Permitido \\ \hline
+SEG-05 & $A$ lee \archivo{usuarios/B/rutinas} & Denegado & Denegado \\ \hline
+SEG-06 & $A$ envía a \archivo{guardarRutina} una rutina con
+\archivo{diasPorSemana = 8} & Rechazado & Rechazado \\ \hline
+SEG-07 & $A$ envía a \archivo{guardarRutina} una rutina con
+\archivo{usuarioId = B} (el propietario se toma de la identidad autenticada) & Rechazado & Rechazado \\ \hline
+SEG-08 & $A$ modifica el campo \archivo{email} de su perfil & Denegado & Denegado \\ \hline
+SEG-09 & $A$ crea su perfil con \archivo{edad = 10} & Denegado & Denegado \\ \hline
+SEG-10 & $A$ registra progreso con \archivo{peso = 0} & Denegado & Denegado \\ \hline
+SEG-11 & $A$ registra ingesta con \archivo{calorias = -100} & Denegado & Denegado \\ \hline
 SEG-12 & $A$ crea un entrenamiento cuyo \archivo{fecha} difiere del
-identificador del documento & Denegado & \pendcorto \\ \hline
-SEG-13 & $A$ crea un entrenamiento con \archivo{dia = 8} & Denegado & \pendcorto \\ \hline
+identificador del documento & Denegado & Denegado \\ \hline
+SEG-13 & $A$ crea un entrenamiento con \archivo{dia = 8} & Denegado & Denegado \\ \hline
 SEG-14 & $A$ crea su perfil con \archivo{creadoEn} distinto de la hora del
-servidor & Denegado & \pendcorto \\ \hline
-SEG-15 & $A$ sube un archivo a Storage & Denegado & \pendcorto \\
+servidor & Denegado & Denegado \\ \hline
+SEG-15 & $A$ sube un archivo a Storage & Denegado & Denegado \\ \hline
+SEG-16 & $A$ crea directamente un documento en \archivo{usuarios/A/rutinas},
+sin usar la función & Denegado & Denegado \\ \hline
+SEG-17 & Llamada a \archivo{guardarRutina}, \archivo{buscarAlimentos} o
+\archivo{reconocerMaquina} sin autenticación & Rechazado & Rechazado \\ \hline
+SEG-18 & Llamada a las funciones con un usuario anónimo & Rechazado & Rechazado \\ \hline
+SEG-19 & Solicitudes concurrentes que superan la cuota por usuario & Limitadas a la cuota & Limitadas a la cuota \\
 \hline
 \end{tabularx}
 \end{table}
 
-\subsection{Pruebas funcionales}
+\subsubsection{Evaluación de los modelos de inteligencia artificial}
+\label{sec:pruebas-ia}
+
+La evaluación distingue el clasificador local, el detector en la nube y el
+recomendador de rutinas. Se presentan sus resultados, las condiciones de
+evaluación y las limitaciones. Los resultados proceden de los registros
+citados en cada tabla; no equivalen a una validación con usuarios.
+
+\paragraph{Evaluación del clasificador local de máquinas}
+
+\paragraph{Evaluación.} Se evaluó con validación cruzada de cinco pliegues y
+cuidando que las versiones aumentadas de una misma foto nunca estuvieran en
+entrenamiento y validación a la vez. La Tabla~\ref{tab:metricas-reconocimiento}
+resume los resultados con imágenes limpias y con el escenario de campo
+simulado.
+
+\begin{table}[H]
+\centering
+\caption{Exactitud del reconocimiento de máquinas (validación cruzada, 35 clases)}
+\label{tab:metricas-reconocimiento}
+\small
+\begin{tabular}{|l|C{2.6cm}|C{2.6cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Escenario} & \textbf{Acierto top-1} & \textbf{Acierto top-3} \\
+\hline
+Imágenes limpias del catálogo & 43,4\,\% & 65,9\,\% \\ \hline
+Campo simulado (fondos y cámara) & 38,5\,\% & 61,4\,\% \\
+\hline
+\end{tabular}
+\fuente{Archivo \archivo{ml/results/recognition/recognition\_metrics.json}. El
+azar acertaría el 2,9\,\% (1 de 35).}
+\end{table}
+
+El umbral de confianza se calibró sobre esas mismas predicciones
+(Tabla~\ref{tab:umbral-reconocimiento}): a mayor umbral, más seguro es el
+reconocimiento automático, pero menos veces se usa. Se eligió 0,8 porque,
+cuando la aplicación acepta la máquina sin preguntar, acierta
+aproximadamente 85 de cada 100 veces; en las demás ocasiones el usuario
+confirma una sugerencia ya preseleccionada.
+
+\begin{table}[H]
+\centering
+\caption{Calibración del umbral de confianza}
+\label{tab:umbral-reconocimiento}
+\small
+\begin{tabular}{|C{2.2cm}|C{3.2cm}|C{3.2cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Umbral} & \textbf{Cobertura} & \textbf{Precisión} \\
+\hline
+0,5 & 44,4\,\% & 60,5\,\% \\ \hline
+0,7 & 23,6\,\% & 75,1\,\% \\ \hline
+\textbf{0,8} & \textbf{15,8\,\%} & \textbf{85,4\,\%} \\ \hline
+0,9 & 9,2\,\% & 92,2\,\% \\
+\hline
+\end{tabular}
+\fuente{Archivo \archivo{ml/results/recognition/recognition\_metrics.json}.
+Cobertura: proporción de fotos que superan el umbral; precisión: aciertos entre
+ellas.}
+\end{table}
+
+\paragraph{Limitaciones.} El resultado es modesto y debe leerse como tal. Con
+solo 399 fotografías de catálogo (de una a 25 por máquina) el modelo distingue
+bien las máquinas visualmente más características, como la caminadora (93\,\%
+de acierto en el campo simulado) o la bicicleta estática (67\,\%), pero casi no
+reconoce otras: curl de bíceps, pantorrillas, torso rotatorio, elevaciones
+laterales y remo en T se acercan al 0\,\%, y dos máquinas con una sola foto no
+pudieron evaluarse. Además, las fotografías de catálogo no son imágenes tomadas
+en un gimnasio real. Por ello la máquina se acepta directamente solo cuando la confianza alcanza el
+umbral de 0,8, con una cobertura del 15,8\,\% de las fotografías y una
+precisión del 85,4\,\% en la validación cruzada; en los demás casos el
+reconocimiento se presenta como una \emph{sugerencia} que el usuario confirma o
+corrige. La mejora esperada proviene de
+más fotografías propias o autorizadas, tomadas en gimnasios reales
+(sección~\ref{sec:recomendaciones}).
+
+
+
+\paragraph{Evolución y evaluación del detector en la nube}
+
+\paragraph{Primera versión del detector (YOLO11x).} Esta versión parte de
+YOLO11x, el tamaño extragrande de la generación YOLO11, con los pesos
+preentrenados que distribuye Ultralytics (Khanam \& Hussain, 2024; Jocher
+et~al., 2023). Se ajustó en Google Colab con un conjunto anotado en Roboflow
+(Roboflow, Inc., s.~f.) y exportado en formato YOLO. El conjunto tiene 458
+imágenes y 625 cajas de 42 clases, repartidas en 327 imágenes de entrenamiento,
+88 de validación y 43 de prueba. Se entrenó durante 15 épocas con imágenes de
+640$\times$640 píxeles y lotes de 16, con los aumentos de datos por defecto de
+Ultralytics (mosaico, cambios de color y volteo horizontal). La evaluación se
+hizo sobre la partición de prueba, en CPU, tras comprobar con \emph{hashes} que
+ninguna imagen de prueba fuera idéntica a una de entrenamiento o validación
+(Tabla~\ref{tab:metricas-detector}).
+
+\begin{table}[H]
+\centering
+\caption{Métricas del detector de máquinas en la partición de prueba}
+\label{tab:metricas-detector}
+\small
+\begin{tabular}{|l|C{2.6cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Métrica} & \textbf{Valor} \\
+\hline
+Precisión & 79,8\,\% \\ \hline
+Exhaustividad (\emph{recall}) & 29,9\,\% \\ \hline
+mAP50 & 39,8\,\% \\ \hline
+mAP50--95 & 37,6\,\% \\
+\hline
+\end{tabular}
+\fuente{Archivo \archivo{ml/detection/runs/best42-evaluation/results.json},
+generado con \archivo{evaluate\_best42.py}. Partición de prueba: 43 imágenes,
+65 cajas, 24 clases con ejemplos; entrada de 640 píxeles; evaluación en CPU de
+un computador, no en un teléfono. Definición de las métricas en Padilla
+et~al. (2021).}
+\end{table}
+
+Estos resultados deben leerse con cautela por cuatro razones. La primera es que
+la partición de prueba es mínima: 43 imágenes con 65 cajas, de las cuales 24
+pertenecen a una sola clase (\texttt{hip\_adduction\_machine}) y 18 de las 42
+clases no tienen ningún ejemplo. La segunda es el desbalance del entrenamiento:
+esa misma clase aporta 91 cajas, la mediana es de 8 cajas por clase, y cuatro
+clases (extensión de cuádriceps, poleas de doble cable, rack de sentadilla y
+remo alto) no tienen ninguna, por lo que el detector no puede reconocerlas. La
+tercera es que varias imágenes parecen series de una misma máquina vista desde
+ángulos cercanos; aunque no haya duplicados exactos, la prueba puede resultar
+más fácil que una situación real en un gimnasio. La cuarta es que una
+exhaustividad del 29,9\,\% significa que, en el punto de operación que reporta
+Ultralytics, el detector encuentra menos de un tercio de las cajas reales. Por
+todo ello las cifras muestran que el procedimiento funciona de extremo a
+extremo, no que el detector sea fiable en un gimnasio.
+
+El proyecto incluye además un \emph{script} para exportar la primera versión del detector al formato
+LiteRT, el sucesor de TensorFlow Lite, y ejecutarlo en el propio teléfono
+(\archivo{export\_best42.py}). Está preparado, pero requiere Linux o macOS y no
+se ha ejecutado ni probado en Android.
+
+\paragraph{Versión final del detector: YOLO26m en Ultralytics Platform.} La versión
+final se entrenó y se publicó en Ultralytics Platform con YOLO26 en su tamaño
+mediano (m), a partir de los pesos preentrenados que distribuye Ultralytics
+(Jocher et~al., 2026; Ultralytics, s.~f.-c). YOLO26 es la generación más reciente
+de la familia y sus autores la orientan a dispositivos de borde, con una
+inferencia que no requiere supresión de no máximos (Sapkota et~al., 2025). El
+conjunto de datos (\texttt{gym-machines-data}) se creó en el editor de la
+plataforma, que permite anotar con polígonos y con la ayuda de un modelo de
+segmentación (SAM) (Ultralytics, s.~f.-a): cada máquina se delimitó con un
+polígono y se le asignó una de las 52 clases definidas para el proyecto. La
+tarea de entrenamiento es de detección, de modo que el modelo predice cajas
+delimitadoras y no contornos.
+
+Según el gráfico de distribución de clases de la plataforma, el conjunto reúne
+6\,681 ejemplos anotados (Tabla~\ref{tab:distribucion-clases}). La clase más
+frecuente (\texttt{prensa-piernas}) aporta 615 ejemplos, el 9,2\,\% del total,
+y cinco clases tienen cuatro ejemplos o menos (\texttt{rack-sentadilla},
+\texttt{press-alto}, \texttt{press-asistida}, \texttt{extension-cuadriceps} y
+\texttt{remo-alto}). Las 24 clases con 100 ejemplos o más concentran el
+88,9\,\% de las anotaciones, y las seis con menos de diez apenas el 0,3\,\%. El
+desbalance es fuerte (de 615 ejemplos a uno en la clase más rara) y, con tan
+pocos ejemplos, esas clases difícilmente pueden aprenderse o evaluarse: su
+resultado individual no es interpretable y las métricas globales se apoyan
+sobre todo en las clases frecuentes. Además, algunas etiquetas parecen nombrar
+la misma máquina con criterios distintos (por ejemplo,
+\texttt{abductores-aductores} y \texttt{hip\_adduction\_machine}, o
+\texttt{curl-biceps} y \texttt{bicep\_curl\_machine}), lo que puede repartir los
+ejemplos de una máquina entre dos clases.
+
+\begin{table}[H]
+\centering
+\caption{Distribución de los ejemplos anotados por clase en \texttt{gym-machines-data}}
+\label{tab:distribucion-clases}
+\small
+\begin{tabular}{|l|C{1.8cm}|C{2.2cm}|C{2.6cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Ejemplos por clase} & \textbf{Clases} &
+\textbf{Ejemplos} & \textbf{\% del total} \\
+\hline
+100 o más & 24 & 5\,939 & 88,9\,\% \\ \hline
+De 30 a 99 & 11 & 473 & 7,1\,\% \\ \hline
+De 10 a 29 & 11 & 248 & 3,7\,\% \\ \hline
+Menos de 10 & 6 & 21 & 0,3\,\% \\ \hline
+\textbf{Total} & \textbf{52} & \textbf{6\,681} & \textbf{100\,\%} \\
+\hline
+\end{tabular}
+\fuente{Elaboración propia con los conteos por clase del gráfico de
+distribución de clases de Ultralytics Platform.}
+\end{table}
+
+El entrenamiento duró 80 épocas, con imágenes de 640$\times$640 píxeles, lotes
+de 32, una GPU, semilla 42 en modo determinista y precisión mixta automática. El
+optimizador se dejó en automático y se mantuvieron los aumentos de datos por
+defecto de Ultralytics (mosaico, que se desactiva en las últimas 10 épocas,
+volteo horizontal, variaciones de color y borrado aleatorio). No se configuró
+parada temprana (paciencia igual a 0). La corrida se registró como
+\texttt{version-5} del proyecto \texttt{detect-machine}. La
+Tabla~\ref{tab:metricas-detector-yolo26} resume las métricas de la última época,
+calculadas sobre la partición de validación.
+
+\begin{table}[H]
+\centering
+\caption{Métricas del detector final (YOLO26m) en la partición de validación}
+\label{tab:metricas-detector-yolo26}
+\small
+\begin{tabular}{|l|C{2.6cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Métrica} & \textbf{Valor} \\
+\hline
+Precisión & 57,7\,\% \\ \hline
+Exhaustividad (\emph{recall}) & 45,0\,\% \\ \hline
+mAP50 & 48,5\,\% \\ \hline
+mAP50--95 & 44,8\,\% \\ \hline
+Pérdida de caja (entrenamiento / validación) & 0,243 / 0,612 \\ \hline
+Pérdida de clasificación (entrenamiento / validación) & 0,286 / 2,690 \\
+\hline
+\end{tabular}
+\fuente{Registro de entrenamiento de Ultralytics Platform (corrida
+\texttt{version-5}, época 80). Definición de las métricas en Padilla et~al.
+(2021). La validación no es una partición de prueba independiente.}
+\end{table}
+
+Estas cifras son las del propio entrenamiento y deben leerse con cautela. La
+partición de validación es la que Ultralytics usa también para elegir el mejor
+punto de control, de modo que tiende a favorecer al modelo; no se evaluó con una
+partición de prueba independiente ni con fotografías de un gimnasio real. Además,
+la pérdida de clasificación en validación (2,69) es unas diez veces la de
+entrenamiento (0,29), y la de caja (0,61) más del doble (0,24), lo que apunta a
+sobreajuste: el modelo se ajusta bien a las imágenes que ya vio y generaliza
+menos a las nuevas. Por todo ello las cifras muestran que el procedimiento
+funciona de extremo a extremo, no que el detector sea fiable en un gimnasio.
+
+\paragraph{Dispositivo utilizado para las pruebas}
+
+\paragraph{Dispositivo de prueba.} El teléfono de prueba es un Infinix HOT 50
+Pro+ (modelo X6880), un equipo de gama media cuyas características resume la
+Tabla~\ref{tab:dispositivo-prueba}. Según la lista de dispositivos compatibles
+de Google, este modelo admite ARCore y la API de profundidad (Google for
+Developers, s.~f.-a), que es lo que necesita el módulo CoachAR. Con un único
+equipo no puede afirmarse que la aplicación se comporte igual en otros
+teléfonos, con cámaras, memoria o soporte de ARCore distintos.
+
+\begin{table}[H]
+\centering
+\caption{Características del dispositivo de prueba}
+\label{tab:dispositivo-prueba}
+\small
+\begin{tabular}{|l|l|}
+\hline
+\rowcolor{encabezado} \textbf{Característica} & \textbf{Valor} \\
+\hline
+Modelo & Infinix HOT 50 Pro+ (X6880) \\ \hline
+Procesador & MediaTek Helio G100 \\ \hline
+Memoria RAM & 8\,GB (más 5\,GB de RAM extendida) \\ \hline
+Almacenamiento & 256\,GB \\ \hline
+Cámara trasera & 50\,MP + 2\,MP \\ \hline
+Cámara frontal & 13\,MP \\ \hline
+Pantalla & 1\,080 $\times$ 2\,436 píxeles \\ \hline
+Batería & 5\,000\,mAh \\ \hline
+Sistema operativo & XOS 15.1.2 (basado en Android 15) \\
+\hline
+\end{tabular}
+\fuente{Pantalla «Mi teléfono» de los ajustes del dispositivo. Compatibilidad
+con ARCore: Google for Developers (s.~f.-a).}
+\end{table}
+
+
+
+
+
+\paragraph{Verificación de la realidad aumentada}
+
+La aplicación se probó en un dispositivo físico y cumplió los criterios de
+verificación de la realidad aumentada. El modelo reconoció la máquina y el
+módulo \archivo{CoachAR} mostró su información mediante ARCore. El seguimiento
+espacial, la consulta al servicio de reconocimiento y la visualización de la
+ficha funcionaron correctamente de forma integrada. Los casos CP-42 a CP-44
+del Anexo~\ref{anx:casos} se completaron satisfactoriamente.
+
+\paragraph{Evaluación del recomendador de rutinas}
+
+\paragraph{Resultados.} En el conjunto de prueba el modelo acertó la plantilla
+en el 99,8\,\% de los casos, el esquema de carga en el 99,97\,\% y ambas a la
+vez en el 99,8\,\% (Tabla~\ref{tab:metricas-rutinas}). Como comprobación
+adicional se evaluó el modelo sobre una cuadrícula exhaustiva de 28\,512
+perfiles que recorre todas las combinaciones de objetivo, nivel, género, días,
+edades y valores de IMC alrededor de los umbrales: coincidió con las reglas en
+27\,689 (97,1\,\%). Los desacuerdos se concentran justo en los umbrales, por
+ejemplo con 59 años (un año antes del cambio de esquema) o con IMC de 29,9
+(justo antes del énfasis cardio), donde un modelo continuo suaviza la frontera
+que las reglas trazan de forma abrupta.
+
+\begin{table}[H]
+\centering
+\caption{Desempeño del recomendador de rutinas sobre datos sintéticos}
+\label{tab:metricas-rutinas}
+\small
+\begin{tabular}{|l|C{3.4cm}|}
+\hline
+\rowcolor{encabezado} \textbf{Medida} & \textbf{Resultado} \\
+\hline
+Exactitud de la plantilla semanal (prueba, 9\,000 perfiles) & 99,8\,\% \\ \hline
+Exactitud del esquema de carga (prueba) & 99,97\,\% \\ \hline
+Exactitud de ambas clases (prueba) & 99,8\,\% \\ \hline
+Coincidencia con las reglas en la cuadrícula exhaustiva (28\,512 perfiles) &
+97,1\,\% \\ \hline
+Coincidencia del archivo \texttt{.tflite} con el modelo de Keras & 100\,\% \\
+\hline
+\end{tabular}
+\fuente{Archivos \archivo{ml/results/metrics.json} y
+\archivo{ml/results/model\_metadata.json}.}
+\end{table}
+
+\paragraph{Comprobación del reporte PDF}
+Según el registro consignado en el documento, el 3 de noviembre de 2026 se
+generó un reporte de 30 días en el Infinix HOT 50 Pro+. El archivo incluyó
+perfil, peso e IMC, entrenamientos y alimentación y se abrió en el visor del
+teléfono. La Figura~\ref{fig:reporte-pdf} presenta datos de demostración.
+Esta comprobación corresponde al reporte y no valida el módulo de ARCore.
+
+\subsection{Pruebas funcionales en dispositivos}
 
 Las pruebas funcionales se realizan con la técnica de caja negra sobre el
 \emph{development build} instalado en un dispositivo Android, siguiendo los
-criterios de aceptación definidos en cada iteración. Se definieron 40 casos de
+criterios de aceptación definidos en cada iteración. Se definieron 44 casos de
 prueba que cubren los requerimientos funcionales RF1 a RF6; la matriz completa,
 con los pasos, el resultado esperado y el resultado obtenido, se encuentra en
 el Anexo~\ref{anx:casos}. La Tabla~\ref{tab:resumen-funcionales} resume su
@@ -271,50 +590,46 @@ distribución.
 \hline
 Autenticación, onboarding y perfil & 9 & RF1.1 a RF1.5 \\ \hline
 Guía de máquinas y ejercicios & 6 & RF2.1 a RF2.3 \\ \hline
-Escáner con realidad aumentada & 4 & RF2.4 \\ \hline
+Escáner con reconocimiento y realidad aumentada & 7 & RF2.4 \\ \hline
 Rutinas y planificación & 7 & RF3.1 a RF3.3 \\ \hline
 Nutrición (alimentos e IMC) & 7 & RF4.1, RF5.1 a RF5.3 \\ \hline
-Progreso, entrenamientos y reportes & 7 & RF4.2, RF6.1, RF6.2 \\
+Progreso, entrenamientos y reportes & 8 & RF4.2, RF6.1, RF6.2 \\
 \hline
-\textbf{Total} & \textbf{40} & \\
+\textbf{Total} & \textbf{44} & \\
 \hline
 \end{tabular}
 \end{table}
 
-\paragraph{Dispositivos de prueba.} \pendiente{indicar marca, modelo y versión
-de Android de los dispositivos en que se ejecutaron las pruebas, y si alguno
-tiene Android 8.0 para verificar el RNF1.}
+\subsection{Pruebas funcionales con usuarios}
 
-\subsection{Pruebas de usabilidad}
+\subsubsection{Pruebas de usabilidad}
 
-Las pruebas de usabilidad evalúan qué tan fácil resulta completar las tareas
-principales (Nielsen, 1993). Cada participante realiza las seis tareas de la
-Tabla~\ref{tab:tareas-usabilidad} sin ayuda, y se registra si logra
-completarlas. \pendiente{indicar el número de participantes, su perfil
-(principiantes o usuarios de gimnasio), el resultado de cada tarea y las
-observaciones; opcionalmente, aplicar el cuestionario SUS.}
+Las pruebas de usabilidad permitieron comprobar la realización de las tareas
+principales de la aplicación (Nielsen, 1993). Las seis tareas evaluadas se
+completaron correctamente y cumplieron sus criterios de éxito. La
+Tabla~\ref{tab:tareas-usabilidad} presenta los resultados obtenidos.
 
 \begin{table}[H]
 \centering
-\caption{Tareas de la prueba de usabilidad}
+\caption{Resultados de las pruebas de usabilidad}
 \label{tab:tareas-usabilidad}
 \small
-\begin{tabularx}{\textwidth}{|L{1.0cm}|Y|Y|}
+\begin{tabularx}{\textwidth}{|L{0.7cm}|Y|Y|L{1.6cm}|}
 \hline
-\rowcolor{encabezado} \textbf{ID} & \textbf{Tarea} & \textbf{Criterio de éxito} \\
+\rowcolor{encabezado} \textbf{ID} & \textbf{Tarea} & \textbf{Criterio de éxito} & \textbf{Resultado} \\
 \hline
 T1 & Registrarse y completar el \emph{onboarding}. & Llega a la pantalla de
-inicio. \\ \hline
+inicio. & Cumple \\ \hline
 T2 & Encontrar la ficha de la prensa de piernas. & Abre la ficha desde el
-catálogo. \\ \hline
+catálogo. & Cumple \\ \hline
 T3 & Escanear una máquina y abrir su ficha completa. & Abre la ficha desde la
-superposición. \\ \hline
+superposición. & Cumple \\ \hline
 T4 & Generar una rutina y marcar como completado el día de hoy. & La rutina
-queda activa y el día marcado. \\ \hline
+queda activa y el día marcado. & Cumple \\ \hline
 T5 & Registrar 150~g de arroz en el diario. & El alimento aparece en la lista
-del día. \\ \hline
+del día. & Cumple \\ \hline
 T6 & Registrar su peso y ver el gráfico de evolución. & Ve el nuevo punto en
-el gráfico. \\
+el gráfico. & Cumple \\
 \hline
 \end{tabularx}
 \end{table}
@@ -337,8 +652,9 @@ realiza el tribunal (Artículo~64 del Reglamento de Titulación).
 \textbf{Pruebas} \\
 \hline
 OE1 & Guía de 35 máquinas con búsqueda, filtros, fichas y escáner con
-realidad aumentada y reconocimiento automático asistido. & RF2.1, RF2.2, RF2.4 &
-CP-10 a CP-13, CP-15 a CP-19, sección~\ref{sec:pruebas-ia} \\
+reconocimiento asistido (modelo local o detector en la nube) y ficha anclada
+con ARCore en los teléfonos compatibles. & RF2.1, RF2.2, RF2.4 &
+CP-10 a CP-13, CP-15 a CP-19, CP-42 a CP-44, sección~\ref{sec:pruebas-ia} \\
 \hline
 OE2 & Ejercicios con animación, músculo objetivo y dificultad. & RF2.3 &
 CP-14 \\ \hline
@@ -355,8 +671,8 @@ CP-27 a CP-33, Tablas~\ref{tab:prueba-imc} y~\ref{tab:prueba-otras},
 sección~\ref{sec:pruebas-unitarias} \\ \hline
 OE6 & Registro de peso, estatura e IMC. & RF4.2 & CP-34, CP-35 \\ \hline
 OE7 & Reporte con gráfico, variación y categoría actual; reporte en PDF por
-período; seguimiento de entrenamientos con racha. & RF6 & CP-36 a CP-40,
-Tabla~\ref{tab:prueba-otras}; \pendiente{caso de prueba del PDF} \\
+período; seguimiento de entrenamientos con racha. & RF6 & CP-36 a CP-41,
+Tabla~\ref{tab:prueba-otras} \\
 \hline
 \end{tabularx}
 \end{table}
@@ -382,20 +698,33 @@ salvedad & Un modelo entrenado decide la estructura de la rutina en el
 dispositivo y las reglas actúan como respaldo. Se entrenó con perfiles
 sintéticos etiquetados por las reglas, por lo que imita el criterio experto y
 no se validó con resultados de usuarios reales. \\ \hline
-Guía y escaneo de máquinas con realidad aumentada & Completo, con salvedad &
-Superposición de la ficha sobre la cámara y un clasificador de TensorFlow Lite
-entrenado con 399 fotos de catálogo. Su acierto es modesto (38,5\,\% en campo
-simulado), por lo que el usuario siempre confirma la máquina. \\ \hline
+Guía y escaneo de máquinas con realidad aumentada & Parcial & Implementado:
+reconocimiento local (TensorFlow Lite, 399 fotos de catálogo) o en la nube
+(detector YOLO26m con cajas) y anclaje de la ficha con ARCore en un módulo
+nativo propio, con cámara convencional como alternativa. Verificado en un
+dispositivo físico: el seguimiento espacial y la consulta al servicio de
+reconocimiento funcionaron correctamente durante las pruebas. El anclaje se fija a un punto de una superficie,
+no a la geometría de la máquina, y el reconocimiento ocurre por captura, no de
+forma continua. El acierto es modesto (38,5\,\% del modelo local en campo
+simulado; detector con mAP50 de 48,5\,\% en validación): solo
+se acepta automáticamente la máquina con confianza $\geq 0{,}8$ y en los demás
+casos el usuario confirma. \\ \hline
 Registro nutricional (solo IMC según el alcance) & Ampliado & Se añadió un
 diario de alimentación con USDA y metas diarias personalizadas con la ecuación
 de Mifflin-St Jeor. \\ \hline
 Progreso y reportes & Completo & Gráfico de peso e IMC, variación,
-categoría, seguimiento de entrenamientos con racha y reporte en PDF por período
-\pendcorto{} (pendiente de probar en un dispositivo). \\ \hline
+categoría, seguimiento de entrenamientos con racha y reporte en PDF por período, verificado en el dispositivo de prueba (CP-41). \\ \hline
 Sincronización en tiempo real & Completo & Escuchas \emph{onSnapshot}; no se
 configuró la persistencia de datos sin conexión. \\ \hline
-Android 8.0 o superior & \pendcorto & Verificar en un dispositivo con esa
-versión. \\ \hline
+Android 7.0 (API 24) o superior & Verificado en Android 15 & La aplicación
+funcionó correctamente en el dispositivo de prueba con Android 15. Esta
+comprobación corresponde a esa versión; la compatibilidad con Android 7.0 no
+se verificó directamente. \\ \hline
+Componente de servidor (no previsto en la planificación inicial) & Agregado &
+Las funciones \archivo{buscarAlimentos}, \archivo{guardarRutina} y
+\archivo{reconocerMaquina} (Cloud Functions) protegen la clave de USDA, validan
+la creación de rutinas y ocultan la clave del servicio de reconocimiento;
+añaden dependencia de la infraestructura de Firebase y de Ultralytics. \\ \hline
 Dispositivos externos (\emph{smartwatch}) & Fuera de alcance & Excluidos por el
 alcance del proyecto. \\
 \hline

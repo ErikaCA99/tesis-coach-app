@@ -1,3 +1,14 @@
+% =====================================================================
+%  CAPÍTULO 2 (versión actualizada). Cambios respecto al original:
+%   - Citas de autores corporativos alineadas con la bibliografía APA 7.
+%   - Mobile-D: adaptación declarada (equipos pequeños, proyectos breves) y
+%     días de planificación/trabajo/entrega (Abrahamsson et al., 2004).
+%   - Realidad aumentada: atribución corregida y subsección de alcance.
+%   - IA: modelos ligeros (Sandler et al., 2018) y antecedente de Silva Amado.
+%   - Entrenamiento y nutrición: prescripción (Kraemer y Ratamess, 2004),
+%     IMC/OMS y gasto energético (Mifflin et al., 1990).
+%   - Afirmaciones absolutas atenuadas («garantizan», «demuestra»).
+% =====================================================================
 \chapter{MARCO TEÓRICO}
 \label{cap:marco}
 
@@ -10,7 +21,7 @@ para estructurar, planificar y controlar el proceso de desarrollo de sistemas de
 información (Gabriel Maide \& Pacienzia, 2020). Asimismo el objetivo de las
 distintas metodologías es el intentar organizar los equipos de trabajo para que
 estos desarrollen las funciones de un programa de la mejor manera posible
-(Santander, 2020). Una metodología establece un conjunto de prácticas, técnicas
+(Santander Open Academy, 2020). Una metodología establece un conjunto de prácticas, técnicas
 y procesos que permiten mejorar la eficiencia del trabajo, garantizar la
 calidad y reducir la incertidumbre durante el ciclo de vida del software
 (Pressman, 2010).
@@ -25,7 +36,7 @@ Las metodologías de desarrollo de software son enfoques que proporcionan un
 marco claro para planificar, ejecutar y entregar proyectos de software, estas
 pueden ser lineales o iterativas, se ajustan a diferentes tipos de proyectos y
 equipos de acuerdo a las necesidades específicas de cada proyecto o equipo
-(Team, 2024).
+(Abstracta Team, 2024).
 
 % =====================================================================
 \section{Metodologías de desarrollo de software tradicionales vs ágiles}
@@ -41,21 +52,12 @@ enfoques secuenciales y lineales, basados en una planificación detallada y
 estructurada, donde cada fase debe completarse antes de iniciar la siguiente,
 tampoco se puede volver hacia atrás una vez se ha cambiado de fase. Estas
 metodologías, no se adaptan nada bien a los cambios, y el mundo actual cambia
-constantemente (Santander, 2020).
+constantemente (Santander Open Academy, 2020).
 
 Este enfoque es ideal para proyectos en los que los requerimientos están bien
 definidos desde el principio.
 
 La comparación detallada de las metodologías Waterfall, Espiral, Incremental, Prototipado y Diseño rápido de aplicaciones (RAD), con su descripción y características, se presenta en la Tabla~\ref{tab:metodologias-tradicionales} del Anexo~\ref{anx:comparativas}.
-
-\conclusion{De acuerdo al análisis comparativo presentado en la
-Tabla~\ref{tab:metodologias-tradicionales}, se concluye que la principal
-diferencia entre las metodologías tradicionales radica en su tolerancia al
-cambio y la gestión de riesgo. Mientras que el modelo cascada prioriza una
-estructura secuencial y rígida, los modelos espiral, incremental y prototipado
-introducen cambios iterativos que permiten la validación progresiva del
-usuario. Por lo tanto, estas metodologías son más aptas para proyectos con
-requerimientos claros, estables que no cambiaran con el tiempo.}
 
 \subsection{Metodologías ágiles para móvil}
 
@@ -66,16 +68,11 @@ colaboración constante con el cliente y la capacidad de adaptarse a nuevos
 requerimientos.
 
 Las metodologías ágiles son las más utilizadas en la actualidad debido a su alta
-flexibilidad y agilidad (Santander, 2020). Se basan en la metodología
+flexibilidad y agilidad (Santander Open Academy, 2020). Se basan en la metodología
 incremental, en la que en cada ciclo de desarrollo se agregan nuevas
 funcionalidades a la aplicación final.
 
 La comparación de las metodologías Scrum, Extreme Programming (XP), Mobile-D y Kanban, con su descripción y características, se presenta en la Tabla~\ref{tab:metodologias-agiles} del Anexo~\ref{anx:comparativas}.
-
-\conclusion{En conclusión, todas las metodologías ágiles comparten principios
-como la flexibilidad y la entrega continua, sin embargo, la metodología
-Mobile-D es la más adecuada para proyectos móviles por su rapidez, sus
-iteraciones cortas y su adaptación a las particularidades del hardware.}
 
 % =====================================================================
 \section{Mobile-D}
@@ -89,22 +86,27 @@ diversidad de plataformas y cambios frecuentes en los requisitos (Abrahamsson
 et al., 2004).
 
 Mobile-D es adecuada para proyectos que requieren rapidez, flexibilidad y alta
-calidad, como aplicaciones de seguridad informática, plataformas de comercio
-electrónico, aplicaciones de simulación entre otros. Está pensada para equipos
-pequeños. Esta metodología combina prácticas de diversas metodologías ágiles,
-como Scrum, XP y prácticas de ingeniería de software.
+calidad. Está pensada para equipos pequeños y para proyectos de corta duración
+(el artículo original menciona entregas en menos de diez semanas;
+Abrahamsson et~al., 2004), por lo que su aplicación a este proyecto, individual
+y de mayor duración, constituye una adaptación. La metodología combina prácticas
+de diversas metodologías ágiles y de ingeniería de software.
+% VERIFICAR: citar en el texto base de Mobile-D qué metodologías integra.
 
 \subsection{Fases y etapas}
 
 El desarrollo mediante el enfoque de Mobile-D se compone de 5 fases como se
 muestra en la Figura~\ref{fig:mobile-d}, estas fases son: Exploración,
-Inicialización, Producción, Estabilización y Pruebas del sistema.
+Inicialización, Producción, Estabilización y Pruebas del sistema. En cada
+iteración, el método organiza el trabajo en días de planificación, de trabajo y
+de entrega (Abrahamsson et~al., 2004).
 
 \begin{figure}[H]
     \centering
     \fbox{\includegraphics[width=0.68\textwidth]{figuras/docx/mobile-d-fases.png}}
-    \caption{Fases y etapas de la metodología Mobile-D (Leyva, León, \& García, 2016)}
+    \caption{Fases y etapas de la metodología Mobile-D}
     \label{fig:mobile-d}
+    \fuente{Leyva et~al. (2016).}
 \end{figure}
 
 \begin{itemize}
@@ -177,14 +179,9 @@ bibliotecas Jetpack (Google, 2023). Por su parte, iOS desarrollado por Apple, se
 caracteriza por ser un sistema operativo cerrado, de alto control de calidad,
 diseñado exclusivamente para ejecutarse en el hardware de Apple y herramientas
 como Xcode y SwiftUI que permiten crear aplicaciones con elevado rendimiento y
-experiencia de usuario (Apple, 2023).
+experiencia de usuario (Apple Inc., 2023).
 
 Las diferencias entre ambos sistemas operativos (propietario, licencia, lenguajes, entorno de desarrollo, arquitectura, presencia en el mercado boliviano, personalización, fragmentación y distribución de aplicaciones) se resumen en la Tabla~\ref{tab:android-ios} del Anexo~\ref{anx:comparativas}.
-
-\conclusion{En conclusión, Android destaca por su capacidad de adaptabilidad, y
-su compatibilidad con distintos lenguajes de programación, lo que lo hace más
-versátil; su flexibilidad y escalabilidad lo hacen la plataforma idónea para el
-desarrollo de una aplicación móvil.}
 
 % =====================================================================
 \section{Sistema Operativo}
@@ -202,12 +199,12 @@ a cualquier tipo de hardware (Tomás, 2019).
 
 Su dominio en el mercado global, superando el 70\,\% de cuota del mercado, y su
 prevalencia superior al 90\,\% en el contexto boliviano, lo posicionan como el
-estándar en el desarrollo Mobile en la región (Global, 2025). El desarrollo
+estándar en el desarrollo Mobile en la región (StatCounter Global Stats, 2025). El desarrollo
 Android ha ido evolucionando puesto que permite que fabricantes,
 desarrolladores y la comunidad global adapten el sistema, añadiendo funciones
 nuevas y personalicen la interfaz, lo que facilita la creación de aplicaciones
 innovadoras y la configuración del sistema a distintos entornos y necesidades
-(Alliance, 2022).
+(Open Handset Alliance, 2022).
 
 \subsection{Arquitectura de Android}
 
@@ -228,8 +225,9 @@ formada por cuatro capas.
 \begin{figure}[H]
     \centering
     \fbox{\includegraphics[width=0.58\textwidth]{figuras/docx/arquitectura-android.png}}
-    \caption{Arquitectura de Android (Gómez A. A., 2015)}
+    \caption{Arquitectura de Android}
     \label{fig:arquitectura-android}
+    \fuente{Gómez (2015).}
 \end{figure}
 
 \subsection{Ventajas y limitaciones}
@@ -257,15 +255,15 @@ sistema.
 \label{sec:realidad-aumentada}
 
 La realidad aumentada (RA) es una combinación visual de elementos reales y
-virtuales que interaccionan entre ellos (Navarro, Martínez, \& Martínez, 2018),
+virtuales que interaccionan entre ellos (Navarro et~al., 2018),
 también es la integración en tiempo real de la información digital en el
 entorno de un usuario. La tecnología de RA superpone el contenido al mundo
 real, lo que enriquece la percepción de la realidad del usuario en lugar de
 reemplazarla (Hayes \& Downie, 2025). A diferencia de la realidad virtual, que
 sustituye completamente el entorno físico, la RA superpone información digital
-como imágenes, modelos 3D, texto o animaciones sobre la realidad observada a
-través de dispositivos como smartphones, tablets o lentes inteligentes (Azuma,
-1997).
+como imágenes, modelos 3D, texto o animaciones sobre la realidad observada
+(Azuma, 1997), y hoy se despliega en dispositivos como smartphones, tablets o
+lentes inteligentes (Hayes \& Downie, 2025).
 
 \subsection{Componentes de un sistema de Realidad Aumentada}
 
@@ -303,13 +301,56 @@ Para el desarrollo móvil, las principales tecnologías de RA son:
     iOS, Unity y la Web. Transforma la manera en que las personas juegan,
     compran, aprenden, crean y experimentan el mundo juntas mediante la
     comprensión contextual de las personas, los lugares y las cosas
-    (Developers, 2025).
-    \item \textbf{ARKit:} Es un framework de Apple, altamente optimizado y
-    compatible con sensores avanzados como LiDAR. Permite capturar
-    impresionantes videos de alta resolución perfectos para la edición de video
-    profesional, producción cinematográfica, aplicaciones de redes sociales
-    entre otros (Inc., 2025).
+    (Google for Developers, 2025).
+    \item \textbf{ARKit:} Es el framework de realidad aumentada de Apple, que
+    combina la cámara y los sensores del dispositivo, entre ellos LiDAR en los
+    modelos compatibles, para anclar contenido virtual al entorno
+    (Apple Inc., 2025). % VERIFICAR contra la página citada (el texto original describía edición de video).
 \end{itemize}
+
+Para el desarrollo de este trabajo interesa sobre todo cómo ARCore resuelve el
+registro tridimensional. Su seguimiento de movimiento se basa en una técnica de
+localización y mapeo simultáneos (SLAM): detecta puntos de interés en la imagen
+de la cámara y los combina con los datos inerciales del dispositivo para
+estimar su posición y orientación a lo largo del tiempo; además agrupa esos
+puntos para reconocer superficies planas, horizontales o verticales (Google for
+Developers, s.~f.-e). Sobre ese conocimiento del entorno se pueden crear
+\emph{anclas}, es decir, poses fijas respecto del mundo real: a medida que
+ARCore refina su estimación del espacio, el ancla se corrige y el contenido
+asociado a ella permanece en su lugar en vez de ir a la deriva (Google for
+Developers, s.~f.-f). Cuando el dispositivo lo permite, ARCore también estima
+la profundidad de la escena comparando imágenes tomadas desde ángulos distintos
+mientras la persona mueve el teléfono, con apoyo de aprendizaje automático y,
+si existe, de un sensor de tiempo de vuelo; esa información hace que una prueba
+de impacto (\emph{hit test}) funcione incluso sobre superficies sin textura
+(Google for Developers, s.~f.-b), una técnica que cuenta con descripción en la
+literatura científica (Valentin et~al., 2018). Por último, una aplicación puede
+declarar ARCore como requerido o como opcional; en el segundo caso sigue
+funcionando en teléfonos sin soporte, y las funciones de realidad aumentada
+exigen Android 7.0 (API~24) o superior (Google for Developers, s.~f.-c).
+
+\subsection{Alcance de la realidad aumentada en este trabajo}
+\label{subsec:ra-alcance}
+
+Un sistema de RA completo exige cumplir las tres características descritas por
+Azuma (1997): combinar lo real y lo virtual, ser interactivo en tiempo real y
+estar registrado en tres dimensiones. La aplicación las aborda en dos niveles.
+En los teléfonos Android compatibles con ARCore, el escáner usa un módulo
+nativo propio (\archivo{CoachAR}) que, una vez reconocida la máquina, ancla su
+nombre e instrucciones a un punto del entorno real y los mantiene allí mientras
+la persona se mueve; esa es la forma de RA con registro tridimensional
+(sección~\ref{subsec:it3}). En los demás dispositivos, y cuando el usuario lo
+prefiere, el escáner recurre a una cámara convencional con la ficha
+superpuesta en pantalla, que satisface la combinación de lo real y lo virtual
+y, solo en parte, la interacción en tiempo real.
+
+Conviene tener presentes dos límites. El primero es que el ancla se fija a un
+punto de una superficie estimado a partir de la caja delimitadora de la
+máquina, no a la geometría de la máquina, y por eso no la sigue si se desplaza.
+El segundo es que el reconocimiento ocurre por captura y no de forma continua
+sobre el video. En esta memoria el término «realidad aumentada» se usa con
+esos matices (sección~\ref{sec:des-alcance}).
+
 
 % =====================================================================
 \section{Inteligencia Artificial}
@@ -319,11 +360,11 @@ La inteligencia artificial (IA) es una tecnología transformadora que permite a
 las máquinas llevar a cabo tareas de resolución de problemas similares a las de
 los humanos. Desde el reconocimiento de imágenes y la generación de contenido
 creativo hasta la creación de predicciones basadas en datos, la IA permite a
-las empresas tomar decisiones más inteligentes a escala (Services, 2025).
+las empresas tomar decisiones más inteligentes a escala (Amazon Web Services, 2025).
 
 La IA consiste en enseñar a las computadoras a hacer las actividades increíbles
 que nuestros cerebros pueden hacer, desde comprender el mundo que las rodea
-hasta aprender temas nuevos y generar ideas originales (Cloud, 2025). En el
+hasta aprender temas nuevos y generar ideas originales (Google Cloud, 2025). En el
 contexto de las aplicaciones móviles, la IA permite integrar funciones
 avanzadas como la personalización del contenido, la detección automática de
 movimiento, el análisis de rendimiento del usuario y la interacción mediante
@@ -350,9 +391,83 @@ entrenamiento para aprender y mejorar su precisión con el tiempo (IBM, 2025).
 La visión artificial es un campo de la inteligencia artificial, que permite a
 los ordenadores y sistemas interpretar y analizar datos visuales, así como
 también obtener información pertinente a partir de imágenes digitales, videos
-y otros datos visuales (Cloud, 2025). En el contexto de las aplicaciones
+y otros datos visuales (Google Cloud, 2025). En el contexto de las aplicaciones
 móviles modernas, permite interpretar información visual mediante algoritmos
 que detectan objetos, poses, personas entre otras características del entorno.
+
+\subsection{Modelos ligeros para dispositivos móviles}
+
+Los clasificadores de imágenes diseñados para dispositivos móviles equilibran
+precisión y consumo de recursos. MobileNetV2 (Sandler et~al., 2018) es una
+arquitectura de este tipo, basada en bloques residuales invertidos y cuellos de
+botella lineales. Una práctica habitual consiste en reutilizar una red
+preentrenada como extractora de características y entrenar solo una capa final
+para el problema propio, lo que permite trabajar con pocos datos; los modelos
+resultantes pueden ejecutarse en el dispositivo con TensorFlow Lite, sin enviar
+imágenes a un servidor.
+
+\subsection{Detección de objetos y la familia YOLO}
+\label{subsec:yolo}
+
+Un clasificador responde qué hay en una imagen; un detector de objetos
+responde además dónde, pues devuelve para cada objeto una caja delimitadora,
+su clase y un grado de confianza. Esa localización es la que permite, en este
+proyecto, colocar información junto a la máquina en lugar de limitarse a
+nombrarla. YOLO (\emph{You Only Look Once}) planteó la detección como un único
+problema de regresión resuelto por una red que mira la imagen completa una sola
+vez, lo bastante rápida para el tiempo real (Redmon et~al., 2016). Desde
+entonces la familia ha crecido con versiones sucesivas que mejoran la
+arquitectura y el entrenamiento (Terven et~al., 2023).
+
+Las versiones recientes se distribuyen mediante la biblioteca Ultralytics, que
+reúne en un mismo paquete el entrenamiento, la validación y la exportación a
+varios formatos de despliegue (Jocher et~al., 2023). Su código y sus modelos se
+publican con licencia AGPL-3.0 o con una licencia empresarial (Ultralytics,
+s.~f.-c), condición que debe considerarse si el producto se distribuye fuera
+del ámbito académico (sección~\ref{sec:recomendaciones}). YOLO11, la
+generación con la que se entrenó una primera versión del detector de este proyecto, incorpora los
+bloques C3k2 y un módulo de atención (C2PSA) para extraer mejor las
+características, y se ofrece en tamaños desde nano hasta extragrande, de modo
+que sirve tanto para dispositivos con pocos recursos como para servidores
+(Khanam \& Hussain, 2024). YOLO26, publicada después, elimina la supresión de
+no máximos (NMS) durante la inferencia mediante un diseño de doble cabeza,
+suprime la pérdida focal de distribución (DFL) para simplificar la cabeza de
+detección y la exportación, y se entrena con un optimizador híbrido llamado
+MuSGD (Jocher et~al., 2026; Sapkota et~al., 2025). Sus autores reportan una
+inferencia en CPU hasta un 43\,\% más rápida que la de YOLO11 en el tamaño
+nano (Ultralytics, s.~f.-c). La versión final del detector de este trabajo usa YOLO26 en su tamaño mediano (m). Se trata de preimpresiones y de documentación del
+fabricante, aún sin revisión por pares, de modo que esas cifras se toman como
+referencia y no como un resultado propio.
+
+Un detector se evalúa con métricas distintas a las de un clasificador. La
+intersección sobre la unión (IoU) mide cuánto se solapan la caja predicha y la
+real, y una detección se considera correcta si supera un umbral de IoU. La
+precisión es la proporción de detecciones correctas entre las emitidas; la
+exhaustividad (\emph{recall}), la proporción de objetos reales que se
+encontraron; y la precisión promedio (AP) resume el compromiso entre ambas como
+el área bajo la curva precisión--exhaustividad. Su promedio entre clases es la
+mAP (Padilla et~al., 2021). Es habitual reportar la mAP50 (IoU de al menos 0,5)
+y la mAP50--95 (promedio entre umbrales de 0,5 a 0,95), esta última más
+exigente con el ajuste de la caja.
+
+Un modelo así puede ejecutarse en el propio teléfono o en un servidor. Ultralytics
+Platform permite publicarlo como \emph{endpoint} dedicado: un servicio con
+dirección propia, protegido con una clave, que recibe una imagen y devuelve las
+detecciones. En su configuración gratuita escala a cero cuando no se usa, por
+lo que la primera solicitud tras un período inactivo puede tardar hasta
+alrededor de un minuto (Ultralytics, s.~f.-b). Ejecutar el modelo en la nube
+permite usar redes más grandes que las que soporta un teléfono, a cambio de
+depender de la conexión, aceptar la latencia de red y enviar la imagen a un
+servicio externo.
+
+\subsection{Antecedente: visión artificial para la ejecución de ejercicios}
+
+Silva Amado (2024) propone un sistema de visión artificial que estima la pose
+con MediaPipe, calcula ángulos articulares y los compara con umbrales para
+identificar la ejecución de ejercicios; su evaluación es cualitativa. Este
+enfoque verifica \emph{cómo} se ejecuta un movimiento, mientras que el presente
+trabajo reconoce \emph{con qué máquina} se entrena y no estima la pose del
+usuario (capítulo~\ref{cap:resultados}).
 
 \subsection{Modelos de lenguaje Extenso (LLM)}
 
@@ -364,7 +479,7 @@ profundo, como Transformer, desarrollado por Google en 2017, y se pueden
 entrenar con miles de millones de textos y otros tipos de contenido.
 
 Debido a su escalabilidad, los LLM se pueden entrenar con otros tipos de datos,
-como código, imágenes, audio y video, entre otros (Cloud, 2025). Su
+como código, imágenes, audio y video, entre otros (Google Cloud, 2025). Su
 versatilidad y capacidad de aprendizaje los convierten en herramientas clave en
 el desarrollo de aplicaciones modernas, incluyendo sistemas móviles
 inteligentes y soluciones que integren realidad aumentada e inteligencia
@@ -379,16 +494,15 @@ artificial.
 El entrenamiento es un conjunto de ejercicios y actividades que se realizan
 regularmente para mejorar la salud y el estado físico de una persona. Este tipo
 de entrenamiento puede incluir variedad de actividades, cada una enfocada en
-diferentes aspectos del cuerpo y objetivos personales (Orientanet, s.f.).
+diferentes aspectos del cuerpo y objetivos personales (Orientanet, s. f.).
 
 Hoy en día, la tecnología como sensores, aplicaciones móviles, realidad
 aumentada e inteligencia artificial permiten un monitoreo exhaustivo de la
 técnica y el análisis del movimiento, ofreciendo retroalimentación
-personalizada en tiempo real. Estas innovaciones no solo optimizan el
-rendimiento de los usuarios, sino que también garantizan que quienes están
-comenzando su camino en el ejercicio puedan realizar las actividades de manera
-segura y eficaz, contribuyendo de esta manera a la reducción de riesgo de
-lesiones y fomentando un estilo de vida saludable.
+personalizada en tiempo real. Estas innovaciones pueden optimizar el
+rendimiento de los usuarios y ayudar a quienes comienzan en el ejercicio a
+realizar las actividades de manera más segura, contribuyendo a reducir el
+riesgo de lesiones y a fomentar un estilo de vida saludable.
 
 \subsection{Principios del entrenamiento físico}
 
@@ -428,9 +542,10 @@ técnicas, fortalecimiento de músculos estabilizadores o ajustes en la postura.
 
 La técnica incorrecta en la ejecución de ejercicios, es una de las principales
 causas de las lesiones en entornos de entrenamiento físico, especialmente en
-principiantes. La evidencia científica demuestra que una postura inadecuada, la
-falta de control motor y el uso de cargas excesivas incrementan el riesgo de
-daño musculoarticular (Kolt \& Snyder-Mackler, 2007).
+principiantes. La literatura señala que una postura inadecuada, la falta de
+control motor y el uso de cargas excesivas incrementan el riesgo de daño
+musculoarticular (Kolt \& Snyder-Mackler, 2007).
+
 
 El desconocimiento de la técnica o la negligencia en la postura pueden provocar
 lesiones frecuentes, como:
@@ -484,6 +599,26 @@ cuerpo que trabajan, se agrupan en máquinas para tren superior (pecho, espalda,
 hombros y brazos), tren inferior (piernas y glúteos) y core (abdominales y zona
 lumbar).
 
+\subsection{Prescripción del entrenamiento de fuerza}
+\label{subsec:prescripcion}
+
+La prescripción del entrenamiento de fuerza se define mediante variables como la
+selección de ejercicios, la intensidad, el volumen, la frecuencia semanal y los
+descansos, y requiere una progresión gradual de la carga (Kraemer \&
+Ratamess, 2004). Estas pautas, consolidadas en la literatura, son la base de
+conocimiento del generador de rutinas del sistema
+(sección~\ref{sec:des-alcance}).
+
+\subsection{Indicadores nutricionales y metabólicos}
+\label{subsec:nutricion}
+
+El índice de masa corporal (IMC) relaciona el peso con la estatura y se clasifica
+con los puntos de corte de la Organización Mundial de la Salud (2000). Para
+estimar el gasto energético en reposo, y con él las metas calóricas diarias, se
+utiliza la ecuación predictiva de Mifflin et~al. (1990), desarrollada en
+personas sanas. Ambos indicadores son orientativos y no reemplazan la
+valoración de un profesional de la nutrición.
+
 % =====================================================================
 \section{Plataforma de desarrollo}
 \label{sec:plataforma}
@@ -499,7 +634,6 @@ A diferencia de un IDE tradicional que viene completo desde la instalación, VS
 Code parte de un núcleo ligero y va incorporando funcionalidad mediante
 extensiones, lo que permite adaptarlo a prácticamente cualquier lenguaje o
 framework sin cargar con herramientas que el proyecto no necesita.
-
 
 % =====================================================================
 \section{Frameworks para desarrollo Mobile}
@@ -517,12 +651,6 @@ Xamarin y Jetpack Compose.
 
 La descripción, características y ventajas de cada uno de estos frameworks se comparan en la Tabla~\ref{tab:frameworks} del Anexo~\ref{anx:comparativas}.
 
-\conclusion{En conclusión, React Native destaca frente a los demás frameworks
-debido a su equilibrio entre rendimiento y desarrollo multiplataforma, su
-capacidad de generar componentes nativos le da mayor fluidez a diferencia de
-Ionic y Flutter. Así también, permite desarrollar aplicaciones de forma
-eficiente y se adapta al entorno de Android.}
-
 \subsection{React Native}
 
 React Native es un framework para la creación de aplicaciones nativas para iOS
@@ -532,7 +660,7 @@ híbridas tradicionales, React Native genera interfaces nativas, lo que permite
 lograr un rendimiento cercano al desarrollo completamente nativo (React Native,
 2025).
 
-React Native se caracteriza por (Viera, s.f.):
+React Native se caracteriza por (Viera, s. f.):
 
 \begin{itemize}
     \item \textbf{Componentes nativos:} Usa componentes de interfaz de usuario
@@ -568,9 +696,6 @@ cuales destacan Firebase Firestore, SQLite, MongoDB Atlas, MySQL y PostgreSQL.
 
 La descripción, características y ventajas de cada una de estas bases de datos se comparan en la Tabla~\ref{tab:bases-datos} del Anexo~\ref{anx:comparativas}.
 
-\conclusion{En conclusión, Firebase Firestore es la mejor alternativa, por su
-arquitectura NoSQL, reduce la complejidad del Backend y es escalable.}
-
 \subsection{Firebase}
 
 Firebase es una plataforma en la nube desarrollada por Google, facilita el
@@ -594,12 +719,12 @@ cambios realizados en un archivo o conjunto de archivos, principalmente
 utilizado por ingenieros de software para hacer seguimiento a las
 modificaciones realizadas en el código fuente (B, 2025).
 
-Para esto utilizaremos:
+En este proyecto se utilizaron:
 
 \begin{enumerate}
     \item \textbf{Git:} Es un sistema de control de versiones distribuido,
     gratuito y de código abierto diseñado para manejar proyectos pequeños, como
-    también proyectos muy grandes de forma rápida y eficiente (Git, s.f.).
+    también proyectos muy grandes de forma rápida y eficiente (Git, s. f.).
     \item \textbf{GitHub:} Es un servicio basado en la nube que aloja un sistema
     de control de versiones (VCS) llamado Git. Éste permite a los
     desarrolladores colaborar y realizar cambios en proyectos compartidos, a la
@@ -610,7 +735,7 @@ Para esto utilizaremos:
 
 Las herramientas de gestión de proyectos están especialmente diseñadas para
 asistir a un empleado o equipo en la gestión eficaz de sus proyectos y tareas
-(Gurnov \& Wrike (W.), 2025). Estas herramientas son utilizadas para la
+(Gurnov \& Wrike, 2025). Estas herramientas son utilizadas para la
 organización, planificación, seguimiento y aseguramiento de calidad del
 proyecto.
 

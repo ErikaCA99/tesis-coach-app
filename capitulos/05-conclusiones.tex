@@ -1,3 +1,5 @@
+% MEJORADO (27 oct 2026): realidad aumentada acotada (Azuma, 1997), umbral y precisión del
+% reconocimiento, componente de servidor, límites de las pruebas y trabajo futuro con fuentes.
 \chapter{CONCLUSIONES Y RECOMENDACIONES}
 \label{cap:conclusiones}
 
@@ -11,9 +13,16 @@ producto es una aplicación Android construida con React Native, Expo y
 TypeScript sobre los servicios de Firebase, organizada en una arquitectura
 cliente--servidor con capas Modelo--Vista--Controlador y desarrollada con la
 metodología Mobile-D en seis iteraciones. Dos de sus componentes, la
-inteligencia artificial y la realidad aumentada, se implementaron con modelos
-de TensorFlow Lite entrenados para este proyecto, pero con un alcance de
-validación acotado, como se detalla a continuación.
+inteligencia artificial y la realidad aumentada, se implementaron con un
+alcance acotado, como se detalla a continuación: la primera mediante modelos de
+TensorFlow Lite entrenados para este proyecto y un detector YOLO26m publicado en Ultralytics Platform, cuya validación se limita a datos sintéticos, de
+catálogo y a las particiones del propio entrenamiento; la segunda mediante un módulo
+nativo basado en ARCore que ancla la ficha de la máquina en el entorno de los
+teléfonos compatibles y, en los demás, una superposición en pantalla sobre la
+cámara. Según la definición de Azuma (1997), el anclaje aporta el registro
+tridimensional, pero aún no se ha validado en un teléfono físico y el
+reconocimiento sigue ocurriendo por captura y no de forma continua
+(sección~\ref{subsec:ra-alcance}).
 
 Respecto a cada objetivo específico, se concluye lo siguiente:
 
@@ -24,18 +33,26 @@ Respecto a cada objetivo específico, se concluye lo siguiente:
     guía de uso paso a paso, errores comunes y pautas de prevención de
     lesiones redactadas como contenido propio. El catálogo se consulta con
     búsqueda tolerante a tildes y filtros, y se complementa con un escáner que
-    superpone la ficha de la máquina sobre la imagen en vivo de la cámara. Un
+    superpone la ficha de la máquina sobre la vista de la cámara y, en los
+    teléfonos compatibles con ARCore, la ancla a un punto del entorno. Un
     clasificador de TensorFlow Lite (MobileNetV2 con una capa entrenada),
     entrenado con las 399 fotografías del catálogo, propone la máquina a
     partir de una foto; su acierto es modesto (38,5\,\% en un escenario de
     campo simulado de 35 clases y 61,4\,\% entre las tres primeras
     sugerencias), por lo que solo se acepta sin preguntar con una confianza de
-    al menos 0,8 y, en los demás casos, el usuario confirma la sugerencia o
-    elige la máquina en una lista.
+    al menos 0,8, umbral con el que la validación cruzada arrojó una precisión
+    del 85,4\,\% sobre el 15,8\,\% de las fotografías; en los demás casos, el
+    usuario confirma la sugerencia o elige la máquina en una lista. Como
+    alternativa opcional, un detector YOLO26m entrenado y publicado como \emph{endpoint} en Ultralytics Platform devuelve además la caja de la máquina; en validación alcanzó una mAP50 de 48,5\,\% y una exhaustividad de 45,0\,\%, cifras que muestran que el procedimiento funciona de extremo a extremo, no que el detector sea fiable en un gimnasio. El reconocimiento se
+    ejecuta sobre una fotografía fija y su latencia en el dispositivo no se ha
+    medido.
     \item \textbf{Instruir en la ejecución correcta de ejercicios.} Cada
     máquina presenta al menos un ejercicio con su animación de ejecución, su
-    músculo objetivo y su nivel de dificultad, con un total de 95 animaciones
-    obtenidas por la vía oficial de su proveedor.
+    músculo objetivo y su nivel de dificultad, con animaciones y pasos ilustrados procedentes de varias fuentes de datos: WorkoutX (s.~f.), ExerciseDB
+    (AscendAPI, s.~f.), Gym Visual (s.~f.), wger (wger Project, s.~f.) y
+    free-exercise-db (Yuhonas, s.~f.), que se
+    complementan con una guía de entrenamiento paso a paso. El sistema no
+    verifica automáticamente la postura del usuario.
     \item \textbf{Diseñar rutinas personalizadas.} Se implementó
     un generador de rutinas basado en reglas cuya base de conocimiento
     traduce las pautas de prescripción del ejercicio en reglas de frecuencia,
@@ -74,8 +91,8 @@ Respecto a cada objetivo específico, se concluye lo siguiente:
     reflejar siempre los datos vigentes. Además, el usuario puede generar un
     reporte en PDF por período (7, 30, 90 días o todo el historial) con su
     perfil, su peso, sus entrenamientos y su alimentación frente a la meta, y
-    compartirlo desde el sistema. \pendiente{confirmar la generación del PDF
-    en un dispositivo físico.}
+    compartirlo desde el sistema; su generación se verificó en el dispositivo
+    de prueba.
 \end{enumerate}
 
 En el plano técnico, se concluye además que:
@@ -86,9 +103,14 @@ En el plano técnico, se concluye además que:
     como el paso de colecciones raíz a subcolecciones por usuario, o la
     incorporación de nuevas fuentes de datos como USDA, se resolvieron sin
     modificar las pantallas.
-    \item Las reglas de seguridad del servidor, que validan propiedad, tipos y
-    rangos, son indispensables en una arquitectura sin servidor propio, porque
-    las credenciales del cliente son públicas por diseño.
+    \item Las reglas de seguridad y las funciones del servidor son
+    indispensables en una arquitectura basada en servicios gestionados, porque
+    las credenciales del cliente son públicas por diseño. La incorporación de
+    dos funciones (\archivo{buscarAlimentos} y \archivo{guardarRutina}) con
+    App Check, rechazo de usuarios anónimos y cuotas por usuario permitió ocultar
+    la clave de USDA y validar en el servidor la creación de rutinas. Esta
+    protección aún no cuenta con resultados de ejecución de las pruebas con
+    emulador (sección~\ref{sec:pruebas-seguridad}).
     \item Concentrar las reglas de negocio en funciones puras (generador de
     rutinas, IMC, racha de entrenamientos, porciones de alimentos) permitió
     verificarlas de forma automática y reproducible sin depender de la red ni
@@ -108,13 +130,15 @@ En el plano técnico, se concluye además que:
 \end{itemize}
 
 Como limitaciones del producto actual cabe señalar que las pruebas
-automatizadas cubren la lógica pura (cinco suites, 66 pruebas) pero no la
-interfaz, que la persistencia de datos sin conexión no está configurada, que
-los dos modelos no se han medido en un dispositivo ni con usuarios reales, que
-el reconocedor de máquinas acierta poco con las máquinas menos distintivas y
-que las metas nutricionales son estimaciones referenciales. \pendiente{agregar, cuando se disponga de ellos, los resultados
-de las pruebas en dispositivos reales y con usuarios (sección~\ref{sec:des-pruebas})
-como una conclusión sobre la validación del sistema.}
+automatizadas cubren la lógica pura y los componentes de servicio (20 archivos
+de prueba en la aplicación, con 160 casos aprobados el 3 de noviembre de 2026)
+pero no la interfaz, que la persistencia de datos sin conexión no está
+configurada, que los modelos no se han medido en un dispositivo ni con usuarios
+reales, que el anclaje con ARCore no se ha validado en un teléfono físico y que
+el ancla no sigue a la máquina si esta se mueve, que los reconocedores aciertan
+poco con las máquinas menos distintivas, que el uso del detector en la nube
+depende de un servicio externo con licencia propia, y que las metas
+nutricionales son estimaciones referenciales.
 
 \section{Recomendaciones}
 \label{sec:recomendaciones}
@@ -131,14 +155,31 @@ A partir de la experiencia del desarrollo se recomienda, como trabajo futuro:
     \item \textbf{Más fotografías para el reconocimiento de máquinas.} Ampliar
     el conjunto con fotografías propias de las 35 máquinas, tomadas en gimnasios
     reales y con autorización, con varias por máquina (hoy hay desde una hasta
-    24), y reentrenar el clasificador; después, ajustar el umbral de confianza
-    y medir el modelo en dispositivos. No deben usarse las animaciones de
+    25), y reentrenar el clasificador y el detector. En el detector, conviene ampliar el conjunto de datos y las clases con menos ejemplos, reservar una partición de prueba independiente y compararlo con otros tamaños de YOLO26 (por ejemplo, el nano, pensado para dispositivos de borde; Jocher et~al., 2026) y con una versión ejecutada en el propio teléfono. Después, recalibrar el umbral de confianza y medir los modelos en dispositivos. No deben usarse las animaciones de
     WorkoutX para el entrenamiento, porque sus condiciones de uso lo prohíben
     sin permiso escrito.
-    \item \textbf{Realidad aumentada con anclaje tridimensional.} Evaluar
-    ARCore para anclar indicaciones sobre la máquina real (puntos de ajuste,
-    trayectoria del movimiento), como evolución de la superposición basada en
-    cámara.
+    \item \textbf{Validar y ampliar la realidad aumentada.} El anclaje con
+    ARCore ya está implementado, pero falta lo esencial para darlo por
+    validado: ejecutar el protocolo de pruebas (CP-42 a CP-44) en teléfonos
+    físicos y en un gimnasio, y medir el error de colocación, las pérdidas de
+    seguimiento y los modelos de teléfono compatibles. Después se proponen tres
+    líneas de trabajo, en orden creciente de complejidad: (a) ejecutar el
+    detector sobre los fotogramas del vídeo, no solo sobre una captura, y
+    estabilizar el resultado en el tiempo; (b) combinar la caja del detector
+    con la profundidad de ARCore en los dispositivos que la admiten, para
+    acercar el ancla a la geometría de la máquina; y (c) anclar indicaciones
+    tridimensionales (puntos de ajuste, trayectoria del movimiento) sobre la
+    máquina real (Google for Developers, s.~f.-f). Revisiones
+    del campo (Azuma et al., 2001; Billinghurst et al., 2015) señalan el
+    registro preciso y el seguimiento como los problemas técnicos centrales,
+    por lo que cada línea debe evaluarse con medidas de latencia y estabilidad
+    en un dispositivo físico antes de afirmar que se logró el registro
+    tridimensional.
+    \item \textbf{Verificación de la postura.} Evaluar la estimación de pose
+    corporal en el dispositivo (por ejemplo, BlazePose; Bazarevsky et al.,
+    2020) como línea futura para retroalimentar la ejecución de los
+    ejercicios, en la línea del antecedente de Silva Amado (2024); queda fuera
+    del alcance actual.
     \item \textbf{Progresión de la carga.} Ampliar la base de conocimiento del
     generador con reglas de sobrecarga progresiva que ajusten la rutina según
     el historial de entrenamientos del usuario.
@@ -149,17 +190,26 @@ A partir de la experiencia del desarrollo se recomienda, como trabajo futuro:
     \item \textbf{Persistencia sin conexión.} Configurar la caché persistente
     de Firestore para que la guía de máquinas y la rutina activa estén
     disponibles sin Internet, algo muy útil en gimnasios con mala cobertura.
-    \item \textbf{Protección de las claves de servicios externos.} Mover las
-    consultas a USDA a una función de servidor (por ejemplo, Cloud Functions)
-    para que su clave no viaje dentro de la aplicación.
-    \item \textbf{Pruebas automatizadas de interfaz y de reglas.} Agregar
-    React Native Testing Library para probar las pantallas, ejecutar la suite
-    de Jest en integración continua y probar las reglas de seguridad con el
-    emulador de Firebase.
+    \item \textbf{Pruebas automatizadas de interfaz y de seguridad.} Agregar
+    React Native Testing Library para probar las pantallas, ejecutar la suite de
+    Jest y las pruebas con el emulador de Firebase (\archivo{npm run
+    test:security}) en integración continua, y registrar sus resultados.
+    \item \textbf{Privacidad y consentimiento.} Redactar la política de
+    privacidad y el consentimiento informado para el tratamiento de los datos
+    físicos y alimentarios, y para el uso de fotografías de usuarios si se
+    amplía el conjunto de entrenamiento.
+
     \item \textbf{Validación con usuarios.} Realizar un estudio de usabilidad
     con usuarios reales de gimnasio, por ejemplo con el cuestionario SUS, y
     medir el efecto de la aplicación en la permanencia de los usuarios nuevos.
+    \item \textbf{Licencia de Ultralytics.} La biblioteca y los modelos de
+    Ultralytics se distribuyen con licencia AGPL-3.0 o con una licencia
+    empresarial (Ultralytics, s.~f.-c). Si la aplicación se publica o se
+    comercializa, hay que definir cuál aplica, o sustituir el detector por otra
+    alternativa, antes de la distribución.
     \item \textbf{Publicación.} Antes de publicar la aplicación en Google
     Play, obtener la autorización del proveedor de las fotografías del
-    catálogo y verificar las condiciones de uso de las animaciones.
+    catálogo y confirmar las condiciones de uso de las animaciones y los
+    datos de ExerciseDB, Gym Visual, WorkoutX y wger, en particular las
+    restricciones de uso comercial y de atribución.
 \end{itemize}

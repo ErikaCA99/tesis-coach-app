@@ -1,25 +1,34 @@
 % =====================================================================
-\section{Fase de Estabilización}
+% MEJORADO (27 oct 2026): integración #5-#7, métricas de código, verificación y suites de pruebas.
+\subsection{Fase de estabilización}
 \label{sec:des-estabilizacion}
 
-En esta fase no se agregó funcionalidad nueva. El trabajo se concentró en
-integrar los módulos, uniformar la arquitectura y verificar la calidad del
-código.
+En esta fase se concentró el trabajo en integrar los módulos, uniformar la
+arquitectura y verificar la calidad del código. Las adiciones funcionales
+corresponden al componente de servidor (funciones \archivo{buscarAlimentos} y
+\archivo{guardarRutina}), que se incorporó para proteger la clave de la API de
+nutrición y para validar en el servidor la creación de rutinas, y, el 3 de
+noviembre de 2026, al reconocimiento de máquinas en la nube
+(\archivo{reconocerMaquina}) y al módulo nativo de ARCore
+(sección~\ref{sec:des-produccion}).
 
-\subsection{Integración de los módulos}
+\subsubsection{Integración de los módulos}
 
 Los módulos desarrollados en las ramas \archivo{feature/auth},
 \archivo{feature/machines} y \archivo{feature/ejercicios} se integraron en
 \archivo{develop} mediante las solicitudes de integración \#1, \#3 y \#4. Los
 módulos de rutinas, escáner, nutrición y progreso se desarrollaron en
-\archivo{feature/routines}. La navegación principal quedó unificada en la barra
+\archivo{feature/routines}, integrada mediante la solicitud \#5 (18 de octubre
+de 2026). La solicitud \#6 (19 de octubre) incorporó el cambio de nombre de los
+archivos a nombres en inglés (\archivo{refactor/english-file-names}) y la
+solicitud \#7 (27 de octubre) integró la rama \archivo{feature/modelAI}, con los
+modelos de TensorFlow Lite, el componente de servidor y las pruebas de
+seguridad. La navegación principal quedó unificada en la barra
 de pestañas de \archivo{(app)} (Inicio, Máquinas, Progreso y Nutrición), con
 las rutinas y el perfil accesibles desde el inicio, y la protección de rutas
-centralizada en el diseño raíz. \pendiente{indicar el número de la solicitud de
-integración de feature/routines y la fecha de su incorporación a develop y a
-main.}
+centralizada en el diseño raíz.
 
-\subsection{Refactorización por capas}
+\subsubsection{Refactorización por capas}
 
 Durante las primeras iteraciones, solo el módulo de nutrición cumplía
 completamente la separación en capas; las pantallas de autenticación, de
@@ -89,7 +98,7 @@ Otras mejoras aplicadas en la refactorización fueron:
     \emph{hooks}) sin desactivar.
 \end{itemize}
 
-\subsection{Métricas del código}
+\subsubsection{Métricas del código}
 
 La Tabla~\ref{tab:metricas} resume el tamaño del código fuente por capa al
 cierre de la estabilización.
@@ -102,23 +111,27 @@ cierre de la estabilización.
 \hline
 \rowcolor{encabezado} \textbf{Capa} & \textbf{Carpetas} & \textbf{Archivos} & \textbf{Líneas} \\
 \hline
-Vista & \archivo{app/}, \archivo{components/} & 54 & 7\,590 \\ \hline
+Vista & \archivo{app/}, \archivo{components/} & 87 & 11\,410 \\ \hline
 Controlador & \archivo{controllers/}, \archivo{utils/}, \archivo{store/},
-\archivo{hooks/} & 30 & 4\,168 \\ \hline
-Modelo & \archivo{models/}, \archivo{schemas/} & 27 & 1\,486 \\ \hline
-Servicios & \archivo{services/}, \archivo{config/} & 12 & 1\,031 \\ \hline
-Otros & \archivo{constants/}, \archivo{types/} & 3 & 51 \\
+\archivo{hooks/} & 41 & 5\,454 \\ \hline
+Modelo & \archivo{models/}, \archivo{schemas/} & 32 & 1\,852 \\ \hline
+Servicios & \archivo{services/}, \archivo{config/} & 20 & 1\,423 \\ \hline
+Otros & \archivo{constants/}, \archivo{types/} & 6 & 93 \\
 \hline
-\textbf{Total} & & \textbf{126} & \textbf{14\,326} \\
+\textbf{Total} & & \textbf{186} & \textbf{20\,232} \\
 \hline
 \end{tabular}
 \fuente{Conteo de archivos \archivo{.ts} y \archivo{.tsx} de la carpeta
 \archivo{src/}, sin las pruebas automáticas, incluidos comentarios y líneas en
-blanco, al 19 de octubre de 2026. La capa de servicios creció por la
-incorporación de los modelos de TensorFlow Lite y del servicio de reportes.}
+blanco, al 3 de noviembre de 2026. No incluye el código de las funciones de
+servidor (\archivo{functions/}) ni el del módulo nativo de ARCore
+(\archivo{modules/coach-ar/}, 606 líneas de Kotlin en cuatro archivos). El
+crecimiento respecto del 27 de octubre se debe sobre todo a los componentes
+compartidos de interfaz, a los servicios y esquemas del reconocimiento en la
+nube y a la interfaz tipada de la vista de realidad aumentada.}
 \end{table}
 
-\subsection{Verificación estática}
+\subsubsection{Verificación estática}
 
 Como criterio de cierre de la fase se estableció una secuencia de
 verificaciones automáticas que el código debe superar
@@ -133,24 +146,29 @@ verificaciones automáticas que el código debe superar
 \rowcolor{encabezado} \textbf{Verificación} & \textbf{Qué detecta} & \textbf{Resultado} \\
 \hline
 \archivo{tsc --noEmit} & Errores de tipos en todo el proyecto (TypeScript
-estricto). & 0 errores \\ \hline
+estricto). & Sin errores (registro del proyecto del 3 de noviembre de 2026) \\ \hline
 \archivo{eslint .} & Errores y malas prácticas, incluidas las reglas de
-\emph{hooks} de React. & \pendiente{ejecutar \texttt{npm run lint} y registrar el resultado} \\ \hline
+\emph{hooks} de React. & Sin errores (registro del 3 de noviembre de 2026) \\ \hline
 \archivo{prettier --check} & Formato no uniforme del código. &
-\pendiente{volver a ejecutar \texttt{npm run format} tras los últimos cambios y registrar el resultado} \\
+Conforme (registro del 3 de noviembre de 2026) \\
 \hline
 \end{tabularx}
 \end{table}
 
-\subsection{Pruebas unitarias automáticas}
+\subsubsection{Pruebas unitarias automáticas}
 \label{sec:estab-jest}
 
 Como complemento de la verificación estática, se configuró Jest con el
 \emph{preset} \archivo{jest-expo} y se escribieron pruebas para la lógica pura
 del sistema, es decir, las funciones que no dependen de Firebase ni de módulos
 nativos. Se ejecutan con \archivo{npm test}. La
-Tabla~\ref{tab:suites-jest} lista las cinco suites; su detalle se presenta en
-la sección~\ref{sec:pruebas-unitarias}.
+Tabla~\ref{tab:suites-jest} lista los archivos de prueba de la aplicación, que
+son 20 y comprenden 160 casos; en la ejecución del 3 de noviembre de 2026 todos
+resultaron aprobados, igual que los 22 casos de las funciones del servidor y las
+5 pruebas de JVM del módulo de ARCore (registro del proyecto en
+\archivo{docs/ARCORE.md}). Su detalle se presenta en la
+sección~\ref{sec:pruebas-unitarias}. \pendiente{conservar la salida de
+\texttt{npm test} como evidencia para el tribunal.}
 
 \begin{table}[H]
 \centering
@@ -161,17 +179,35 @@ la sección~\ref{sec:pruebas-unitarias}.
 \hline
 \rowcolor{encabezado} \textbf{Suite} & \textbf{Qué verifica} \\
 \hline
-\archivo{bmiCalculator} & Cálculo del IMC y límites de las categorías de la
-OMS. \\ \hline
+\archivo{bmiCalculator} & Cálculo del IMC, límites de las categorías de la
+OMS y mensajes. \\ \hline
 \archivo{nutritionGoals} & Ecuación de Mifflin-St Jeor, factores de actividad,
 ajuste por objetivo, piso calórico y coherencia de los macronutrientes. \\ \hline
-\archivo{workoutStats} & Racha, semana y total de entrenamientos. \\ \hline
+\archivo{workoutStats} & Fechas, racha, semana y total de entrenamientos. \\ \hline
+\archivo{workoutSession} & Creación de la sesión, series completadas y
+descansos. \\ \hline
 \archivo{routineGenerator} & Orden de las plantillas y esquemas (contrato con el
 modelo), reglas de \archivo{decidirClases} y reparto de ejercicios. \\ \hline
 \archivo{features} & Vector de entrada del modelo de rutinas y valores por
-defecto. \\
+defecto. \\ \hline
+\archivo{tfliteService} & Carga diferida del intérprete de TensorFlow Lite. \\ \hline
+\archivo{ProgressController}, \archivo{ReportsController} & Actualización
+parcial del progreso y cálculo de los reportes. \\ \hline
+\archivo{MachinesController}, \archivo{machineRecognition} & Candidatas con su
+caja, que no se mezclan con las de otras máquinas; preparación del objetivo de
+ARCore y esquema de la respuesta del reconocimiento. \\ \hline
+\archivo{workoutSessionStorage} & Persistencia de la sesión de entrenamiento
+guiada. \\ \hline
+\archivo{exerciseDbRepository}, \archivo{wgerImageRepository},
+\archivo{localDemonstrationRepository} & Repositorios de ejercicios y
+demostraciones locales por máquina. \\ \hline
+\archivo{persisted} & Esquemas de los datos persistidos. \\ \hline
+\archivo{environment}, \archivo{loadingProgress}, \archivo{typography} &
+Variables de entorno faltantes, porcentaje de carga simulado y selección de
+fuentes por peso. \\
 \hline
 \end{tabularx}
-\fuente{Carpetas \archivo{\_\_tests\_\_} de \archivo{src/utils} y
-\archivo{src/services/ai}.}
+\fuente{Carpetas \archivo{\_\_tests\_\_} de \archivo{src/}. Las pruebas del
+componente de servidor y de las reglas de seguridad se describen en la
+sección~\ref{sec:pruebas-seguridad}.}
 \end{table}
